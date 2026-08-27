@@ -11,7 +11,11 @@ export const bikeServicesService = {
       storageService.set(STORAGE_KEY, servicesData);
       return servicesData;
     }
-    return saved;
+    // Synchronize imageUrl from servicesData so updated service photos always take effect
+    return saved.map((item) => {
+      const def = servicesData.find((s) => s.id === item.id);
+      return def ? { ...item, imageUrl: def.imageUrl } : item;
+    });
   },
 
   getById: (id: string): ServiceItem | undefined => {

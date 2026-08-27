@@ -42,7 +42,7 @@ export const servicesData: ServiceItem[] = [
     estimatedTime: '4 - 5 Hours',
     priceStartingAt: '₹799',
     category: 'maintenance',
-    imageUrl: '/images/hero-bike.jpg',
+    imageUrl: '/images/services/premium-service.jpg',
     isPopular: true,
   },
   {
@@ -158,7 +158,7 @@ export const servicesData: ServiceItem[] = [
     estimatedTime: '45 Minutes',
     priceStartingAt: '₹199',
     category: 'repair',
-    imageUrl: '/images/services/carburetor-fi.jpg',
+    imageUrl: '/images/services/electrical-repair.jpg',
   },
   {
     id: 's9',
@@ -176,7 +176,7 @@ export const servicesData: ServiceItem[] = [
     estimatedTime: '3 - 5 Days',
     priceStartingAt: '₹1,499',
     category: 'cosmetic',
-    imageUrl: '/images/about/bay4-wash.jpg',
+    imageUrl: '/images/services/bike-painting.jpg',
   },
   {
     id: 's10',
