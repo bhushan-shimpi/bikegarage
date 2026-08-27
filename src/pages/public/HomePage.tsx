@@ -7,7 +7,6 @@ import { WhyChooseUs } from '../../components/home/WhyChooseUs';
 import { HowItWorks } from '../../components/home/HowItWorks';
 import { ProjectsShowcase } from '../../components/home/ProjectsShowcase';
 import { TestimonialsSection } from '../../components/home/TestimonialsSection';
-import { HomeContactSnippet } from '../../components/home/HomeContactSnippet';
 import { CTASection } from '../../components/home/CTASection';
 
 export const HomePage: React.FC = () => {
@@ -37,10 +36,7 @@ export const HomePage: React.FC = () => {
       {/* 8. Customer Reviews */}
       <TestimonialsSection />
 
-      {/* 9. Contact / Location */}
-      <HomeContactSnippet />
-
-      {/* 10. Final CTA Banner */}
+      {/* 9. Final CTA Banner */}
       <CTASection />
     </div>
   );
