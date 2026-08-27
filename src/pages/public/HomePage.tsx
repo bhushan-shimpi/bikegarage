@@ -3,7 +3,6 @@ import { HeroSection } from '../../components/home/HeroSection';
 import { TrustBar } from '../../components/home/TrustBar';
 import { ServicesOverview } from '../../components/home/ServicesOverview';
 import { RestorationHighlight } from '../../components/home/RestorationHighlight';
-import { PremiumServiceChecklist } from '../../components/home/PremiumServiceChecklist';
 import { WhyChooseUs } from '../../components/home/WhyChooseUs';
 import { HowItWorks } from '../../components/home/HowItWorks';
 import { ProjectsShowcase } from '../../components/home/ProjectsShowcase';
@@ -20,31 +19,28 @@ export const HomePage: React.FC = () => {
       {/* 2. Trust Stats */}
       <TrustBar />
 
-      {/* 3. Services (12 Motorcycle Services, 2 columns on mobile) */}
+      {/* 3. Services */}
       <ServicesOverview />
 
-      {/* 4. Bike Restoration (Signature Specialty) */}
+      {/* 4. Bike Restoration */}
       <RestorationHighlight />
 
-      {/* 5. Premium Bike Service (10-Point Checklist) */}
-      <PremiumServiceChecklist />
-
-      {/* 6. Why Choose Us (8 Value Props) */}
+      {/* 5. Why Choose Us */}
       <WhyChooseUs />
 
-      {/* 7. How It Works (5-Step Timeline) */}
+      {/* 6. How It Works */}
       <HowItWorks />
 
-      {/* 8. Our Projects */}
+      {/* 7. Our Projects */}
       <ProjectsShowcase />
 
-      {/* 9. Customer Reviews */}
+      {/* 8. Customer Reviews */}
       <TestimonialsSection />
 
-      {/* 10. Contact / Location with Map */}
+      {/* 9. Contact / Location */}
       <HomeContactSnippet />
 
-      {/* 11. Final CTA Banner */}
+      {/* 10. Final CTA Banner */}
       <CTASection />
     </div>
   );
