@@ -11,10 +11,10 @@ export const HeroSection: React.FC = () => {
         <div className="relative w-full h-[230px] xs:h-[260px] overflow-hidden bg-[#0B0B0B]">
           <img
             src="/images/hero-bike.jpg"
-            alt="Royal Enfield Classic 350 motorcycle at Chaudhari Auto Centre"
+            alt="Royal Enfield Meteor 350 motorcycle at Chaudhari Auto Centre"
             fetchPriority="high"
             decoding="async"
-            className="w-full h-full object-cover object-[80%_center] scale-110 brightness-105 contrast-105"
+            className="w-full h-full object-cover object-[75%_center] brightness-105 contrast-105"
           />
           {/* Subtle directional fade at bottom into the content area */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B] via-transparent to-black/10 pointer-events-none" />
@@ -74,14 +74,14 @@ export const HeroSection: React.FC = () => {
 
       {/* ─── DESKTOP / TABLET COMPOSITION (>= sm / 640px) ─── */}
       <div className="hidden sm:flex relative min-h-[500px] lg:min-h-[560px] xl:min-h-[600px] items-center w-full">
-        {/* Full-width motorcycle image with enlarged bike on the right */}
+        {/* Full-width motorcycle image positioned towards the right */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
             src="/images/hero-bike.jpg"
-            alt="Royal Enfield Classic 350 motorcycle at Chaudhari Auto Centre"
+            alt="Royal Enfield Meteor 350 motorcycle at Chaudhari Auto Centre"
             fetchPriority="high"
             decoding="async"
-            className="w-full h-full object-cover object-right lg:object-[90%_center] scale-115 lg:scale-125 xl:scale-130 origin-right brightness-105 contrast-105"
+            className="w-full h-full object-cover object-[78%_center] lg:object-[82%_center] xl:object-[86%_center] brightness-105 contrast-105"
           />
 
           {/* Left-to-right directional gradient: dark on left for text readability, warm & open on right */}
