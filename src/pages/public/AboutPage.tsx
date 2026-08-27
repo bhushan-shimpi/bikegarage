@@ -41,7 +41,7 @@ export const AboutPage: React.FC = () => {
     <div className="bg-[#F8F9FA] min-h-screen flex flex-col justify-between">
       <div>
         {/* Top Banner */}
-        <PageBanner title="ABOUT CHAUDHARI AUTO" breadcrumb="About Us" />
+        <PageBanner title="ABOUT CHAUDHARI AUTO CENTRE" breadcrumb="About Us" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-16">
           {/* Top Section: Story & Workshop Facade */}

@@ -5,8 +5,8 @@ import {
   Inbox,
   Users,
   Settings,
+  Tag,
   LogOut,
-  Wrench,
   ExternalLink,
   ChevronRight,
 } from 'lucide-react';
@@ -28,7 +28,8 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
 
   const navItems = [
     { name: 'Dashboard', path: '/garage/dashboard', icon: LayoutDashboard },
-    { name: 'All Enquiries', path: '/garage/enquiries', icon: Inbox },
+    { name: 'Enquiries & Bookings', path: '/garage/enquiries', icon: Inbox },
+    { name: 'Services & Pricing', path: '/garage/services', icon: Tag },
     { name: 'Customer Directory', path: '/garage/customers', icon: Users },
     { name: 'Garage Settings', path: '/garage/settings', icon: Settings },
   ];
@@ -51,16 +52,18 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
       >
         <div>
           {/* Brand Header */}
-          <div className="p-5 border-b border-gray-100 bg-white">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-[#FFF9E6] border border-[#F5B900] flex items-center justify-center text-[#DFA500] shadow-xs">
-                <Wrench className="w-5 h-5 stroke-[2.2]" />
-              </div>
+          <div className="p-4 border-b border-gray-100 bg-white">
+            <div className="flex items-center gap-2.5">
+              <img
+                src="/images/logo.png"
+                alt="Chaudhari Auto Centre Logo"
+                className="h-10 w-auto object-contain"
+              />
               <div className="flex flex-col">
-                <span className="text-sm font-black tracking-tight text-gray-900 uppercase font-sans leading-tight">
+                <span className="text-xs font-black tracking-tight text-gray-900 uppercase font-sans leading-tight">
                   CHAUDHARI AUTO
                 </span>
-                <span className="text-[10px] font-black tracking-[0.2em] text-[#DFA500] uppercase leading-tight">
+                <span className="text-[9px] font-black tracking-[0.2em] text-[#DFA500] uppercase leading-tight">
                   PAHUR • PORTAL
                 </span>
               </div>

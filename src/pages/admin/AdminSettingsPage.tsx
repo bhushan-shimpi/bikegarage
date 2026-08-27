@@ -43,7 +43,7 @@ export const AdminSettingsPage: React.FC = () => {
               </label>
               <input
                 type="text"
-                defaultValue="Chaudhari Auto"
+                defaultValue="Chaudhari Auto Centre"
                 className="w-full bg-white border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-[#F5B900]"
               />
             </div>
@@ -54,7 +54,7 @@ export const AdminSettingsPage: React.FC = () => {
               </label>
               <input
                 type="tel"
-                defaultValue="+91 12345 67890 / 98220 00000"
+                defaultValue="+91 98220 00000"
                 className="w-full bg-white border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-[#F5B900]"
               />
             </div>
@@ -65,7 +65,7 @@ export const AdminSettingsPage: React.FC = () => {
               </label>
               <input
                 type="text"
-                defaultValue="Mon - Sat: 9:00 AM - 7:00 PM | Sun: 9:00 AM - 2:00 PM"
+                defaultValue="Monday – Sunday: 9:00 AM – 8:00 PM"
                 className="w-full bg-white border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-[#F5B900]"
               />
             </div>
@@ -76,7 +76,7 @@ export const AdminSettingsPage: React.FC = () => {
               </label>
               <input
                 type="text"
-                defaultValue="Main Road, Pahur, Jalgaon, Maharashtra - 425101"
+                defaultValue="Main Road, Near Bus Stand, Pahur, Dist. Jalgaon, Maharashtra 424205"
                 className="w-full bg-white border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-[#F5B900]"
               />
             </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Wrench, Lock, User, AlertCircle } from 'lucide-react';
+import { Lock, User, AlertCircle } from 'lucide-react';
 import { authService } from '../../services/authService';
 import { Button } from '../../components/common/Button';
 
@@ -39,12 +39,14 @@ export const LoginPage: React.FC = () => {
       <div className="w-full max-w-md bg-white border border-gray-200 rounded-2xl p-8 sm:p-10 shadow-lg relative z-10">
         {/* Header Branding */}
         <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-[#FFF9E6] border-2 border-[#F5B900] flex items-center justify-center text-[#DFA500] mx-auto mb-4 shadow-xs">
-            <Wrench className="w-7 h-7 stroke-[2.2]" />
-          </div>
+          <img
+            src="/images/logo.png"
+            alt="Chaudhari Auto Centre Logo"
+            className="h-16 w-auto object-contain mx-auto mb-3"
+          />
 
           <h1 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-gray-900 font-sans">
-            CHAUDHARI AUTO
+            CHAUDHARI AUTO CENTRE
           </h1>
 
           <div className="text-xs font-black tracking-[0.25em] text-[#DFA500] uppercase mt-0.5">

@@ -18,8 +18,8 @@ export const projectsData: ProjectItem[] = [
     ],
     result: 'Complete bike makeover! Engine purrs like day one with 48+ kmpl mileage and pristine mirror gloss body finish.',
     completionTime: '12 Days',
-    beforeImage: 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1000&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1000&q=80',
+    beforeImage: '/images/services/bike-restoration.jpg',
+    afterImage: '/images/hero-bike.jpg',
     isFeatured: true
   },
   {
@@ -38,8 +38,8 @@ export const projectsData: ProjectItem[] = [
     ],
     result: 'Iconic 2-stroke exhaust ring-a-ding note restored with instant front wheel lift acceleration and head-turning retro shine.',
     completionTime: '18 Days',
-    beforeImage: 'https://images.unsplash.com/photo-1508974239320-0a029497e820?auto=format&fit=crop&w=1000&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=1000&q=80',
+    beforeImage: '/images/about/bay3-restoration.jpg',
+    afterImage: '/images/why-choose-us.jpg',
     isFeatured: true
   },
   {
@@ -58,46 +58,8 @@ export const projectsData: ProjectItem[] = [
     ],
     result: 'Trademark Royal Enfield deep rhythmic thump back without any oil drops, feather-soft clutch lever, and silky ride quality.',
     completionTime: '3 Days',
-    beforeImage: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=1000&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=1000&q=80',
+    beforeImage: '/images/services/engine-repair.jpg',
+    afterImage: '/images/about/bay2-engine.jpg',
     isFeatured: true
-  },
-  {
-    id: 'p4',
-    title: 'Bajaj Pulsar 150 Engine Refresh & Matte Black Paint',
-    bikeModel: 'Bajaj Pulsar 150 DTS-i',
-    category: 'painting',
-    yearBuilt: '2015',
-    problem: 'White smoke emission, low engine pickup on highway gradients, scratched tank, and faded plastic panels.',
-    workDone: [
-      'Cylinder block boring, fresh Goetze piston and ring kit',
-      'DTS-i dual spark timing check and twin spark plug renewal',
-      'Complete strip-down matte black PU painting with neon yellow rim stripes',
-      'Plastic trim restoration with ceramic bonding agent',
-      'Carburetor jet sonic cleaning and fresh intake manifold rubber'
-    ],
-    result: 'Zero smoke, throttle crispness restored with sporty stealth matte appearance.',
-    completionTime: '5 Days',
-    beforeImage: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1000&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&w=1000&q=80'
-  },
-  {
-    id: 'p5',
-    title: 'Hero Splendor Plus Village Commuter Overhaul',
-    bikeModel: 'Hero Splendor Plus (2010)',
-    category: 'servicing',
-    yearBuilt: '2010',
-    problem: 'Milometer over 1,20,000 km, sluggish pickup, chain slipping, front fork bottoming out on rural roads.',
-    workDone: [
-      'New piston rings, valve guide oil seals, and engine head gasket',
-      'Front telescopic fork oil replacement and heavy duty fork springs',
-      'Complete genuine Hero sprocket kit and chain tensioners',
-      'Brake shoes replaced front and back with drum emery cleaning',
-      'Full foam wash and anti-rust chassis spray'
-    ],
-    result: 'Smooth 65+ kmpl economy restored, rock-solid suspension for rough village tracks.',
-    completionTime: '1 Day',
-    beforeImage: 'https://images.unsplash.com/photo-1589148938909-4d241c91ee52?auto=format&fit=crop&w=1000&q=80',
-    afterImage: 'https://images.unsplash.com/photo-1487754180451-c456f719a1fc?auto=format&fit=crop&w=1000&q=80'
   }
 ];

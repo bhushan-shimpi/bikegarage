@@ -12,9 +12,9 @@ export const PublicLayout: React.FC = () => {
   }, [pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-white text-gray-900 selection:bg-[#F5B900] selection:text-black">
+    <div className="min-h-screen flex flex-col bg-[#0B0B0B] text-white selection:bg-[#F5B900] selection:text-black max-w-full overflow-x-hidden">
       <Navbar />
-      <main className="flex-1">
+      <main className="flex-1 pb-16 sm:pb-0">
         <Outlet />
       </main>
       <Footer />

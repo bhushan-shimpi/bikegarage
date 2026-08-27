@@ -32,7 +32,9 @@ export const EnquiryTableRow: React.FC<EnquiryTableRowProps> = ({ enquiry }) => 
         <div className="flex items-center gap-2">
           <span className="font-mono">{formatPhone(enquiry.customer.mobile)}</span>
           <a
-            href={`https://wa.me/91${enquiry.customer.mobile}`}
+            href={`https://wa.me/91${enquiry.customer.mobile}?text=${encodeURIComponent(
+              `Hello ${enquiry.customer.name}, this is Chaudhari Auto Centre, Pahur. We received your enquiry regarding your bike service. Please let us know when you would like to visit.`
+            )}`}
             target="_blank"
             rel="noopener noreferrer"
             title="Chat on WhatsApp"

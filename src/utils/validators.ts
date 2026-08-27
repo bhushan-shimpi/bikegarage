@@ -33,6 +33,10 @@ export const inquirySchema = z.object({
     .string()
     .optional()
     .or(z.literal('')),
+  currentKm: z
+    .string()
+    .optional()
+    .or(z.literal('')),
   fuelType: z
     .string()
     .optional()
@@ -42,7 +46,8 @@ export const inquirySchema = z.object({
     .min(1, { message: 'Please select service required' }),
   problemRequirement: z
     .string()
-    .min(3, { message: 'Please describe the issue or work required' }),
+    .optional()
+    .or(z.literal('')),
   preferredDate: z
     .string()
     .optional()

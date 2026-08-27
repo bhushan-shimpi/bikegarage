@@ -13,6 +13,7 @@ export const AdminLayout: React.FC = () => {
   const getHeaderTitle = (pathname: string) => {
     if (pathname.includes('/garage/enquiries/')) return { title: 'Enquiry Details', subtitle: 'View customer problem, vehicle specs & update status' };
     if (pathname.includes('/garage/enquiries')) return { title: 'Garage Enquiries', subtitle: 'Manage customer service inquiries & vehicle leads' };
+    if (pathname.includes('/garage/services')) return { title: 'Services & Pricing', subtitle: 'Set and edit two-wheeler service prices live' };
     if (pathname.includes('/garage/customers')) return { title: 'Customer Directory', subtitle: 'Registered vehicle owners & contact history' };
     if (pathname.includes('/garage/settings')) return { title: 'Garage Settings', subtitle: 'Workshop timings, helpline alerts & profile' };
     return { title: 'Workshop Dashboard', subtitle: 'Overview of inquiries, service requests & active vehicles' };

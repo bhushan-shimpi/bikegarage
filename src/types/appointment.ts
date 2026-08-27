@@ -1,22 +1,30 @@
 export interface AppointmentFormData {
   fullName: string;
-  mobileNumber: string;
-  vehicleType: string;
-  vehicleModel: string;
-  registrationNumber: string;
+  mobile: string;
+  email?: string;
+  bikeBrand: string;
+  bikeModel: string;
+  registrationNumber?: string;
+  currentKm?: string;
   serviceRequired: string;
   preferredDate: string;
   preferredTime: string;
-  additionalNotes?: string;
+  additionalProblem?: string;
 }
 
-export interface InquiryFormData {
+export interface Appointment {
+  id: string;
   fullName: string;
-  mobileNumber: string;
+  mobile: string;
   email?: string;
-  vehicleType: string;
-  vehicleModel: string;
-  registrationNumber: string;
-  problemRequirement: string;
-  uploadedImages?: string[];
+  bikeBrand: string;
+  bikeModel: string;
+  registrationNumber?: string;
+  currentKm?: string;
+  serviceRequired: string;
+  preferredDate: string;
+  preferredTime: string;
+  additionalProblem?: string;
+  status: 'new' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
+  createdAt: string;
 }

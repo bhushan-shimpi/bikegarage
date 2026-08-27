@@ -36,7 +36,9 @@ export const EnquiryCardMobile: React.FC<EnquiryCardMobileProps> = ({ enquiry })
               <Phone className="w-3.5 h-3.5" />
             </a>
             <a
-              href={`https://wa.me/91${enquiry.customer.mobile}`}
+              href={`https://wa.me/91${enquiry.customer.mobile}?text=${encodeURIComponent(
+                `Hello ${enquiry.customer.name}, this is Chaudhari Auto Centre, Pahur. We received your enquiry regarding your bike service. Please let us know when you would like to visit.`
+              )}`}
               target="_blank"
               rel="noopener noreferrer"
               className="p-1.5 rounded-md bg-emerald-50 text-emerald-600 border border-emerald-200"

@@ -1,5 +1,6 @@
 const STORAGE_KEYS = {
-  ENQUIRIES: 'cac_enquiries_db',
+  ENQUIRIES: 'chaudhari_auto_enquiries',
+  APPOINTMENTS: 'chaudhari_auto_appointments',
   AUTH_TOKEN: 'cac_auth_token',
   CURRENT_USER: 'cac_current_user',
 };
@@ -33,3 +34,5 @@ export const storage = {
 
   keys: STORAGE_KEYS,
 };
+
+export const storageService = storage;

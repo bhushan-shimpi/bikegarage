@@ -17,20 +17,20 @@ export const RestorationHighlight: React.FC = () => {
   ];
 
   return (
-    <section className="py-24 bg-[#070707] border-y border-[#262626] relative overflow-hidden">
+    <section className="py-20 sm:py-24 bg-[#070707] border-y border-[#262626] relative overflow-hidden" id="restoration">
       {/* Background Accent Gradients */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#F5B900]/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-black rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
           <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 rounded-full border border-[#F5B900]/40 bg-[#F5B900]/10 text-[#F5B900] text-xs font-extrabold uppercase tracking-widest">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Signature Garage Specialty</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white mb-3 font-sans">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white mb-3 font-sans">
             BIKE RESTORATION
           </h2>
 
@@ -40,17 +40,17 @@ export const RestorationHighlight: React.FC = () => {
           </div>
 
           {/* Description */}
-          <p className="text-base sm:text-lg text-neutral-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-neutral-300 max-w-2xl mx-auto leading-relaxed">
             Complete inspection, engine work, body work, paint work, electrical work, parts replacement आणि final detailing. We breathe new life into classic two-wheelers with master level craftsmanship.
           </p>
         </div>
 
         {/* Before & After Interactive Showcase */}
-        <div className="mb-14">
+        <div className="mb-12 sm:mb-14">
           <BeforeAfterSlider
             bikeName="1996 Yamaha RX100 Retro Master Restoration"
-            beforeImage="https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1200&q=80"
-            afterImage="https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=1200&q=80"
+            beforeImage="/images/services/bike-restoration.jpg"
+            afterImage="/images/hero-bike.jpg"
           />
         </div>
 
@@ -61,12 +61,12 @@ export const RestorationHighlight: React.FC = () => {
               key={idx}
               className="p-3.5 rounded-lg bg-[#141414] border border-[#2B2B2B] flex items-center gap-3 hover:border-[#F5B900]/40 transition-colors"
             >
-              <CheckCircle2 className="w-5 h-5 text-[#F5B900] shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-[#F5B900] shrink-0" />
               <div>
                 <span className="text-xs font-bold text-white uppercase block leading-tight">
                   {phase.name}
                 </span>
-                <span className="text-[11px] text-[#F5B900] font-medium block">
+                <span className="text-[10px] text-[#F5B900] font-medium block">
                   {phase.marathi}
                 </span>
               </div>
@@ -74,9 +74,9 @@ export const RestorationHighlight: React.FC = () => {
           ))}
         </div>
 
-        {/* Buttons: View Restoration Work & Enquire Now */}
+        {/* CTAs: View Restoration Work & Get Restoration Estimate */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link to="/services">
+          <Link to="/services" className="w-full sm:w-auto">
             <Button
               variant="secondary"
               size="lg"
@@ -87,14 +87,14 @@ export const RestorationHighlight: React.FC = () => {
             </Button>
           </Link>
 
-          <Link to="/inquiry?service=Bike%20Restoration">
+          <Link to="/inquiry?service=Bike%20Restoration" className="w-full sm:w-auto">
             <Button
               variant="primary"
               size="lg"
               rightIcon={<ArrowRight className="w-4 h-4" />}
               className="w-full sm:w-auto font-black"
             >
-              Enquire Now For Your Bike
+              Get Restoration Estimate
             </Button>
           </Link>
         </div>

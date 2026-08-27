@@ -127,9 +127,9 @@ export const EnquiryDetailsPage: React.FC = () => {
           </a>
 
           <a
-            href={`https://wa.me/91${enquiry.customer.mobile}?text=Hello%20${encodeURIComponent(
-              enquiry.customer.name
-            )},%20this%20is%20Chaudhari%20Auto%20Pahur%20regarding%20your%20bike%20service%20inquiry.`}
+            href={`https://wa.me/91${enquiry.customer.mobile}?text=${encodeURIComponent(
+              `Hello ${enquiry.customer.name}, this is Chaudhari Auto Centre, Pahur. We received your enquiry regarding your bike service. Please let us know when you would like to visit.`
+            )}`}
             target="_blank"
             rel="noopener noreferrer"
             className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2 transition-colors shadow-xs"

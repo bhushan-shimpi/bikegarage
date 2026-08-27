@@ -20,6 +20,7 @@ import { EnquiriesListPage } from './pages/admin/EnquiriesListPage';
 import { EnquiryDetailsPage } from './pages/admin/EnquiryDetailsPage';
 import { AdminCustomersPage } from './pages/admin/AdminCustomersPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
+import { AdminServicesPricingPage } from './pages/admin/AdminServicesPricingPage';
 
 export const App: React.FC = () => {
   return (
@@ -30,8 +31,9 @@ export const App: React.FC = () => {
           <Route index element={<HomePage />} />
           <Route path="services" element={<ServicesPage />} />
           <Route path="about" element={<AboutPage />} />
+          {/* Single unified page for Book Appointment & Inquiry */}
           <Route path="inquiry" element={<InquiryPage />} />
-          <Route path="book-appointment" element={<Navigate to="/inquiry" replace />} />
+          <Route path="book-appointment" element={<InquiryPage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
@@ -45,6 +47,8 @@ export const App: React.FC = () => {
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="enquiries" element={<EnquiriesListPage />} />
           <Route path="enquiries/:id" element={<EnquiryDetailsPage />} />
+          <Route path="services" element={<AdminServicesPricingPage />} />
+          <Route path="appointments" element={<Navigate to="/garage/enquiries" replace />} />
           <Route path="customers" element={<AdminCustomersPage />} />
           <Route path="settings" element={<AdminSettingsPage />} />
         </Route>

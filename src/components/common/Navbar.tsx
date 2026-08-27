@@ -14,7 +14,7 @@ export const Navbar: React.FC = () => {
     { name: 'Home', path: '/' },
     { name: 'Services', path: '/services' },
     { name: 'About Us', path: '/about' },
-    { name: 'Inquiry / Quote', path: '/inquiry' },
+    { name: 'Book / Enquire', path: '/book-appointment' },
     { name: 'Contact Us', path: '/contact' },
   ];
 
@@ -22,18 +22,25 @@ export const Navbar: React.FC = () => {
     <>
       <header className="sticky top-0 z-40 w-full bg-[#000000] border-b border-[#222222] py-2.5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Logo matching exact reference design */}
-          <Link to="/" className="flex flex-col group">
-            <span className="text-lg sm:text-xl font-black tracking-tight text-white uppercase font-sans leading-none">
-              CHAUDHARI AUTO
-            </span>
-            <span className="text-xs font-black tracking-[0.25em] text-[#F5B900] uppercase mt-0.5 leading-none">
-              PAHUR
-            </span>
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group select-none">
+            <img
+              src="/images/logo.png"
+              alt="Chaudhari Auto Centre Logo"
+              className="h-10 sm:h-11 w-auto object-contain transition-transform group-hover:scale-105"
+            />
+            <div className="flex flex-col">
+              <span className="text-sm sm:text-base lg:text-lg font-black tracking-tight text-white uppercase font-sans leading-none">
+                CHAUDHARI AUTO CENTRE
+              </span>
+              <span className="text-[9px] sm:text-[10px] font-black tracking-[0.25em] text-[#F5B900] uppercase mt-1 leading-none">
+                PAHUR • EST. 1994
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-7 xl:gap-9">
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
             {navLinks.map((link) => (
               <NavLink
                 key={link.path}
@@ -58,15 +65,8 @@ export const Navbar: React.FC = () => {
             ))}
           </nav>
 
-          {/* Right Action Button */}
+          {/* Right Action Button (Desktop) */}
           <div className="hidden lg:flex items-center gap-3">
-            <Link
-              to="/garage/login"
-              className="text-xs text-neutral-400 hover:text-[#F5B900] px-2 py-1 rounded transition-colors"
-              title="Staff Portal"
-            >
-              Garage Portal
-            </Link>
             <a
               href="tel:+919822000000"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#F5B900] hover:bg-[#DFA500] text-black font-extrabold text-xs tracking-wider uppercase shadow-sm transition-all active:scale-95"
@@ -76,7 +76,7 @@ export const Navbar: React.FC = () => {
             </a>
           </div>
 
-          {/* Mobile Buttons */}
+          {/* Mobile Buttons: Call & Hamburger Menu */}
           <div className="flex items-center gap-2 lg:hidden">
             <a
               href="tel:+919822000000"
@@ -88,7 +88,7 @@ export const Navbar: React.FC = () => {
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-1.5 text-neutral-300 hover:text-white bg-[#1A1A1A] border border-[#333333] rounded"
-              aria-label="Toggle navigation"
+              aria-label="Toggle navigation menu"
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -99,35 +99,48 @@ export const Navbar: React.FC = () => {
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
+          {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
             onClick={() => setIsMobileMenuOpen(false)}
           />
-          <div className="relative ml-auto w-3/4 max-w-xs bg-[#0F0F0F] h-full border-l border-[#262626] p-6 flex flex-col justify-between z-10">
+
+          {/* Drawer Body */}
+          <div className="relative ml-auto w-4/5 max-w-xs bg-[#0F0F0F] h-full border-l border-[#262626] p-6 flex flex-col justify-between z-10">
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-[#262626]">
-                <div className="flex flex-col">
-                  <span className="text-base font-black text-white uppercase">CHAUDHARI AUTO</span>
-                  <span className="text-[10px] font-black text-[#F5B900] tracking-widest uppercase">PAHUR</span>
+                <div className="flex items-center gap-2.5">
+                  <img
+                    src="/images/logo.png"
+                    alt="Chaudhari Auto Centre"
+                    className="h-9 w-auto object-contain"
+                  />
+                  <div className="flex flex-col">
+                    <span className="text-xs font-black text-white uppercase leading-tight">CHAUDHARI AUTO CENTRE</span>
+                    <span className="text-[9px] font-black text-[#F5B900] tracking-widest uppercase mt-0.5 leading-none">PAHUR</span>
+                  </div>
                 </div>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="p-1 text-neutral-400 hover:text-white"
+                  aria-label="Close menu"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="flex flex-col gap-2 mt-6">
+              {/* Large Touch Target Navigation Links */}
+              <div className="flex flex-col gap-1.5 mt-6">
                 {navLinks.map((link) => (
                   <NavLink
                     key={link.path}
                     to={link.path}
+                    onClick={() => setIsMobileMenuOpen(false)}
                     className={({ isActive }) =>
-                      `px-3 py-2.5 rounded text-sm font-semibold transition-colors ${
+                      `px-3.5 py-3 rounded-lg text-sm font-bold tracking-wide transition-colors ${
                         isActive
-                          ? 'bg-[#F5B900] text-black font-bold'
-                          : 'text-neutral-300 hover:bg-[#1A1A1A]'
+                          ? 'bg-[#F5B900] text-black'
+                          : 'text-neutral-200 hover:bg-[#1A1A1A]'
                       }`
                     }
                   >
@@ -137,19 +150,22 @@ export const Navbar: React.FC = () => {
               </div>
             </div>
 
+            {/* Bottom Actions */}
             <div className="pt-4 border-t border-[#262626] space-y-3">
               <a
                 href="tel:+919822000000"
-                className="w-full py-2.5 rounded bg-[#F5B900] text-black font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5"
+                className="w-full py-3 rounded-lg bg-[#F5B900] text-black font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow"
               >
-                <Phone className="w-3.5 h-3.5 fill-black" />
-                <span>Call Now: +91 98220 00000</span>
+                <Phone className="w-4 h-4 fill-black" />
+                <span>Call: +91 98220 00000</span>
               </a>
+
               <Link
                 to="/garage/login"
-                className="block text-center text-xs text-neutral-400 hover:text-[#F5B900]"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block text-center text-[11px] text-neutral-500 hover:text-neutral-300 py-1"
               >
-                Garage Admin Portal
+                Garage Staff Login
               </Link>
             </div>
           </div>
