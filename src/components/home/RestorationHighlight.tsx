@@ -74,27 +74,29 @@ export const RestorationHighlight: React.FC = () => {
           ))}
         </div>
 
-        {/* CTAs: View Restoration Work & Get Restoration Estimate — Single row always */}
-        <div className="flex flex-row items-center justify-center gap-3">
-          <Link to="/services" className="flex-1 sm:flex-initial max-w-xs">
+        {/* CTAs — single row, compact on mobile */}
+        <div className="flex flex-row items-center justify-center gap-2 sm:gap-4">
+          <Link to="/services" className="flex-1 sm:flex-initial">
             <Button
               variant="secondary"
-              size="lg"
-              leftIcon={<Wrench className="w-4 h-4 text-[#F5B900] shrink-0" />}
-              className="w-full text-[11px] sm:text-sm whitespace-nowrap"
+              size="sm"
+              leftIcon={<Wrench className="w-3.5 h-3.5 text-[#F5B900] shrink-0" />}
+              className="w-full sm:w-auto text-[10px] sm:text-sm py-2.5 sm:py-3 px-3 sm:px-5"
             >
-              View Restoration Work
+              <span className="sm:hidden">View Work</span>
+              <span className="hidden sm:inline">View Restoration Work</span>
             </Button>
           </Link>
 
-          <Link to="/inquiry?service=Bike%20Restoration" className="flex-1 sm:flex-initial max-w-xs">
+          <Link to="/inquiry?service=Bike%20Restoration" className="flex-1 sm:flex-initial">
             <Button
               variant="primary"
-              size="lg"
-              rightIcon={<ArrowRight className="w-4 h-4 shrink-0" />}
-              className="w-full font-black text-[11px] sm:text-sm whitespace-nowrap"
+              size="sm"
+              rightIcon={<ArrowRight className="w-3.5 h-3.5 shrink-0" />}
+              className="w-full sm:w-auto font-black text-[10px] sm:text-sm py-2.5 sm:py-3 px-3 sm:px-5"
             >
-              Get Restoration Estimate
+              <span className="sm:hidden">Get Estimate</span>
+              <span className="hidden sm:inline">Get Restoration Estimate</span>
             </Button>
           </Link>
         </div>
