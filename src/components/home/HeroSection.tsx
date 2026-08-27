@@ -4,7 +4,7 @@ import { MessageSquare, Calendar, MapPin, Star } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="relative bg-[#0B0B0B] overflow-hidden text-white -mt-14 sm:-mt-16">
+    <section className="relative bg-[#0B0B0B] overflow-hidden text-white">
       {/* ─── MOBILE LAYOUT ─── */}
       <div className="block sm:hidden">
         {/* Full-bleed hero image with strong gradient overlay */}
