@@ -35,10 +35,10 @@ export const Navbar: React.FC = () => {
   return (
     <>
       <header
-        className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-40 w-full transition-all duration-500 ${
           scrolled
-            ? 'bg-[#000000]/98 backdrop-blur-md border-b border-[#2A2A2A] shadow-lg shadow-black/40'
-            : 'bg-[#000000] border-b border-[#1E1E1E]'
+            ? 'bg-black/90 backdrop-blur-xl border-b border-white/10 shadow-xl shadow-black/50'
+            : 'bg-transparent border-b border-transparent'
         }`}
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
