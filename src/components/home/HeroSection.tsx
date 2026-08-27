@@ -7,20 +7,20 @@ export const HeroSection: React.FC = () => {
     <section className="relative bg-[#0B0B0B] text-white overflow-hidden">
       {/* ─── DEDICATED MOBILE LAYOUT (< sm / 640px) ─── */}
       <div className="block sm:hidden w-full">
-        {/* Motorcycle Visual Hero — Positioned higher to eliminate empty top black gap */}
-        <div className="relative w-full h-[220px] xs:h-[240px] overflow-hidden bg-[#0B0B0B]">
+        {/* Motorcycle Visual Hero — Framed on the Royal Enfield with warm showroom lighting */}
+        <div className="relative w-full h-[230px] xs:h-[260px] overflow-hidden bg-[#0B0B0B]">
           <img
             src="/images/hero-bike.jpg"
             alt="Royal Enfield Classic 350 motorcycle at Chaudhari Auto Centre"
             fetchPriority="high"
             decoding="async"
-            className="w-full h-full object-cover object-[center_32%] scale-105 brightness-110 contrast-105"
+            className="w-full h-full object-cover object-[78%_center] brightness-105 contrast-105"
           />
           {/* Subtle directional fade at bottom into the content area */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B] via-transparent to-black/10 pointer-events-none" />
         </div>
 
-        {/* Mobile Content Area — Tightened vertical padding */}
+        {/* Mobile Content Area */}
         <div className="px-5 xs:px-6 pt-2 pb-5 flex flex-col">
           {/* Eyebrow */}
           <p className="text-[#F5B900] text-xs font-bold uppercase tracking-[0.2em] mb-2">
@@ -73,34 +73,34 @@ export const HeroSection: React.FC = () => {
       </div>
 
       {/* ─── DESKTOP / TABLET COMPOSITION (>= sm / 640px) ─── */}
-      <div className="hidden sm:flex relative min-h-[500px] lg:min-h-[550px] xl:min-h-[580px] items-center w-full">
-        {/* Full-width motorcycle image with directional linear gradient */}
+      <div className="hidden sm:flex relative min-h-[500px] lg:min-h-[560px] xl:min-h-[600px] items-center w-full">
+        {/* Full-width motorcycle image with motorcycle placed toward the right */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
             src="/images/hero-bike.jpg"
             alt="Royal Enfield Classic 350 motorcycle at Chaudhari Auto Centre"
             fetchPriority="high"
             decoding="async"
-            className="w-full h-full object-cover object-[72%_32%] lg:object-[right_28%] scale-105 brightness-110 contrast-105"
+            className="w-full h-full object-cover object-right lg:object-[86%_center] brightness-105 contrast-105"
           />
 
-          {/* Left-to-right directional gradient: dark on left for text readability, clear on right for bike details */}
+          {/* Left-to-right directional gradient: dark on left for text readability, open and lighter on right */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                'linear-gradient(90deg, #0B0B0B 0%, rgba(11,11,11,0.96) 28%, rgba(11,11,11,0.80) 45%, rgba(11,11,11,0.22) 68%, transparent 92%)',
+                'linear-gradient(90deg, #0B0B0B 0%, rgba(11,11,11,0.90) 26%, rgba(11,11,11,0.60) 42%, rgba(11,11,11,0.12) 62%, transparent 80%)',
             }}
           />
 
-          {/* Edge fades for seamless top/bottom integration */}
+          {/* Subtle edge fades for top/bottom integration */}
           <div className="absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-[#0B0B0B]/60 to-transparent pointer-events-none" />
           <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#0B0B0B] to-transparent pointer-events-none" />
         </div>
 
-        {/* Content container — aligned left, vertically centered */}
+        {/* Content container — aligned left, max-w-lg to prevent overlap with bike on right */}
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-10 lg:py-14">
-          <div className="max-w-xl lg:max-w-2xl">
+          <div className="max-w-lg lg:max-w-xl">
             {/* Eyebrow */}
             <p className="text-[#F5B900] text-xs lg:text-sm font-bold uppercase tracking-[0.22em] mb-2.5">
               TRUSTED BIKE SERVICE SINCE 1994
@@ -110,7 +110,7 @@ export const HeroSection: React.FC = () => {
             <h1
               className="font-black uppercase tracking-tight text-white font-sans mb-3.5"
               style={{
-                fontSize: 'clamp(3rem, 5.2vw, 4.8rem)',
+                fontSize: 'clamp(2.8rem, 4.8vw, 4.5rem)',
                 lineHeight: 0.95,
                 letterSpacing: '-0.03em',
               }}
@@ -119,10 +119,10 @@ export const HeroSection: React.FC = () => {
             </h1>
 
             {/* Supporting Text with Marathi line */}
-            <p className="text-neutral-200 text-base lg:text-lg font-medium leading-relaxed mb-1 max-w-lg">
+            <p className="text-neutral-200 text-base lg:text-lg font-medium leading-relaxed mb-1 max-w-md">
               Professional two-wheeler service, repair &amp; restoration in Pahur.
             </p>
-            <p className="text-neutral-400 text-xs lg:text-sm leading-relaxed mb-6 max-w-lg">
+            <p className="text-neutral-400 text-xs lg:text-sm leading-relaxed mb-6 max-w-md">
               Regular servicing पासून Complete Bike Restoration पर्यंत — तुमच्या Bike ची संपूर्ण काळजी एकाच ठिकाणी.
             </p>
 
