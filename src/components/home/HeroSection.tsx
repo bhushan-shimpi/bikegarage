@@ -8,28 +8,28 @@ export const HeroSection: React.FC = () => {
       {/* ─── DEDICATED MOBILE LAYOUT (< sm / 640px) ─── */}
       <div className="block sm:hidden w-full">
         {/* Motorcycle Visual Hero */}
-        <div className="relative w-full h-[230px] xs:h-[260px] overflow-hidden bg-[#0B0B0B]">
+        <div className="relative w-full h-[220px] xs:h-[250px] overflow-hidden bg-[#0B0B0B]">
           <img
-            src="/images/hero-bike.jpg"
+            src="/images/hero-bike-mobile.jpg"
             alt="Royal Enfield Meteor 350 motorcycle at Chaudhari Auto Centre"
             fetchPriority="high"
             decoding="async"
-            className="w-full h-full object-cover object-[75%_center] brightness-105 contrast-105"
+            className="w-full h-full object-cover object-center brightness-105 contrast-105"
           />
           {/* Subtle directional fade at bottom into the content area */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B] via-transparent to-black/10 pointer-events-none" />
         </div>
 
         {/* Mobile Content Area */}
-        <div className="px-5 xs:px-6 pt-2 pb-5 flex flex-col">
+        <div className="px-5 xs:px-6 pt-2 pb-4 flex flex-col">
           {/* Eyebrow */}
-          <p className="text-[#F5B900] text-xs font-bold uppercase tracking-[0.2em] mb-2">
+          <p className="text-[#F5B900] text-xs font-bold uppercase tracking-[0.2em] mb-1.5">
             TRUSTED BIKE SERVICE SINCE 1994
           </p>
 
           {/* Main Heading */}
           <h1
-            className="font-black uppercase tracking-tight text-white font-sans mb-2.5"
+            className="font-black uppercase tracking-tight text-white font-sans mb-2"
             style={{
               fontSize: 'clamp(2.35rem, 11vw, 3.25rem)',
               lineHeight: 0.96,
@@ -43,7 +43,7 @@ export const HeroSection: React.FC = () => {
           <p className="text-neutral-200 text-sm font-medium leading-relaxed mb-1">
             Professional two-wheeler service, repair &amp; restoration in Pahur.
           </p>
-          <p className="text-neutral-400 text-xs xs:text-[13px] leading-relaxed mb-4">
+          <p className="text-neutral-400 text-xs xs:text-[13px] leading-relaxed mb-3.5">
             Regular servicing पासून Complete Bike Restoration पर्यंत — तुमच्या Bike ची संपूर्ण काळजी एकाच ठिकाणी.
           </p>
 
@@ -73,7 +73,7 @@ export const HeroSection: React.FC = () => {
       </div>
 
       {/* ─── DESKTOP / TABLET COMPOSITION (>= sm / 640px) ─── */}
-      <div className="hidden sm:flex relative min-h-[500px] lg:min-h-[560px] xl:min-h-[600px] items-center w-full">
+      <div className="hidden sm:flex relative min-h-[440px] lg:min-h-[490px] xl:min-h-[530px] items-center w-full">
         {/* Full-width motorcycle image positioned towards the right */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
@@ -94,21 +94,21 @@ export const HeroSection: React.FC = () => {
           />
 
           {/* Subtle edge fades for seamless top/bottom integration */}
-          <div className="absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-[#0B0B0B]/60 to-transparent pointer-events-none" />
-          <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#0B0B0B] to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-[#0B0B0B]/60 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#0B0B0B] to-transparent pointer-events-none" />
         </div>
 
         {/* Content container — aligned left, max-w-lg to prevent overlap with bike on right */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-10 lg:py-14">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-6 lg:py-8 xl:py-10">
           <div className="max-w-lg lg:max-w-xl">
             {/* Eyebrow */}
-            <p className="text-[#F5B900] text-xs lg:text-sm font-bold uppercase tracking-[0.22em] mb-2.5">
+            <p className="text-[#F5B900] text-xs lg:text-sm font-bold uppercase tracking-[0.22em] mb-2">
               TRUSTED BIKE SERVICE SINCE 1994
             </p>
 
             {/* Main Heading */}
             <h1
-              className="font-black uppercase tracking-tight text-white font-sans mb-3.5"
+              className="font-black uppercase tracking-tight text-white font-sans mb-3"
               style={{
                 fontSize: 'clamp(2.8rem, 4.8vw, 4.5rem)',
                 lineHeight: 0.95,
@@ -122,7 +122,7 @@ export const HeroSection: React.FC = () => {
             <p className="text-neutral-200 text-base lg:text-lg font-medium leading-relaxed mb-1 max-w-md">
               Professional two-wheeler service, repair &amp; restoration in Pahur.
             </p>
-            <p className="text-neutral-400 text-xs lg:text-sm leading-relaxed mb-6 max-w-md">
+            <p className="text-neutral-400 text-xs lg:text-sm leading-relaxed mb-5 max-w-md">
               Regular servicing पासून Complete Bike Restoration पर्यंत — तुमच्या Bike ची संपूर्ण काळजी एकाच ठिकाणी.
             </p>
 
