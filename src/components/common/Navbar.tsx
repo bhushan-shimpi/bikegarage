@@ -18,7 +18,6 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Prevent body scroll when drawer open
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
@@ -43,18 +42,20 @@ export const Navbar: React.FC = () => {
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14 sm:h-16">
-            {/* Logo */}
-            <Link to="/" className="flex items-center gap-2 sm:gap-3 group select-none min-w-0">
+
+            {/* Logo — on mobile show image only (logo already has brand text inside) */}
+            <Link to="/" className="flex items-center gap-2.5 group select-none">
               <img
                 src="/images/logo.png"
                 alt="Chaudhari Auto Centre"
-                className="h-9 sm:h-11 w-auto object-contain shrink-0 transition-transform duration-200 group-hover:scale-105"
+                className="h-9 sm:h-10 w-auto object-contain shrink-0 transition-transform duration-200 group-hover:scale-105"
               />
-              <div className="flex flex-col min-w-0">
-                <span className="text-[11px] sm:text-base lg:text-lg font-black tracking-tight text-white uppercase font-sans leading-none truncate">
+              {/* Brand text: hidden on xs, visible on sm+ */}
+              <div className="hidden sm:flex flex-col">
+                <span className="text-sm lg:text-base font-black tracking-tight text-white uppercase font-sans leading-none">
                   CHAUDHARI AUTO CENTRE
                 </span>
-                <span className="text-[8px] sm:text-[10px] font-black tracking-[0.2em] sm:tracking-[0.25em] text-[#F5B900] uppercase mt-0.5 leading-none">
+                <span className="text-[9px] lg:text-[10px] font-black tracking-[0.25em] text-[#F5B900] uppercase mt-0.5 leading-none">
                   PAHUR • EST. 1994
                 </span>
               </div>
@@ -87,10 +88,10 @@ export const Navbar: React.FC = () => {
               ))}
             </nav>
 
-            {/* Desktop Right CTAs */}
+            {/* Desktop CTAs */}
             <div className="hidden lg:flex items-center gap-2.5">
               <a
-                href="https://wa.me/919822000000?text=Hello%20Chaudhari%20Auto%20Centre"
+                href="https://wa.me/919822000000"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#1A1A1A] hover:bg-emerald-600 text-emerald-400 hover:text-white font-bold text-xs tracking-wide border border-[#2E2E2E] hover:border-emerald-600 transition-all"
@@ -107,9 +108,9 @@ export const Navbar: React.FC = () => {
               </a>
             </div>
 
-            {/* Mobile: Quick Call + Hamburger */}
+            {/* Mobile right: Book pill + Call icon + Hamburger */}
             <div className="flex items-center gap-2 lg:hidden">
-              {/* Quick Book button on mobile */}
+              {/* Book pill — visible on sm, hidden on xs */}
               <Link
                 to="/book-appointment"
                 className="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#F5B900] text-black font-extrabold text-[10px] uppercase tracking-wider"
@@ -118,30 +119,24 @@ export const Navbar: React.FC = () => {
                 <span>Book</span>
               </Link>
 
-              {/* Call button */}
+              {/* Call icon button */}
               <a
                 href="tel:+919822000000"
-                className="flex items-center justify-center w-8 h-8 rounded-lg bg-[#1A1A1A] border border-[#333] text-[#F5B900] hover:bg-[#F5B900] hover:text-black transition-all"
+                className="flex items-center justify-center w-9 h-9 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black transition-all active:scale-95 shadow-md shadow-[#F5B900]/20"
                 aria-label="Call Workshop"
               >
-                <Phone className="w-3.5 h-3.5" />
+                <Phone className="w-4 h-4 fill-black" />
               </a>
 
               {/* Hamburger */}
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="flex flex-col items-center justify-center w-9 h-9 rounded-lg bg-[#1A1A1A] border border-[#333333] text-white hover:border-[#F5B900] transition-all gap-1.5 px-2"
+                className="flex flex-col items-center justify-center w-9 h-9 rounded-xl bg-[#1A1A1A] border border-[#333] text-white hover:border-[#F5B900]/50 transition-all gap-[5px] px-[10px]"
                 aria-label="Toggle navigation"
               >
-                {isMobileMenuOpen ? (
-                  <X className="w-4.5 h-4.5" />
-                ) : (
-                  <>
-                    <span className="block w-full h-0.5 bg-current rounded-full" />
-                    <span className="block w-3/4 h-0.5 bg-current rounded-full" />
-                    <span className="block w-1/2 h-0.5 bg-current rounded-full" />
-                  </>
-                )}
+                <span className={`block w-full h-0.5 bg-current rounded-full transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-[7px]' : ''}`} />
+                <span className={`block w-full h-0.5 bg-current rounded-full transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0 scale-x-0' : ''}`} />
+                <span className={`block w-full h-0.5 bg-current rounded-full transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-[7px]' : ''}`} />
               </button>
             </div>
           </div>
@@ -153,41 +148,33 @@ export const Navbar: React.FC = () => {
         <div className="fixed inset-0 z-50 lg:hidden">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/85 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
           />
 
-          {/* Slide-in Drawer from right */}
+          {/* Slide-in panel */}
           <div
             ref={drawerRef}
-            className="absolute top-0 right-0 w-[85%] max-w-sm h-full bg-[#0D0D0D] border-l border-[#2A2A2A] flex flex-col z-10 shadow-2xl shadow-black/60"
+            className="absolute top-0 right-0 w-[82%] max-w-xs h-full bg-[#0D0D0D] border-l border-[#2A2A2A] flex flex-col z-10 shadow-2xl"
           >
             {/* Drawer Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-[#1E1E1E] bg-[#0A0A0A]">
               <div className="flex items-center gap-2.5">
-                <img
-                  src="/images/logo.png"
-                  alt="Chaudhari Auto Centre"
-                  className="h-9 w-auto object-contain"
-                />
+                <img src="/images/logo.png" alt="Chaudhari Auto Centre" className="h-9 w-auto object-contain" />
                 <div className="flex flex-col">
-                  <span className="text-[11px] font-black text-white uppercase leading-tight tracking-tight">
-                    CHAUDHARI AUTO
-                  </span>
-                  <span className="text-[8px] font-black text-[#F5B900] tracking-[0.2em] uppercase mt-0.5">
-                    PAHUR • 1994
-                  </span>
+                  <span className="text-[11px] font-black text-white uppercase leading-tight">CHAUDHARI AUTO</span>
+                  <span className="text-[9px] font-black text-[#F5B900] tracking-[0.2em] uppercase mt-0.5">PAHUR • 1994</span>
                 </div>
               </div>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="w-8 h-8 rounded-lg bg-[#1A1A1A] border border-[#2E2E2E] text-neutral-400 hover:text-white hover:border-[#F5B900] transition-all flex items-center justify-center"
+                className="w-8 h-8 rounded-lg bg-[#1A1A1A] border border-[#2E2E2E] text-neutral-400 hover:text-white flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Nav Links */}
+            {/* Nav links */}
             <nav className="flex-1 px-4 py-5 space-y-1 overflow-y-auto">
               {navLinks.map((link) => (
                 <NavLink
@@ -209,47 +196,39 @@ export const Navbar: React.FC = () => {
                         <span className="text-base">{link.emoji}</span>
                         <span>{link.name}</span>
                       </div>
-                      {!isActive && (
-                        <ChevronRight className="w-4 h-4 text-neutral-500" />
-                      )}
+                      {!isActive && <ChevronRight className="w-4 h-4 text-neutral-500" />}
                     </>
                   )}
                 </NavLink>
               ))}
             </nav>
 
-            {/* Bottom CTA Area */}
+            {/* Bottom CTAs */}
             <div className="px-4 py-5 border-t border-[#1E1E1E] space-y-2.5 bg-[#0A0A0A]">
-              {/* Workshop status pill */}
-              <div className="flex items-center justify-center gap-2 py-2">
+              <div className="flex items-center justify-center gap-2 py-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[11px] font-medium text-emerald-400 uppercase tracking-wider">
-                  Workshop Open in Pahur
-                </span>
+                <span className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">Workshop Open • Pahur</span>
               </div>
-
               <a
                 href="tel:+919822000000"
-                className="w-full py-3 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-extrabold text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-md shadow-[#F5B900]/20 transition-all"
+                className="w-full py-3 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-extrabold text-sm uppercase tracking-wider flex items-center justify-center gap-2 shadow-md transition-all"
               >
                 <Phone className="w-4 h-4 fill-black" />
                 <span>Call: +91 98220 00000</span>
               </a>
-
               <a
                 href="https://wa.me/919822000000?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 rounded-xl bg-[#1A3828] hover:bg-emerald-700 text-emerald-400 hover:text-white font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 border border-emerald-900 hover:border-emerald-600 transition-all"
+                className="w-full py-3 rounded-xl bg-[#0D2318] hover:bg-emerald-800 text-emerald-400 font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 border border-emerald-900 transition-all"
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>WhatsApp Us</span>
               </a>
-
               <Link
                 to="/garage/login"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-center text-[11px] text-neutral-600 hover:text-neutral-400 pt-1 pb-0.5 transition-colors"
+                className="block text-center text-[11px] text-neutral-600 hover:text-neutral-400 pt-1 transition-colors"
               >
                 Garage Staff Login →
               </Link>
