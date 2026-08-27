@@ -22,12 +22,12 @@ export const CTASection: React.FC = () => {
             </div>
           </div>
 
-          {/* Right: Unified Action Buttons */}
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
-            <Link to="/book-appointment">
-              <button className="px-6 py-3.5 rounded-lg bg-black hover:bg-neutral-900 text-white font-black text-xs uppercase tracking-wider shadow-lg transition-transform active:scale-95 flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-[#F5B900]" />
-                <span>Book Appointment & Enquiry</span>
+          {/* Right: Unified Action Buttons in ONE ROW on mobile */}
+          <div className="flex flex-row items-center gap-2 sm:gap-3 w-full md:w-auto shrink-0">
+            <Link to="/book-appointment" className="flex-1 md:flex-initial">
+              <button className="w-full px-3.5 sm:px-6 py-2.5 sm:py-3.5 rounded-lg bg-black hover:bg-neutral-900 text-white font-black text-[11px] sm:text-xs uppercase tracking-wider shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F5B900] shrink-0" />
+                <span>Book Appointment</span>
               </button>
             </Link>
 
@@ -35,9 +35,9 @@ export const CTASection: React.FC = () => {
               href="https://wa.me/919822000000?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-3.5 rounded-lg bg-black/10 hover:bg-black/20 text-black border border-black/30 font-bold text-xs uppercase tracking-wider transition-colors flex items-center gap-2"
+              className="flex-1 md:flex-initial px-3.5 sm:px-5 py-2.5 sm:py-3.5 rounded-lg bg-black/10 hover:bg-black/20 text-black border border-black/30 font-bold text-[11px] sm:text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap"
             >
-              <MessageSquare className="w-4 h-4 text-emerald-800" />
+              <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-800 shrink-0" />
               <span>WhatsApp Us</span>
             </a>
           </div>

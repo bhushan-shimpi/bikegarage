@@ -57,12 +57,12 @@ export const HeroSection: React.FC = () => {
             Regular servicing पासून Complete Bike Restoration पर्यंत — तुमच्या Bike ची संपूर्ण काळजी एकाच ठिकाणी.
           </p>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            <Link to="/book-appointment" className="w-full sm:w-auto">
-              <button className="w-full sm:w-auto px-6 py-3 rounded-lg bg-[#F5B900] hover:bg-[#DFA500] text-black font-black text-xs uppercase tracking-wider shadow-md transition-all active:scale-95 flex items-center justify-center gap-2">
-                <Calendar className="w-4 h-4" />
-                <span>Book Appointment / Enquiry</span>
+          {/* Action Buttons — In ONE ROW on all screen sizes */}
+          <div className="flex flex-row items-center gap-2.5 sm:gap-3 pt-1">
+            <Link to="/book-appointment" className="flex-1 sm:flex-initial">
+              <button className="w-full sm:w-auto px-3.5 sm:px-6 py-2.5 sm:py-3 rounded-lg bg-[#F5B900] hover:bg-[#DFA500] text-black font-black text-[11px] sm:text-xs uppercase tracking-wider shadow-md transition-all active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap">
+                <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+                <span>Book Appointment</span>
               </button>
             </Link>
 
@@ -70,9 +70,9 @@ export const HeroSection: React.FC = () => {
               href="https://wa.me/919822000000?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto px-6 py-3 rounded-lg bg-transparent hover:bg-white/10 text-white border border-white/40 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
+              className="flex-1 sm:flex-initial px-3.5 sm:px-6 py-2.5 sm:py-3 rounded-lg bg-transparent hover:bg-white/10 text-white border border-white/40 font-bold text-[11px] sm:text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap"
             >
-              <MessageSquare className="w-4 h-4 text-[#25D366]" />
+              <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#25D366] shrink-0" />
               <span>WhatsApp Us</span>
             </a>
           </div>

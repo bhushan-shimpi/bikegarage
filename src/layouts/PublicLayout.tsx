@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Navbar } from '../components/common/Navbar';
 import { Footer } from '../components/common/Footer';
-import { MobileActionBar } from '../components/common/MobileActionBar';
 
 export const PublicLayout: React.FC = () => {
   const { pathname } = useLocation();
@@ -14,11 +13,10 @@ export const PublicLayout: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-[#0B0B0B] text-white selection:bg-[#F5B900] selection:text-black max-w-full overflow-x-hidden">
       <Navbar />
-      <main className="flex-1 pb-16 sm:pb-0">
+      <main className="flex-1">
         <Outlet />
       </main>
       <Footer />
-      <MobileActionBar />
     </div>
   );
 };
