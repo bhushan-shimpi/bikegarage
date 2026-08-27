@@ -74,25 +74,25 @@ export const RestorationHighlight: React.FC = () => {
           ))}
         </div>
 
-        {/* CTAs: View Restoration Work & Get Restoration Estimate */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Link to="/services" className="w-full sm:w-auto">
+        {/* CTAs: View Restoration Work & Get Restoration Estimate — Single row always */}
+        <div className="flex flex-row items-center justify-center gap-3">
+          <Link to="/services" className="flex-1 sm:flex-initial max-w-xs">
             <Button
               variant="secondary"
               size="lg"
-              leftIcon={<Wrench className="w-4 h-4 text-[#F5B900]" />}
-              className="w-full sm:w-auto"
+              leftIcon={<Wrench className="w-4 h-4 text-[#F5B900] shrink-0" />}
+              className="w-full text-[11px] sm:text-sm whitespace-nowrap"
             >
               View Restoration Work
             </Button>
           </Link>
 
-          <Link to="/inquiry?service=Bike%20Restoration" className="w-full sm:w-auto">
+          <Link to="/inquiry?service=Bike%20Restoration" className="flex-1 sm:flex-initial max-w-xs">
             <Button
               variant="primary"
               size="lg"
-              rightIcon={<ArrowRight className="w-4 h-4" />}
-              className="w-full sm:w-auto font-black"
+              rightIcon={<ArrowRight className="w-4 h-4 shrink-0" />}
+              className="w-full font-black text-[11px] sm:text-sm whitespace-nowrap"
             >
               Get Restoration Estimate
             </Button>

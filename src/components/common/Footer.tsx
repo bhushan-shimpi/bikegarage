@@ -4,9 +4,9 @@ import { Phone, Mail, MapPin, MessageCircle } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#0A0A0A] border-t border-[#1C1C1C] text-neutral-400 pt-12 pb-16 lg:pb-10 text-xs">
+    <footer className="bg-[#0A0A0A] border-t border-[#1C1C1C] text-neutral-400 pt-10 pb-8 text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-10 border-b border-[#1C1C1C]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-[#1C1C1C]">
           {/* Column 1: Brand */}
           <div className="space-y-3">
             <Link to="/" className="flex items-center gap-3">
@@ -60,52 +60,13 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link to="/contact" className="hover:text-[#F5B900] transition-colors">
-                  Contact & Location
+                  Contact &amp; Location
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 3: Two-Wheeler Services */}
-          <div>
-            <h4 className="text-white text-xs font-bold uppercase tracking-wider mb-3.5">
-              Bike Services
-            </h4>
-            <ul className="space-y-2 text-neutral-400">
-              <li>
-                <Link to="/services" className="hover:text-[#F5B900] transition-colors">
-                  General Bike Service
-                </Link>
-              </li>
-              <li>
-                <Link to="/services" className="hover:text-[#F5B900] transition-colors">
-                  Engine Repair & Overhaul
-                </Link>
-              </li>
-              <li>
-                <Link to="/services" className="hover:text-[#F5B900] transition-colors">
-                  Brake Service & Disc Tuning
-                </Link>
-              </li>
-              <li>
-                <Link to="/services" className="hover:text-[#F5B900] transition-colors">
-                  Carburetor & FI Mileage Tuning
-                </Link>
-              </li>
-              <li>
-                <Link to="/services" className="hover:text-[#F5B900] transition-colors">
-                  Foam Washing & Detailing
-                </Link>
-              </li>
-              <li>
-                <Link to="/services" className="hover:text-[#F5B900] transition-colors">
-                  Complete Bike Restoration
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 4: Contact Us */}
+          {/* Column 3: Contact Us */}
           <div className="space-y-2.5">
             <h4 className="text-white text-xs font-bold uppercase tracking-wider mb-3.5">
               Workshop Contact
