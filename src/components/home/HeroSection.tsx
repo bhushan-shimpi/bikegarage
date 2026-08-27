@@ -29,7 +29,7 @@ export const HeroSection: React.FC = () => {
 
           {/* Main Heading */}
           <h1
-            className="font-black uppercase tracking-tight text-white font-sans mb-3.5"
+            className="font-black uppercase tracking-tight text-white font-sans mb-3"
             style={{
               fontSize: 'clamp(2.35rem, 11vw, 3.25rem)',
               lineHeight: 0.96,
@@ -39,19 +39,22 @@ export const HeroSection: React.FC = () => {
             EXPERT CARE<br />FOR YOUR BIKE
           </h1>
 
-          {/* Supporting Text */}
-          <p className="text-neutral-300 text-sm font-normal leading-relaxed mb-6">
+          {/* Supporting Text with Marathi line */}
+          <p className="text-neutral-200 text-sm font-medium leading-relaxed mb-1.5">
             Professional two-wheeler service, repair &amp; restoration in Pahur.
           </p>
+          <p className="text-neutral-400 text-xs xs:text-[13px] leading-relaxed mb-5">
+            Regular servicing पासून Complete Bike Restoration पर्यंत — तुमच्या Bike ची संपूर्ण काळजी एकाच ठिकाणी.
+          </p>
 
-          {/* Stacked Full-Width CTA Buttons */}
-          <div className="flex flex-col gap-3 w-full">
-            <Link to="/book-appointment" className="w-full">
+          {/* Single-Row CTA Buttons on Mobile */}
+          <div className="flex flex-row items-center gap-2 xs:gap-3 w-full">
+            <Link to="/book-appointment" className="flex-1">
               <button
                 type="button"
-                className="w-full min-h-[52px] px-6 py-3.5 rounded-xl bg-[#F5B900] hover:bg-[#E5AC00] active:scale-[0.98] text-black font-extrabold text-xs uppercase tracking-wider transition-all shadow-lg shadow-[#F5B900]/20 flex items-center justify-center gap-2"
+                className="w-full min-h-[48px] px-2 xs:px-4 py-3 rounded-xl bg-[#F5B900] hover:bg-[#E5AC00] active:scale-[0.98] text-black font-extrabold text-[11px] xs:text-xs uppercase tracking-wider transition-all shadow-lg shadow-[#F5B900]/20 flex items-center justify-center gap-1.5 xs:gap-2"
               >
-                <Calendar className="w-4 h-4 shrink-0" />
+                <Calendar className="w-3.5 h-3.5 xs:w-4 xs:h-4 shrink-0" />
                 <span className="whitespace-nowrap">BOOK A SERVICE</span>
               </button>
             </Link>
@@ -60,9 +63,9 @@ export const HeroSection: React.FC = () => {
               href="https://wa.me/919822000000?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full min-h-[52px] px-6 py-3.5 rounded-xl bg-[#141414] hover:bg-[#1f1f1f] active:scale-[0.98] text-white border border-neutral-700/80 hover:border-neutral-500 font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
+              className="flex-1 min-h-[48px] px-2 xs:px-4 py-3 rounded-xl bg-[#141414] hover:bg-[#1f1f1f] active:scale-[0.98] text-white border border-neutral-700/80 hover:border-neutral-500 font-bold text-[11px] xs:text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 xs:gap-2"
             >
-              <MessageSquare className="w-4 h-4 text-[#25D366] shrink-0" />
+              <MessageSquare className="w-3.5 h-3.5 xs:w-4 xs:h-4 text-[#25D366] shrink-0" />
               <span className="whitespace-nowrap">WHATSAPP US</span>
             </a>
           </div>
@@ -115,9 +118,12 @@ export const HeroSection: React.FC = () => {
               EXPERT CARE<br />FOR YOUR BIKE
             </h1>
 
-            {/* Supporting Text */}
-            <p className="text-neutral-300 text-base lg:text-lg font-normal leading-relaxed mb-8 max-w-lg">
+            {/* Supporting Text with Marathi line */}
+            <p className="text-neutral-200 text-base lg:text-lg font-medium leading-relaxed mb-1.5 max-w-lg">
               Professional two-wheeler service, repair &amp; restoration in Pahur.
+            </p>
+            <p className="text-neutral-400 text-xs lg:text-sm leading-relaxed mb-8 max-w-lg">
+              Regular servicing पासून Complete Bike Restoration पर्यंत — तुमच्या Bike ची संपूर्ण काळजी एकाच ठिकाणी.
             </p>
 
             {/* Inline Action Buttons */}
