@@ -42,7 +42,7 @@ export const WhyChooseUs: React.FC = () => {
             </div>
 
             <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-              With over 30 years in Pahur, we treat every bike—from everyday commuters to high-power superbikes and vintage 2-strokes—with master craftsmanship, genuine spares, and complete transparency.
+              With over 30 years in Pahur, we treat every commuter bike—like Hero, Honda, Yamaha, KTM, and more, as well as vintage 2-strokes—with master craftsmanship, genuine spares, and complete transparency.
             </p>
 
             <div className="grid grid-cols-2 gap-2.5 sm:gap-3.5 pt-2">

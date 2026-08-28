@@ -34,7 +34,7 @@ export const ServicesOverview: React.FC = () => {
             </h2>
             <div className="w-12 h-1 bg-[#F5B900] mx-auto mt-2 rounded-full" />
             <p className="text-xs sm:text-sm text-gray-600 max-w-xl mx-auto mt-2.5">
-              From daily commuter tune-ups to superbike diagnostics and classic 2-stroke restorations — expert care for every bike.
+              From everyday commuter bikes like Hero, Honda, Yamaha, and KTM to classic 2-stroke restorations — expert care for every bike.
             </p>
           </div>
         </ScrollReveal>
