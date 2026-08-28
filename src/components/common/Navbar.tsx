@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { NavLink, Link, useLocation } from 'react-router-dom';
-import { Phone, X, Calendar, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from "react";
+import { NavLink, Link, useLocation } from "react-router-dom";
+import { Phone, X, Calendar, ChevronRight } from "lucide-react";
 
 export const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -14,22 +14,29 @@ export const Navbar: React.FC = () => {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isMobileMenuOpen]);
 
   const navLinks = [
-    { name: 'Home', path: '/', emoji: '🏠' },
-    { name: 'Services', path: '/services', emoji: '🔧' },
-    { name: 'Restoration Form', path: '/restoration-form', emoji: '🏍️', badge: 'New' },
-    { name: 'About Us', path: '/about', emoji: '🏆' },
-    { name: 'Book / Enquire', path: '/book-appointment', emoji: '📅' },
-    { name: 'Contact Us', path: '/contact', emoji: '📍' },
+    { name: "Home", path: "/", emoji: "🏠" },
+    { name: "Services", path: "/services", emoji: "🔧" },
+    {
+      name: "Restoration Form",
+      path: "/restoration-form",
+      emoji: "🏍️",
+      badge: "New",
+    },
+    { name: "About Us", path: "/about", emoji: "🏆" },
+    { name: "Enquire", path: "/book-appointment", emoji: "📅" },
+    { name: "Contact Us", path: "/contact", emoji: "📍" },
   ];
 
   return (
@@ -37,15 +44,17 @@ export const Navbar: React.FC = () => {
       <header
         className={`fixed top-0 left-0 right-0 z-40 w-full transition-all duration-500 ${
           scrolled
-            ? 'bg-black/70 backdrop-blur-xl border-b border-white/10 shadow-xl shadow-black/40'
-            : 'bg-[#000000] border-b border-[#1E1E1E]'
+            ? "bg-black/70 backdrop-blur-xl border-b border-white/10 shadow-xl shadow-black/40"
+            : "bg-[#000000] border-b border-[#1E1E1E]"
         }`}
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14 sm:h-16">
-
             {/* Logo — on mobile show image only (logo already has brand text inside) */}
-            <Link to="/" className="flex items-center gap-2.5 group select-none">
+            <Link
+              to="/"
+              className="flex items-center gap-2.5 group select-none"
+            >
               <img
                 src="/images/logo.png"
                 alt="Chaudhari Auto Centre"
@@ -68,10 +77,12 @@ export const Navbar: React.FC = () => {
                 <NavLink
                   key={link.path}
                   to={link.path}
-                  end={link.path === '/'}
+                  end={link.path === "/"}
                   className={({ isActive }) =>
                     `text-sm font-semibold transition-colors relative py-1.5 tracking-wide group flex items-center gap-1.5 ${
-                      isActive ? 'text-[#F5B900]' : 'text-neutral-300 hover:text-white'
+                      isActive
+                        ? "text-[#F5B900]"
+                        : "text-neutral-300 hover:text-white"
                     }`
                   }
                 >
@@ -85,7 +96,9 @@ export const Navbar: React.FC = () => {
                       )}
                       <span
                         className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-[#F5B900] transition-all duration-200 ${
-                          isActive ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0 group-hover:opacity-40 group-hover:scale-x-100'
+                          isActive
+                            ? "opacity-100 scale-x-100"
+                            : "opacity-0 scale-x-0 group-hover:opacity-40 group-hover:scale-x-100"
                         }`}
                       />
                     </>
@@ -131,9 +144,15 @@ export const Navbar: React.FC = () => {
                 className="flex flex-col items-center justify-center w-9 h-9 rounded-xl bg-[#1A1A1A] border border-[#333] text-white hover:border-[#F5B900]/50 transition-all gap-[5px] px-[10px]"
                 aria-label="Toggle navigation"
               >
-                <span className={`block w-full h-0.5 bg-current rounded-full transition-all duration-300 ${isMobileMenuOpen ? 'rotate-45 translate-y-[7px]' : ''}`} />
-                <span className={`block w-full h-0.5 bg-current rounded-full transition-all duration-300 ${isMobileMenuOpen ? 'opacity-0 scale-x-0' : ''}`} />
-                <span className={`block w-full h-0.5 bg-current rounded-full transition-all duration-300 ${isMobileMenuOpen ? '-rotate-45 -translate-y-[7px]' : ''}`} />
+                <span
+                  className={`block w-full h-0.5 bg-current rounded-full transition-all duration-300 ${isMobileMenuOpen ? "rotate-45 translate-y-[7px]" : ""}`}
+                />
+                <span
+                  className={`block w-full h-0.5 bg-current rounded-full transition-all duration-300 ${isMobileMenuOpen ? "opacity-0 scale-x-0" : ""}`}
+                />
+                <span
+                  className={`block w-full h-0.5 bg-current rounded-full transition-all duration-300 ${isMobileMenuOpen ? "-rotate-45 -translate-y-[7px]" : ""}`}
+                />
               </button>
             </div>
           </div>
@@ -157,10 +176,18 @@ export const Navbar: React.FC = () => {
             {/* Drawer Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-[#1E1E1E] bg-[#0A0A0A]">
               <div className="flex items-center gap-2.5">
-                <img src="/images/logo.png" alt="Chaudhari Auto Centre" className="h-9 w-auto object-contain" />
+                <img
+                  src="/images/logo.png"
+                  alt="Chaudhari Auto Centre"
+                  className="h-9 w-auto object-contain"
+                />
                 <div className="flex flex-col">
-                  <span className="text-[11px] font-black text-white uppercase leading-tight">CHAUDHARI AUTO</span>
-                  <span className="text-[9px] font-black text-[#F5B900] tracking-[0.2em] uppercase mt-0.5">PAHUR • 1994</span>
+                  <span className="text-[11px] font-black text-white uppercase leading-tight">
+                    CHAUDHARI AUTO
+                  </span>
+                  <span className="text-[9px] font-black text-[#F5B900] tracking-[0.2em] uppercase mt-0.5">
+                    PAHUR • 1994
+                  </span>
                 </div>
               </div>
               <button
@@ -177,13 +204,13 @@ export const Navbar: React.FC = () => {
                 <NavLink
                   key={link.path}
                   to={link.path}
-                  end={link.path === '/'}
+                  end={link.path === "/"}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={({ isActive }) =>
                     `flex items-center justify-between px-4 py-3.5 rounded-xl font-bold text-sm transition-all ${
                       isActive
-                        ? 'bg-[#F5B900] text-black shadow-md shadow-[#F5B900]/20'
-                        : 'text-neutral-300 hover:bg-[#1A1A1A] hover:text-white border border-transparent hover:border-[#2A2A2A]'
+                        ? "bg-[#F5B900] text-black shadow-md shadow-[#F5B900]/20"
+                        : "text-neutral-300 hover:bg-[#1A1A1A] hover:text-white border border-transparent hover:border-[#2A2A2A]"
                     }`
                   }
                 >
@@ -193,7 +220,9 @@ export const Navbar: React.FC = () => {
                         <span className="text-base">{link.emoji}</span>
                         <span>{link.name}</span>
                       </div>
-                      {!isActive && <ChevronRight className="w-4 h-4 text-neutral-500" />}
+                      {!isActive && (
+                        <ChevronRight className="w-4 h-4 text-neutral-500" />
+                      )}
                     </>
                   )}
                 </NavLink>
