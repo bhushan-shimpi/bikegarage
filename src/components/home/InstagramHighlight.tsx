@@ -64,26 +64,26 @@ export const InstagramHighlight: React.FC = () => {
   ];
 
   return (
-    <section className="py-2.5 sm:py-3.5 bg-[#0A0A0A] border-y border-[#181818] text-white relative overflow-hidden">
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-64 h-64 bg-[#F5B900]/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-64 h-64 bg-[#E1306C]/10 rounded-full blur-3xl pointer-events-none" />
+    <section className="py-3 sm:py-4 bg-[#0A0A0A] border-y border-[#181818] text-white relative overflow-hidden">
+      {/* Ambient background lighting */}
+      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-72 h-72 bg-[#F5B900]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-72 h-72 bg-[#E1306C]/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-6xl mx-auto px-3 sm:px-5 relative z-10">
         
-        {/* Main Combined Grid: 2x2 Stats on Left + 3 Social Cards on Right */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-2.5 sm:gap-4 items-center">
+        {/* Equal 2-Column Split: 50% Stats on Left + 50% Social on Right (NO awkward center gap) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 items-stretch">
           
-          {/* ─── LEFT COLUMN: 2x2 Dark Rounded Stat Cards (Compact Height) ─── */}
-          <div className="lg:col-span-5 w-full">
+          {/* ─── LEFT: 2x2 Dark Rounded Stat Cards (Fills left 50% evenly) ─── */}
+          <div className="w-full h-full">
             <ScrollReveal direction="left">
-              <div className="grid grid-cols-2 gap-2 sm:gap-2.5 w-full">
+              <div className="grid grid-cols-2 gap-2 sm:gap-2.5 h-full">
                 {darkStats.map((item, idx) => (
                   <div
                     key={idx}
-                    className="bg-[#1C1C1C] hover:bg-[#232323] border border-[#2B2B2B] hover:border-[#F5B900]/50 rounded-xl py-2 px-2.5 sm:py-2.5 sm:px-3 flex flex-col items-center justify-center text-center shadow-sm transition-all duration-300 hover:scale-[1.02] group"
+                    className="bg-[#181818] hover:bg-[#202020] border border-[#272727] hover:border-[#F5B900]/50 rounded-xl sm:rounded-2xl p-2.5 sm:p-3 flex flex-col items-center justify-center text-center shadow-sm transition-all duration-300 hover:scale-[1.02] group min-h-[66px] sm:min-h-[72px]"
                   >
-                    <div className="text-base sm:text-lg lg:text-xl font-black text-[#F5B900] font-sans tracking-tight leading-none group-hover:scale-105 transition-transform">
+                    <div className="text-base sm:text-lg lg:text-xl font-black text-[#F5B900] font-sans tracking-tight leading-none group-hover:scale-105 transition-transform drop-shadow-[0_2px_6px_rgba(245,185,0,0.2)]">
                       <AnimatedNumber
                         value={item.value}
                         formatWithCommas={item.formatWithCommas}
@@ -100,24 +100,24 @@ export const InstagramHighlight: React.FC = () => {
             </ScrollReveal>
           </div>
 
-          {/* ─── RIGHT COLUMN: 3 Compact Social Media Cards (Reduced Height) ─── */}
-          <div className="lg:col-span-7 w-full flex justify-center lg:justify-end">
+          {/* ─── RIGHT: 3 Social Media Cards (Fills right 50% evenly, perfectly aligned) ─── */}
+          <div className="w-full h-full">
             <ScrollReveal direction="right">
-              <div className="grid grid-cols-3 gap-2 sm:gap-2.5 w-full max-w-lg">
+              <div className="grid grid-cols-3 gap-2 sm:gap-2.5 h-full">
                 {socialCards.map((card, idx) => (
                   <a
                     key={idx}
                     href={card.linkUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group relative flex flex-col items-center justify-between h-[125px] xs:h-[135px] sm:h-[145px] rounded-xl sm:rounded-2xl p-2 sm:p-2.5 text-white text-center shadow-md transition-all duration-300 hover:scale-105 hover:-translate-y-1 select-none overflow-hidden"
+                    className="group relative flex flex-col items-center justify-between h-[138px] sm:h-[148px] rounded-xl sm:rounded-2xl p-2 sm:p-2.5 text-white text-center shadow-md transition-all duration-300 hover:scale-105 hover:-translate-y-0.5 select-none overflow-hidden"
                     style={{
                       background: card.bgGradient,
-                      boxShadow: `0 8px 20px -6px ${card.shadowColor}`,
+                      boxShadow: `0 8px 22px -6px ${card.shadowColor}`,
                     }}
                     aria-label={`Follow ${card.handle} on ${card.platform}`}
                   >
-                    {/* Subtle top glare */}
+                    {/* Subtle top reflective glare */}
                     <div className="absolute -top-8 -left-8 w-20 h-20 bg-white/20 rounded-full blur-md pointer-events-none" />
 
                     {/* Diagonal shimmer sheen on hover */}
@@ -165,7 +165,7 @@ export const InstagramHighlight: React.FC = () => {
 
                     {/* Handle Pill at Bottom */}
                     <div className="w-full pb-0.5 px-0.5">
-                      <div className="px-1 py-0.5 rounded-full bg-black/35 backdrop-blur-sm border border-white/20 text-[8px] xs:text-[9px] sm:text-[10px] font-bold text-white truncate group-hover:bg-black/50 transition-colors leading-none">
+                      <div className="px-1.5 py-0.5 rounded-full bg-black/35 backdrop-blur-sm border border-white/20 text-[8px] xs:text-[9px] sm:text-[10px] font-bold text-white truncate group-hover:bg-black/50 transition-colors leading-none">
                         {card.handle}
                       </div>
                     </div>
