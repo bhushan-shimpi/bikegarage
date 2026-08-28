@@ -165,7 +165,7 @@ export const AdminCustomersPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Customers Cards Grid */}
+      {/* Customers List in Rows / Table */}
       {filtered.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-200 p-12 text-center">
           <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
@@ -177,102 +177,121 @@ export const AdminCustomersPage: React.FC = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((item) => (
-            <div
-              key={item.id || item.mobile}
-              className="p-5 rounded-2xl bg-white border border-gray-200 hover:border-gray-300 transition-all flex flex-col justify-between space-y-4 shadow-xs"
-            >
-              <div>
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <h4 className="text-base font-black text-gray-900 uppercase tracking-tight">
-                      {item.name}
-                    </h4>
-                    <span className="text-xs text-gray-600 block font-mono font-bold mt-0.5">
-                      📞 {formatPhone(item.mobile)}
-                    </span>
-                    {item.city && (
-                      <span className="text-[10px] text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded font-medium mt-1 inline-block">
-                        📍 {item.city}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      onClick={() => handleDelete(item.id || item.mobile, item.name)}
-                      className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-700 transition-colors"
-                      title="Delete Customer"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Primary Bike Details */}
-                <div className="mt-3 p-3 rounded-xl bg-gray-50 border border-gray-100 text-xs text-gray-700 space-y-1.5">
-                  <div className="flex items-center gap-2">
-                    <Bike className="w-4 h-4 text-[#DFA500] shrink-0" />
-                    <span className="font-bold text-gray-900 text-sm">
-                      {item.bikeBrand} {item.bikeModel || 'Motorcycle'}
-                    </span>
-                  </div>
-                  {item.registrationNumber && (
-                    <div className="text-xs text-gray-600 font-mono pl-6">
-                      Reg: <span className="font-bold text-gray-900 uppercase">{item.registrationNumber}</span>
-                    </div>
-                  )}
-                  {item.currentKm && (
-                    <div className="text-[11px] text-gray-500 pl-6 font-mono">
-                      Odometer: {item.currentKm} KM
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="pt-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-1.5">
-                  <button
-                    onClick={() => handleViewHistory(item)}
-                    className="px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300 text-xs font-bold flex items-center gap-1 transition-colors shadow-2xs"
+        <div className="bg-white border border-gray-200 rounded-2xl shadow-xs overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-gray-50/80 border-b border-gray-200 text-[11px] font-black uppercase text-gray-500 tracking-wider">
+                  <th className="py-3.5 px-4">Customer Name & Location</th>
+                  <th className="py-3.5 px-4">Mobile Number</th>
+                  <th className="py-3.5 px-4">Motorcycle Details</th>
+                  <th className="py-3.5 px-4">Registration No.</th>
+                  <th className="py-3.5 px-4">Odometer</th>
+                  <th className="py-3.5 px-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100">
+                {filtered.map((item) => (
+                  <tr
+                    key={item.id || item.mobile}
+                    className="hover:bg-amber-50/40 transition-colors"
                   >
-                    <History className="w-3.5 h-3.5 text-[#DFA500]" />
-                    <span>History</span>
-                  </button>
+                    <td className="py-3.5 px-4">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-800 font-black text-xs flex items-center justify-center shrink-0 border border-amber-200">
+                          {item.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <span className="font-bold text-gray-900 text-xs sm:text-sm block uppercase tracking-tight">
+                            {item.name}
+                          </span>
+                          {item.city && (
+                            <span className="text-[10px] text-gray-500 font-medium">
+                              📍 {item.city}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </td>
 
-                  <Link
-                    to="/garage/repair-history"
-                    className="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-[#F5B900] hover:text-black text-gray-800 text-xs font-bold border border-gray-200 transition-colors"
-                  >
-                    + Job Card
-                  </Link>
-                </div>
+                    <td className="py-3.5 px-4 font-mono font-bold text-gray-900">
+                      {formatPhone(item.mobile)}
+                    </td>
 
-                <div className="flex items-center gap-1.5">
-                  <a
-                    href={`tel:+91${item.mobile}`}
-                    className="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold text-xs flex items-center gap-1 transition-colors border border-gray-200"
-                    title="Call Customer"
-                  >
-                    <Phone className="w-3.5 h-3.5 text-gray-700" />
-                    <span>Call</span>
-                  </a>
-                  <a
-                    href={`https://wa.me/91${item.mobile}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-2.5 py-1.5 rounded-lg bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs flex items-center gap-1 transition-colors shadow-2xs"
-                    title="WhatsApp"
-                  >
-                    <MessageCircle className="w-3.5 h-3.5" />
-                    <span>WhatsApp</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          ))}
+                    <td className="py-3.5 px-4">
+                      <div className="flex items-center gap-1.5 text-xs text-gray-800">
+                        <Bike className="w-3.5 h-3.5 text-[#DFA500] shrink-0" />
+                        <span className="font-bold">
+                          {item.bikeBrand} {item.bikeModel || 'Motorcycle'}
+                        </span>
+                      </div>
+                    </td>
+
+                    <td className="py-3.5 px-4 font-mono">
+                      {item.registrationNumber ? (
+                        <span className="px-2 py-0.5 rounded text-[11px] font-bold uppercase bg-gray-100 text-gray-800 border border-gray-200">
+                          {item.registrationNumber}
+                        </span>
+                      ) : (
+                        <span className="text-gray-400 text-[11px]">—</span>
+                      )}
+                    </td>
+
+                    <td className="py-3.5 px-4 font-mono text-xs text-gray-600">
+                      {item.currentKm ? `${item.currentKm} KM` : '—'}
+                    </td>
+
+                    <td className="py-3.5 px-4 text-right">
+                      <div className="flex items-center justify-end gap-1.5">
+                        <button
+                          onClick={() => handleViewHistory(item)}
+                          className="px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300 text-xs font-bold flex items-center gap-1 transition-colors shadow-2xs"
+                          title="View Repair History"
+                        >
+                          <History className="w-3.5 h-3.5 text-[#DFA500]" />
+                          <span className="hidden sm:inline">History</span>
+                        </button>
+
+                        <Link
+                          to="/garage/repair-history"
+                          className="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-[#F5B900] hover:text-black text-gray-800 text-xs font-bold border border-gray-200 transition-colors whitespace-nowrap"
+                          title="Create Job Card"
+                        >
+                          + Job Card
+                        </Link>
+
+                        <a
+                          href={`tel:+91${item.mobile}`}
+                          className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors border border-gray-200"
+                          title="Call Customer"
+                        >
+                          <Phone className="w-3.5 h-3.5" />
+                        </a>
+
+                        <a
+                          href={`https://wa.me/91${item.mobile}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1.5 rounded-lg bg-[#25D366] hover:bg-[#1EBE5D] text-white transition-colors shadow-2xs"
+                          title="Chat on WhatsApp"
+                        >
+                          <MessageCircle className="w-3.5 h-3.5" />
+                        </a>
+
+                        <button
+                          onClick={() => handleDelete(item.id || item.mobile, item.name)}
+                          className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                          title="Delete Customer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
