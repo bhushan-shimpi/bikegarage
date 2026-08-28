@@ -36,8 +36,11 @@ export const ContactPage: React.FC = () => {
                     </div>
                     <div>
                       <span className="font-bold text-gray-900 block">Phone Helpline</span>
-                      <a href="tel:+919822000000" className="text-gray-600 hover:text-black font-mono mt-0.5 block font-bold">
-                        +91 98220 00000
+                      <a href="tel:+917387448878" className="text-gray-600 hover:text-black font-mono mt-0.5 block font-bold">
+                        +91 73874 48878
+                      </a>
+                      <a href="tel:+919503853143" className="text-gray-600 hover:text-black font-mono mt-0.5 block font-bold">
+                        +91 95038 53143
                       </a>
                     </div>
                   </div>
@@ -50,7 +53,7 @@ export const ContactPage: React.FC = () => {
                     <div>
                       <span className="font-bold text-gray-900 block">WhatsApp Support (Live)</span>
                       <a
-                        href="https://wa.me/919822000000?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
+                        href="https://wa.me/917387448878?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-emerald-700 hover:underline mt-0.5 block font-bold"
@@ -144,7 +147,7 @@ export const ContactPage: React.FC = () => {
                 {/* Direct Action Buttons */}
                 <div className="flex flex-wrap items-center gap-3 pt-2">
                   <a
-                    href="tel:+919822000000"
+                    href="tel:+917387448878"
                     className="px-5 py-2.5 rounded-lg bg-[#F5B900] text-black font-extrabold text-xs uppercase tracking-wider hover:bg-[#DFA500] transition-colors flex items-center gap-1.5 shadow-sm"
                   >
                     <Phone className="w-3.5 h-3.5 fill-black" />
@@ -152,7 +155,7 @@ export const ContactPage: React.FC = () => {
                   </a>
 
                   <a
-                    href="https://wa.me/919822000000?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
+                    href="https://wa.me/917387448878?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-5 py-2.5 rounded-lg bg-[#25D366] text-white font-extrabold text-xs uppercase tracking-wider hover:bg-[#1EBE5D] transition-colors flex items-center gap-1.5 shadow-sm"

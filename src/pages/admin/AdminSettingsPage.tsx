@@ -54,7 +54,7 @@ export const AdminSettingsPage: React.FC = () => {
               </label>
               <input
                 type="tel"
-                defaultValue="+91 98220 00000"
+                defaultValue="+91 73874 48878 / +91 95038 53143"
                 className="w-full bg-white border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-[#F5B900]"
               />
             </div>

@@ -15,7 +15,7 @@ export const authService = {
     const cleanPass = password.trim();
 
     // Flexible mock credentials acceptance for smooth testing
-    const validUsernames = ['admin', '9822000000', 'chaudhari', '9423188902', 'garage'];
+    const validUsernames = ['admin', '7387448878', '9503853143', 'chaudhari', 'garage'];
     const validPasswords = ['admin', 'admin123', 'garage1994', '123456', 'chaudhari1994'];
 
     if (
@@ -33,7 +33,7 @@ export const authService = {
 
     return {
       success: false,
-      error: 'Invalid credentials. Use "admin" and "admin123" (or mobile 9822000000) to login.',
+      error: 'Invalid credentials. Use "admin" and "admin123" (or mobile 7387448878) to login.',
     };
   },
 

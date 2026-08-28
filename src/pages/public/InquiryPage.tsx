@@ -172,7 +172,7 @@ export const InquiryPage: React.FC = () => {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a
-                href={`https://wa.me/919822000000?text=${encodeURIComponent(
+                href={`https://wa.me/917387448878?text=${encodeURIComponent(
                   `Hello Chaudhari Auto Centre, I have submitted an enquiry (Ticket: ${submittedEnquiry.ticketNumber}) for my ${submittedEnquiry.bike.model} (${submittedEnquiry.service.serviceName}).`
                 )}`}
                 target="_blank"
@@ -238,7 +238,7 @@ export const InquiryPage: React.FC = () => {
                   <input
                     type="tel"
                     maxLength={10}
-                    placeholder="9822000000"
+                    placeholder="7387448878"
                     {...register('mobileNumber')}
                     className={`w-full bg-gray-50 border rounded-lg pl-12 pr-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#F5B900] ${
                       errors.mobileNumber ? 'border-red-400' : 'border-gray-200'
@@ -342,14 +342,14 @@ export const InquiryPage: React.FC = () => {
                 <p className="text-[11px] text-gray-500 mb-2">Prefer to talk directly?</p>
                 <div className="flex flex-wrap items-center justify-center gap-3">
                   <a
-                    href="tel:+919822000000"
+                    href="tel:+917387448878"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold transition-colors"
                   >
                     <Phone className="w-3.5 h-3.5 text-[#F5B900]" />
-                    <span>Call: +91 98220 00000</span>
+                    <span>Call: +91 73874 48878</span>
                   </a>
                   <a
-                    href="https://wa.me/919822000000?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
+                    href="https://wa.me/917387448878?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold transition-colors border border-emerald-200"

@@ -34,7 +34,7 @@ export const CTASection: React.FC = () => {
               </Link>
 
               <a
-                href="https://wa.me/919822000000?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
+                href="https://wa.me/917387448878?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 md:flex-initial px-3.5 sm:px-5 py-2.5 sm:py-3.5 rounded-lg bg-black/10 hover:bg-black/20 text-black border border-black/30 font-bold text-[11px] sm:text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap"

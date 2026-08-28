@@ -38,12 +38,12 @@ export const LiveWorkshopStatus: React.FC = () => {
         {/* Right: Quick actions */}
         <div className="flex items-center gap-3 shrink-0 text-[11px]">
           <a
-            href="tel:+919822000000"
+            href="tel:+917387448878"
             className="flex items-center gap-1 text-[#F5B900] hover:text-[#E5AC00] font-bold transition-colors"
           >
             <Phone className="w-3 h-3" />
             <span className="hidden xs:inline">Direct Desk:</span>
-            <span>+91 98220 00000</span>
+            <span>+91 73874 48878</span>
           </a>
           <span className="text-neutral-600 hidden sm:inline">•</span>
           <span className="text-neutral-400 hidden md:inline flex items-center gap-1">

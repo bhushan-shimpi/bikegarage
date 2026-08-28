@@ -62,7 +62,7 @@ export const HeroSection: React.FC = () => {
             </Link>
 
             <a
-              href="https://wa.me/919822000000?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
+              href="https://wa.me/917387448878?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 min-h-[46px] px-2 xs:px-4 py-2.5 rounded-xl bg-[#141414] hover:bg-[#1f1f1f] active:scale-[0.98] text-white border border-neutral-700/80 hover:border-neutral-500 font-bold text-[11px] xs:text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-1.5 xs:gap-2"
@@ -142,7 +142,7 @@ export const HeroSection: React.FC = () => {
               </Link>
 
               <a
-                href="https://wa.me/919822000000?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
+                href="https://wa.me/917387448878?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="min-h-[46px] px-7 py-3 rounded-xl bg-black/40 hover:bg-white/10 active:scale-[0.98] text-white border border-white/25 hover:border-white/50 font-bold text-xs uppercase tracking-wider transition-all backdrop-blur-sm flex items-center justify-center gap-2 group"
