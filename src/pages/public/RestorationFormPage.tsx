@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Bike,
   User,
@@ -12,7 +13,8 @@ import {
   CheckCircle2,
   Sparkles,
   ClipboardList,
-  FileCheck
+  Check,
+  Copy
 } from 'lucide-react';
 import { PageBanner } from '../../components/common/PageBanner';
 import { ScrollReveal } from '../../components/common/ScrollReveal';
@@ -45,16 +47,10 @@ interface RestorationFormData {
   originalPartsRequired: 'Yes' | 'No';
   customerSuppliedParts: 'Yes' | 'No';
 
-  // 6. Inspection & Estimate
-  inspectionDate: string;
-  estimatedCost: string;
-  advanceAmount: string;
-  expectedDeliveryDate: string;
-
-  // 7. Customer Special Requirements
+  // 6. Customer Special Requirements
   specialRequirements: string;
 
-  // 8. Signature & Agreement
+  // 7. Signature & Agreement
   customerSignature: string;
   agreementConfirmed: boolean;
   formDate: string;
@@ -80,7 +76,7 @@ const RESTORATION_WORKS = [
   { id: 'carburettor_fuel', label: 'Carburettor / Fuel System Work', marathi: 'कार्बोरेटर / फ्युएल सिस्टीम' },
   { id: 'ceramic_coating', label: 'Ceramic Coating', marathi: 'सिरेमिक कोटिंग' },
   { id: 'full_bike_detailing', label: 'Full Bike Detailing', marathi: 'फुल बाईक डिटेलिंग' },
-  { id: 'other', label: 'Other', marathi: 'इतर काम' },
+  { id: 'other', label: 'Other Work', marathi: 'इतर आवश्यक काम' },
 ];
 
 export const RestorationFormPage: React.FC = () => {
@@ -100,7 +96,6 @@ export const RestorationFormPage: React.FC = () => {
     bikeCondition: 'Average',
     restorationRequired: 'Yes',
     selectedWorks: [
-      'Complete Inspection',
       'Engine Work',
       'Bhatti / Oven Paint',
       'Original Spare Parts Replacement',
@@ -109,10 +104,6 @@ export const RestorationFormPage: React.FC = () => {
     otherWorkText: '',
     originalPartsRequired: 'Yes',
     customerSuppliedParts: 'No',
-    inspectionDate: todayStr,
-    estimatedCost: '',
-    advanceAmount: '',
-    expectedDeliveryDate: '',
     specialRequirements: '',
     customerSignature: '',
     agreementConfirmed: true,
@@ -122,6 +113,7 @@ export const RestorationFormPage: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submittedTicket, setSubmittedTicket] = useState<string | null>(null);
   const [submittedData, setSubmittedData] = useState<RestorationFormData | null>(null);
+  const [copiedTicket, setCopiedTicket] = useState(false);
 
   // Toggle single work item checkbox
   const toggleWorkItem = (label: string) => {
@@ -148,6 +140,12 @@ export const RestorationFormPage: React.FC = () => {
       ...prev,
       selectedWorks: [],
     }));
+  };
+
+  const handleCopyTicket = (ticket: string) => {
+    navigator.clipboard.writeText(ticket);
+    setCopiedTicket(true);
+    setTimeout(() => setCopiedTicket(false), 2000);
   };
 
   // Form Validation
@@ -182,7 +180,7 @@ export const RestorationFormPage: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
-      window.scrollTo({ top: 350, behavior: 'smooth' });
+      window.scrollTo({ top: 320, behavior: 'smooth' });
       return;
     }
 
@@ -203,14 +201,8 @@ SPARE PARTS:
 - 100% Original Genuine Parts: ${formData.originalPartsRequired}
 - Customer Supplied Parts: ${formData.customerSuppliedParts}
 
-ESTIMATE & DATES:
-- Inspection Date: ${formData.inspectionDate || 'Immediate'}
-- Estimated Cost: ₹${formData.estimatedCost || 'TBD on physical inspection'}
-- Advance: ₹${formData.advanceAmount || '0'}
-- Delivery Target: ${formData.expectedDeliveryDate || 'Standard Timeline'}
-
 SPECIAL INSTRUCTIONS:
-${formData.specialRequirements || 'None'}
+${formData.specialRequirements || 'Standard Factory Spec Restoration'}
 
 CONFIRMED BY: ${formData.customerSignature || formData.customerName}
 DATE: ${formData.formDate}
@@ -231,7 +223,7 @@ DATE: ${formData.formDate}
       },
       service: {
         serviceName: 'Bike Restoration',
-        preferredDate: formData.inspectionDate,
+        preferredDate: formData.formDate,
         problemDescription: restorationSummary,
         quickIssues: formData.selectedWorks,
       },
@@ -261,18 +253,12 @@ DATE: ${formData.formDate}
 • Current Condition: ${submittedData.bikeCondition}
 • Restoration Desired: ${submittedData.restorationRequired}
 
-🔧 *Required Restoration Works (${submittedData.selectedWorks.length}):*
+🔧 *Required Restoration Works (${submittedData.selectedWorks.length} Selected):*
 ${submittedData.selectedWorks.map((w) => `✓ ${w}`).join('\n')}
 ${submittedData.otherWorkText ? `• Other Work: ${submittedData.otherWorkText}\n` : ''}
 ⚙️ *Spare Parts:*
 • 100% Original Genuine Parts: ${submittedData.originalPartsRequired}
 • Customer Supplied Parts: ${submittedData.customerSuppliedParts}
-
-💰 *Inspection & Estimate:*
-• Inspection Date: ${submittedData.inspectionDate || 'Immediate'}
-• Estimated Cost: ₹${submittedData.estimatedCost || 'Quote on Inspection'}
-• Advance Amount: ₹${submittedData.advanceAmount || '0'}
-• Expected Delivery: ${submittedData.expectedDeliveryDate || 'Standard Timeline'}
 
 📝 *Special Instructions:*
 ${submittedData.specialRequirements || 'Standard Factory Spec'}
@@ -286,46 +272,65 @@ _Chaudhari Auto Centre, Jalgaon Road, Pahur_`;
   };
 
   return (
-    <div className="bg-[#0B0B0B] text-white min-h-screen">
+    <div className="bg-[#F8F9FA] min-h-screen text-gray-900 pb-16">
       {/* Top Banner */}
       <PageBanner
         title="BIKE RESTORATION FORM"
         breadcrumb="Restoration Form"
       />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12">
 
         {/* ─── SUCCESS SCREEN (AFTER SUBMISSION) ─── */}
         {submittedTicket && submittedData ? (
           <ScrollReveal direction="up">
-            <div className="bg-[#141414] border border-[#F5B900]/40 rounded-3xl p-6 sm:p-10 shadow-2xl text-center">
-              <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto mb-4">
-                <FileCheck className="w-8 h-8" />
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-10 text-center">
+              <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4">
+                <CheckCircle2 className="w-10 h-10" />
               </div>
 
-              <span className="text-xs font-black uppercase tracking-widest text-[#F5B900] block mb-1">
-                Restoration Registered Successfully
+              <span className="text-xs font-bold uppercase tracking-widest text-[#DFA500] block mb-1">
+                Booking Ref: {submittedTicket}
               </span>
-              <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-white font-sans mb-2">
-                RESTORATION JOB SHEET CREATED
+
+              <h2 className="text-2xl sm:text-3xl font-black uppercase text-gray-900 tracking-tight mb-2 font-sans">
+                RESTORATION FORM SUBMITTED!
               </h2>
-              <p className="text-xs sm:text-sm text-neutral-300 max-w-lg mx-auto mb-6">
-                तुमच्या <strong className="text-white">{submittedData.bikeBrand} {submittedData.bikeName}</strong> बाईकचे रिस्टोरेशन जॉब शीट तयार झाले आहे.
+
+              <p className="text-xs sm:text-sm text-gray-600 max-w-md mx-auto mb-6">
+                तुमच्या <strong className="text-gray-900">{submittedData.bikeBrand} {submittedData.bikeName}</strong> बाईकचे रिस्टोरेशन जॉब शीट नोंदवले गेले आहे. आमचे वर्कशॉप सुपरवायझर लवकरच तुमच्याशी संपर्क साधतील.
               </p>
 
-              {/* Official Ticket Card */}
-              <div className="inline-block p-4 sm:p-5 rounded-2xl bg-black border border-white/10 mb-8 max-w-md w-full text-left">
-                <div className="flex items-center justify-between border-b border-neutral-800 pb-2.5 mb-2.5">
-                  <span className="text-[11px] font-bold text-neutral-400 uppercase">Job Ticket</span>
-                  <span className="text-sm sm:text-base font-black text-[#F5B900] font-sans">{submittedTicket}</span>
+              {/* Summary Box */}
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-left text-xs space-y-2 mb-6 max-w-md mx-auto">
+                <div className="flex justify-between items-center pb-2 border-b border-gray-200">
+                  <span className="text-gray-500">Ticket Reference:</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-mono font-bold text-gray-900">{submittedTicket}</span>
+                    <button
+                      onClick={() => handleCopyTicket(submittedTicket)}
+                      className="p-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700 transition-colors"
+                      title="Copy Ticket"
+                    >
+                      {copiedTicket ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3" />}
+                    </button>
+                  </div>
                 </div>
-                <div className="text-xs text-neutral-300 space-y-1.5">
-                  <div><strong>Customer:</strong> {submittedData.customerName} ({submittedData.cityVillage})</div>
-                  <div><strong>Mobile:</strong> {submittedData.mobileNumber}</div>
-                  <div><strong>Bike:</strong> {submittedData.bikeBrand} {submittedData.bikeName} {submittedData.modelYear ? `(${submittedData.modelYear})` : ''}</div>
-                  <div><strong>Tasks Selected:</strong> {submittedData.selectedWorks.length} Items</div>
-                  {submittedData.estimatedCost && <div><strong>Estimated Cost:</strong> ₹{submittedData.estimatedCost}</div>}
-                  {submittedData.advanceAmount && <div><strong>Advance Deposit:</strong> ₹{submittedData.advanceAmount}</div>}
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Customer:</span>
+                  <span className="font-bold text-gray-900">{submittedData.customerName} ({submittedData.cityVillage})</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Mobile:</span>
+                  <span className="font-bold text-gray-900">{submittedData.mobileNumber}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Bike:</span>
+                  <span className="font-bold text-gray-900">{submittedData.bikeBrand} {submittedData.bikeName}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Tasks Selected:</span>
+                  <span className="font-bold text-[#DFA500]">{submittedData.selectedWorks.length} Restoration Works</span>
                 </div>
               </div>
 
@@ -335,623 +340,555 @@ _Chaudhari Auto Centre, Jalgaon Road, Pahur_`;
                   href={getWhatsAppLink()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-emerald-900/30 transition-all"
+                  className="w-full sm:w-auto px-6 py-3 rounded-lg bg-[#25D366] hover:bg-[#1EBE5D] text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-sm transition-colors"
                 >
-                  <MessageSquare className="w-4 h-4" />
+                  <MessageSquare className="w-4 h-4 fill-white" />
                   <span>Send Job Sheet on WhatsApp</span>
                 </a>
 
                 <button
                   type="button"
                   onClick={() => window.print()}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-[#222222] hover:bg-[#2c2c2c] border border-neutral-700 active:scale-95 text-white font-bold text-xs uppercase tracking-wider transition-all"
+                  className="w-full sm:w-auto px-5 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 border border-gray-200 transition-colors"
                 >
-                  <Printer className="w-4 h-4 text-[#F5B900]" />
-                  <span>Print Official Sheet</span>
+                  <Printer className="w-4 h-4 text-gray-600" />
+                  <span>Print Sheet</span>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSubmittedTicket(null);
-                    setSubmittedData(null);
-                  }}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-transparent hover:bg-white/5 border border-neutral-700 text-neutral-300 hover:text-white font-bold text-xs uppercase tracking-wider transition-all"
+                <Link
+                  to="/"
+                  className="w-full sm:w-auto px-6 py-3 rounded-lg bg-gray-900 text-white font-bold text-xs uppercase tracking-wider hover:bg-black transition-colors"
                 >
-                  <span>Submit Another Form</span>
-                </button>
+                  Back To Home
+                </Link>
               </div>
             </div>
           </ScrollReveal>
         ) : (
 
-          /* ─── MAIN RESTORATION FORM ─── */
-          <form onSubmit={handleSubmit} className="space-y-8">
-
-            {/* Notice pill */}
-            <div className="p-4 rounded-2xl bg-[#141414] border border-[#F5B900]/30 flex items-start gap-3">
-              <Sparkles className="w-5 h-5 text-[#F5B900] shrink-0 mt-0.5" />
-              <div className="text-xs text-neutral-300 leading-relaxed">
-                <strong className="text-white block font-bold mb-0.5">
-                  चौधरी ऑटो सेंटर — रिस्टोरेशन पारदर्शकता नियम
-                </strong>
-                ग्राहकासोबत restoration सुरू करण्यापूर्वी नेमकं कोणतं काम ठरलं आहे, याचे प्रत्येक कामाचे स्वतंत्र Checkbox खाली दिले आहेत. आवश्यक कामांची निवड करा.
+          /* ─── MAIN RESTORATION FORM (WHITE ENQUIRY DESIGN) ─── */
+          <ScrollReveal direction="up">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8">
+              
+              {/* Form Title Header */}
+              <div className="text-center pb-6 mb-6 border-b border-gray-100">
+                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-gray-900 font-sans">
+                  Bike Restoration Form
+                </h2>
+                <p className="text-xs text-gray-500 mt-1">
+                  चौधरी ऑटो सेंटर — बाईक रिस्टोरेशन नोंदणी व जॉब शीट. आवश्यक कामांची निवड करा.
+                </p>
               </div>
-            </div>
 
-            {/* ─── SECTION 1: CUSTOMER DETAILS ─── */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-[#141414] border border-[#242424] shadow-xl space-y-5">
-              <div className="flex items-center gap-3 border-b border-neutral-800 pb-3">
-                <div className="w-8 h-8 rounded-xl bg-[#F5B900]/10 text-[#F5B900] flex items-center justify-center font-black text-sm">
-                  1
-                </div>
-                <div>
-                  <h3 className="text-lg font-black uppercase tracking-tight text-white font-sans">
-                    CUSTOMER DETAILS (ग्राहकाची माहिती)
-                  </h3>
+              {/* Informational Banner */}
+              <div className="mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start gap-2.5">
+                <Sparkles className="w-4 h-4 text-[#DFA500] shrink-0 mt-0.5" />
+                <div className="leading-relaxed">
+                  <strong>पारदर्शकता नियम:</strong> ग्राहकासोबत restoration सुरू करण्यापूर्वी नेमकं कोणतं काम ठरलं आहे, याचे प्रत्येक कामाचे स्वतंत्र Checkbox खाली दिले आहेत.
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1.5">
-                    Customer Name (नाव) <span className="text-rose-400">*</span>
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
-                    <input
-                      type="text"
-                      placeholder="उदा. राहुल शांताराम पाटील"
-                      value={formData.customerName}
-                      onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
-                      className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] focus:ring-1 focus:ring-[#F5B900] rounded-xl py-2.5 pl-10 pr-3 text-sm text-white placeholder-neutral-500 outline-none transition-all"
-                    />
+              <form onSubmit={handleSubmit} className="space-y-6 text-xs" noValidate>
+
+                {/* ─── 1. CUSTOMER DETAILS ─── */}
+                <div className="space-y-4 pt-1">
+                  <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
+                    <span className="w-6 h-6 rounded-full bg-amber-100 text-[#DFA500] font-black text-xs flex items-center justify-center">
+                      1
+                    </span>
+                    <h3 className="font-black text-gray-900 uppercase text-sm tracking-wide">
+                      Customer Details (ग्राहकाची माहिती)
+                    </h3>
                   </div>
-                  {errors.customerName && <p className="text-rose-400 text-xs mt-1">{errors.customerName}</p>}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">
+                        Customer Name (नाव) <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <User className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                        <input
+                          type="text"
+                          placeholder="उदा. राहुल पाटील"
+                          value={formData.customerName}
+                          onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
+                          className={`w-full bg-gray-50 border rounded-lg pl-9 pr-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#F5B900] ${
+                            errors.customerName ? 'border-red-400' : 'border-gray-200'
+                          }`}
+                        />
+                      </div>
+                      {errors.customerName && <p className="text-red-500 text-[11px] mt-1">{errors.customerName}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">
+                        Mobile Number (मोबाईल नंबर) <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <Phone className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                        <input
+                          type="tel"
+                          maxLength={10}
+                          placeholder="९८२२००००००"
+                          value={formData.mobileNumber}
+                          onChange={(e) => setFormData({ ...formData, mobileNumber: e.target.value.replace(/\D/g, '') })}
+                          className={`w-full bg-gray-50 border rounded-lg pl-9 pr-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#F5B900] ${
+                            errors.mobileNumber ? 'border-red-400' : 'border-gray-200'
+                          }`}
+                        />
+                      </div>
+                      {errors.mobileNumber && <p className="text-red-500 text-[11px] mt-1">{errors.mobileNumber}</p>}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">
+                        City / Village (गाव / शहर) <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <MapPin className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                        <input
+                          type="text"
+                          placeholder="उदा. पहूर / जामनेर / जळगाव"
+                          value={formData.cityVillage}
+                          onChange={(e) => setFormData({ ...formData, cityVillage: e.target.value })}
+                          className={`w-full bg-gray-50 border rounded-lg pl-9 pr-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#F5B900] ${
+                            errors.cityVillage ? 'border-red-400' : 'border-gray-200'
+                          }`}
+                        />
+                      </div>
+                      {errors.cityVillage && <p className="text-red-500 text-[11px] mt-1">{errors.cityVillage}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">
+                        Customer कुठून आले? (Referral Source)
+                      </label>
+                      <div className="grid grid-cols-3 gap-1.5">
+                        {['Instagram', 'Google', 'Reference', 'Walk-in', 'Other'].map((source) => (
+                          <button
+                            key={source}
+                            type="button"
+                            onClick={() => setFormData({ ...formData, referralSource: source })}
+                            className={`py-2 px-2 rounded-lg text-xs font-semibold border transition-all text-center ${
+                              formData.referralSource === source
+                                ? 'bg-[#F5B900] text-black border-[#F5B900] font-bold shadow-sm'
+                                : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                            }`}
+                          >
+                            {source}
+                          </button>
+                        ))}
+                      </div>
+                      {formData.referralSource === 'Other' && (
+                        <input
+                          type="text"
+                          placeholder="इतर स्त्रोत सांगा..."
+                          value={formData.referralOther}
+                          onChange={(e) => setFormData({ ...formData, referralOther: e.target.value })}
+                          className="mt-2 w-full bg-gray-50 border border-gray-200 rounded-lg py-2 px-3 text-xs text-gray-900 outline-none"
+                        />
+                      )}
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1.5">
-                    Mobile Number (मोबाईल नंबर) <span className="text-rose-400">*</span>
-                  </label>
-                  <div className="relative">
-                    <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
-                    <input
-                      type="tel"
-                      maxLength={10}
-                      placeholder="९८२२००००००"
-                      value={formData.mobileNumber}
-                      onChange={(e) => setFormData({ ...formData, mobileNumber: e.target.value.replace(/\D/g, '') })}
-                      className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] focus:ring-1 focus:ring-[#F5B900] rounded-xl py-2.5 pl-10 pr-3 text-sm text-white placeholder-neutral-500 outline-none transition-all"
-                    />
+                {/* ─── 2. BIKE DETAILS ─── */}
+                <div className="space-y-4 pt-4 border-t border-gray-100">
+                  <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
+                    <span className="w-6 h-6 rounded-full bg-amber-100 text-[#DFA500] font-black text-xs flex items-center justify-center">
+                      2
+                    </span>
+                    <h3 className="font-black text-gray-900 uppercase text-sm tracking-wide">
+                      Bike Details (बाईकची माहिती)
+                    </h3>
                   </div>
-                  {errors.mobileNumber && <p className="text-rose-400 text-xs mt-1">{errors.mobileNumber}</p>}
-                </div>
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-                <div>
-                  <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1.5">
-                    City / Village (गाव / शहर) <span className="text-rose-400">*</span>
-                  </label>
-                  <div className="relative">
-                    <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
-                    <input
-                      type="text"
-                      placeholder="उदा. पहूर, जामनेर, जळगाव"
-                      value={formData.cityVillage}
-                      onChange={(e) => setFormData({ ...formData, cityVillage: e.target.value })}
-                      className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] focus:ring-1 focus:ring-[#F5B900] rounded-xl py-2.5 pl-10 pr-3 text-sm text-white placeholder-neutral-500 outline-none transition-all"
-                    />
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">
+                        Bike Brand (ब्रँड)
+                      </label>
+                      <select
+                        value={formData.bikeBrand}
+                        onChange={(e) => setFormData({ ...formData, bikeBrand: e.target.value })}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2.5 px-3 text-sm text-gray-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#F5B900]"
+                      >
+                        <option value="Yamaha">Yamaha</option>
+                        <option value="Royal Enfield">Royal Enfield</option>
+                        <option value="Bajaj">Bajaj</option>
+                        <option value="Honda">Honda</option>
+                        <option value="Hero">Hero / Hero Honda</option>
+                        <option value="TVS">TVS</option>
+                        <option value="Suzuki">Suzuki</option>
+                        <option value="Jawa / Yezdi">Jawa / Yezdi</option>
+                        <option value="Rajdoot">Rajdoot</option>
+                        <option value="Other">Other Brand</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">
+                        Bike Name (नाव) <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <Bike className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                        <input
+                          type="text"
+                          placeholder="उदा. RX100, Bullet 350"
+                          value={formData.bikeName}
+                          onChange={(e) => setFormData({ ...formData, bikeName: e.target.value })}
+                          className={`w-full bg-gray-50 border rounded-lg pl-9 pr-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#F5B900] ${
+                            errors.bikeName ? 'border-red-400' : 'border-gray-200'
+                          }`}
+                        />
+                      </div>
+                      {errors.bikeName && <p className="text-red-500 text-[11px] mt-1">{errors.bikeName}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">
+                        Model / Variant (व्हेरियंट)
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="उदा. 4-Speed, Standard"
+                        value={formData.bikeModel}
+                        onChange={(e) => setFormData({ ...formData, bikeModel: e.target.value })}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2.5 px-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#F5B900]"
+                      />
+                    </div>
                   </div>
-                  {errors.cityVillage && <p className="text-rose-400 text-xs mt-1">{errors.cityVillage}</p>}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">
+                        Model Year (मॉडेल वर्ष)
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="उदा. 1996, 2004"
+                        value={formData.modelYear}
+                        onChange={(e) => setFormData({ ...formData, modelYear: e.target.value })}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2.5 px-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#F5B900]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">
+                        Registration Number (गाडी नंबर)
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="उदा. MH 19 AB 1234"
+                        value={formData.registrationNumber}
+                        onChange={(e) => setFormData({ ...formData, registrationNumber: e.target.value.toUpperCase() })}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2.5 px-3 text-sm text-gray-900 placeholder-gray-400 uppercase tracking-wider focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#F5B900]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Current Bike Condition */}
+                  <div>
+                    <label className="block font-bold text-gray-700 mb-1.5">
+                      Current Bike Condition (सध्याची गाडीची स्थिती)
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {(['Good', 'Average', 'Poor', 'Very Poor'] as const).map((cond) => (
+                        <button
+                          key={cond}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, bikeCondition: cond })}
+                          className={`p-2.5 rounded-lg border text-center transition-all ${
+                            formData.bikeCondition === cond
+                              ? 'bg-[#F5B900] text-black border-[#F5B900] font-black shadow-sm'
+                              : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 font-bold'
+                          }`}
+                        >
+                          <span className="text-xs uppercase block">{cond}</span>
+                          <span className="text-[10px] opacity-75 block">
+                            {cond === 'Good' && 'चांगली'}
+                            {cond === 'Average' && 'मध्यम'}
+                            {cond === 'Poor' && 'खराब'}
+                            {cond === 'Very Poor' && 'अतिशय खराब'}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1.5">
-                    Customer कुठून आले? (Referral Source)
-                  </label>
-                  <div className="grid grid-cols-2 xs:grid-cols-3 gap-2">
-                    {['Instagram', 'Google', 'Reference', 'Walk-in', 'Other'].map((source) => (
+                {/* ─── 3. RESTORATION REQUIRED ─── */}
+                <div className="space-y-3 pt-4 border-t border-gray-100">
+                  <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
+                    <span className="w-6 h-6 rounded-full bg-amber-100 text-[#DFA500] font-black text-xs flex items-center justify-center">
+                      3
+                    </span>
+                    <h3 className="font-black text-gray-900 uppercase text-sm tracking-wide">
+                      Restoration Required
+                    </h3>
+                  </div>
+
+                  <p className="text-xs text-gray-600">Customer ला Bike Restoration करायचे आहे का?</p>
+                  <div className="flex items-center gap-3">
+                    {(['Yes', 'No'] as const).map((val) => (
                       <button
-                        key={source}
+                        key={val}
                         type="button"
-                        onClick={() => setFormData({ ...formData, referralSource: source })}
-                        className={`py-2 px-2.5 rounded-xl text-xs font-bold border transition-all text-center ${
-                          formData.referralSource === source
-                            ? 'bg-[#F5B900] text-black border-[#F5B900]'
-                            : 'bg-[#1C1C1C] text-neutral-300 border-[#303030] hover:border-neutral-500'
+                        onClick={() => setFormData({ ...formData, restorationRequired: val })}
+                        className={`flex-1 py-2.5 px-4 rounded-lg border font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${
+                          formData.restorationRequired === val
+                            ? 'bg-[#F5B900] text-black border-[#F5B900] font-black shadow-sm'
+                            : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
                         }`}
                       >
-                        {source}
+                        {val === 'Yes' ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4" />}
+                        <span>{val === 'Yes' ? 'होय (Yes — Restoration)' : 'नाही (No — Quote Only)'}</span>
                       </button>
                     ))}
                   </div>
-                  {formData.referralSource === 'Other' && (
-                    <input
-                      type="text"
-                      placeholder="कुठून माहिती मिळाली ते सांगा"
-                      value={formData.referralOther}
-                      onChange={(e) => setFormData({ ...formData, referralOther: e.target.value })}
-                      className="mt-2 w-full bg-[#1C1C1C] border border-[#303030] rounded-xl py-2 px-3 text-xs text-white placeholder-neutral-500 outline-none"
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* ─── SECTION 2: BIKE DETAILS ─── */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-[#141414] border border-[#242424] shadow-xl space-y-5">
-              <div className="flex items-center gap-3 border-b border-neutral-800 pb-3">
-                <div className="w-8 h-8 rounded-xl bg-[#F5B900]/10 text-[#F5B900] flex items-center justify-center font-black text-sm">
-                  2
-                </div>
-                <div>
-                  <h3 className="text-lg font-black uppercase tracking-tight text-white font-sans">
-                    BIKE DETAILS (बाईकची माहिती)
-                  </h3>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1.5">
-                    Bike Brand (ब्रँड)
-                  </label>
-                  <select
-                    value={formData.bikeBrand}
-                    onChange={(e) => setFormData({ ...formData, bikeBrand: e.target.value })}
-                    className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] rounded-xl py-2.5 px-3 text-sm text-white outline-none"
-                  >
-                    <option value="Yamaha">Yamaha</option>
-                    <option value="Royal Enfield">Royal Enfield</option>
-                    <option value="Bajaj">Bajaj</option>
-                    <option value="Honda">Honda</option>
-                    <option value="Hero">Hero / Hero Honda</option>
-                    <option value="TVS">TVS</option>
-                    <option value="Suzuki">Suzuki</option>
-                    <option value="Jawa / Yezdi">Jawa / Yezdi</option>
-                    <option value="Rajdoot">Rajdoot</option>
-                    <option value="Other">Other Brand</option>
-                  </select>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1.5">
-                    Bike Name (नाव) <span className="text-rose-400">*</span>
-                  </label>
-                  <div className="relative">
-                    <Bike className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
-                    <input
-                      type="text"
-                      placeholder="उदा. RX100, Bullet 350, Chetak"
-                      value={formData.bikeName}
-                      onChange={(e) => setFormData({ ...formData, bikeName: e.target.value })}
-                      className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] focus:ring-1 focus:ring-[#F5B900] rounded-xl py-2.5 pl-10 pr-3 text-sm text-white placeholder-neutral-500 outline-none"
-                    />
-                  </div>
-                  {errors.bikeName && <p className="text-rose-400 text-xs mt-1">{errors.bikeName}</p>}
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1.5">
-                    Bike Model / Variant (मॉडेल)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="उदा. 4-Speed, Standard, 2-Stroke"
-                    value={formData.bikeModel}
-                    onChange={(e) => setFormData({ ...formData, bikeModel: e.target.value })}
-                    className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] rounded-xl py-2.5 px-3 text-sm text-white placeholder-neutral-500 outline-none"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1.5">
-                    Model Year (मॉडेल वर्ष)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="उदा. 1996, 2002"
-                    value={formData.modelYear}
-                    onChange={(e) => setFormData({ ...formData, modelYear: e.target.value })}
-                    className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] rounded-xl py-2.5 px-3 text-sm text-white placeholder-neutral-500 outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1.5">
-                    Registration Number (गाडी नंबर)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="उदा. MH 19 AB 1234"
-                    value={formData.registrationNumber}
-                    onChange={(e) => setFormData({ ...formData, registrationNumber: e.target.value.toUpperCase() })}
-                    className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] rounded-xl py-2.5 px-3 text-sm text-white placeholder-neutral-500 uppercase tracking-wider outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Current Bike Condition */}
-              <div>
-                <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-2">
-                  Current Bike Condition (सध्याची गाडीची स्थिती)
-                </label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                  {(['Good', 'Average', 'Poor', 'Very Poor'] as const).map((cond) => (
-                    <button
-                      key={cond}
-                      type="button"
-                      onClick={() => setFormData({ ...formData, bikeCondition: cond })}
-                      className={`p-3 rounded-xl border text-center transition-all ${
-                        formData.bikeCondition === cond
-                          ? 'bg-[#F5B900] text-black border-[#F5B900] font-black'
-                          : 'bg-[#1C1C1C] text-neutral-300 border-[#303030] hover:border-neutral-500 font-bold'
-                      }`}
-                    >
-                      <span className="text-xs uppercase block">{cond}</span>
-                      <span className="text-[10px] opacity-80 block mt-0.5">
-                        {cond === 'Good' && 'चांगली'}
-                        {cond === 'Average' && 'मध्यम'}
-                        {cond === 'Poor' && 'खराब'}
-                        {cond === 'Very Poor' && 'अतिशय खराब'}
+                {/* ─── 4. REQUIRED RESTORATION WORK (20 CHECKBOXES) ─── */}
+                <div className="space-y-4 pt-4 border-t border-gray-100">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-100 pb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="w-6 h-6 rounded-full bg-amber-100 text-[#DFA500] font-black text-xs flex items-center justify-center">
+                        4
                       </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
+                      <h3 className="font-black text-gray-900 uppercase text-sm tracking-wide">
+                        Required Restoration Work (आवश्यक कामांची यादी)
+                      </h3>
+                    </div>
 
-            {/* ─── SECTION 3: RESTORATION REQUIRED ─── */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-[#141414] border border-[#242424] shadow-xl space-y-4">
-              <div className="flex items-center gap-3 border-b border-neutral-800 pb-3">
-                <div className="w-8 h-8 rounded-xl bg-[#F5B900]/10 text-[#F5B900] flex items-center justify-center font-black text-sm">
-                  3
-                </div>
-                <div>
-                  <h3 className="text-lg font-black uppercase tracking-tight text-white font-sans">
-                    RESTORATION REQUIRED
-                  </h3>
-                  <p className="text-xs text-neutral-400">Customer ला Bike Restoration करायचे आहे का?</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-4">
-                {(['Yes', 'No'] as const).map((val) => (
-                  <button
-                    key={val}
-                    type="button"
-                    onClick={() => setFormData({ ...formData, restorationRequired: val })}
-                    className={`flex-1 py-3 px-4 rounded-xl border font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 ${
-                      formData.restorationRequired === val
-                        ? 'bg-[#F5B900] text-black border-[#F5B900] font-black'
-                        : 'bg-[#1C1C1C] text-neutral-300 border-[#303030] hover:border-neutral-500'
-                    }`}
-                  >
-                    {val === 'Yes' ? <CheckSquare className="w-4 h-4" /> : <Square className="w-4 h-4" />}
-                    <span>{val === 'Yes' ? 'होय (Yes — Restoration Required)' : 'नाही (No — General Work / Quote)'}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* ─── SECTION 4: REQUIRED RESTORATION WORK (20 CHECKBOXES) ─── */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-[#141414] border border-[#242424] shadow-xl space-y-5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-neutral-800 pb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-[#F5B900]/10 text-[#F5B900] flex items-center justify-center font-black text-sm">
-                    4
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={selectAllWorks}
+                        className="text-[11px] font-bold text-[#DFA500] hover:underline px-2 py-0.5 rounded bg-amber-50"
+                      >
+                        Select All
+                      </button>
+                      <button
+                        type="button"
+                        onClick={clearAllWorks}
+                        className="text-[11px] font-bold text-gray-500 hover:text-gray-700 px-2 py-0.5 rounded bg-gray-100"
+                      >
+                        Clear All
+                      </button>
+                      <span className="text-[11px] font-bold text-gray-700 px-2 py-0.5 rounded-full bg-gray-100 border border-gray-200">
+                        {formData.selectedWorks.length} Selected
+                      </span>
+                    </div>
                   </div>
+
+                  <p className="text-xs text-gray-500">खालीलपैकी आवश्यक कामांसमोर ✓ करा:</p>
+                  {errors.selectedWorks && <p className="text-red-500 text-[11px]">{errors.selectedWorks}</p>}
+
+                  {/* 20 Checkboxes Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {RESTORATION_WORKS.map((work) => {
+                      const isChecked = formData.selectedWorks.includes(work.label);
+                      return (
+                        <div
+                          key={work.id}
+                          onClick={() => toggleWorkItem(work.label)}
+                          className={`p-2.5 rounded-xl border cursor-pointer select-none transition-all flex items-center justify-between ${
+                            isChecked
+                              ? 'bg-amber-50/80 border-[#F5B900] shadow-sm ring-1 ring-[#F5B900]/30'
+                              : 'bg-gray-50 border-gray-200 hover:border-gray-300 hover:bg-gray-100/60'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <div className={`w-4 h-4 rounded flex items-center justify-center transition-colors ${
+                              isChecked ? 'bg-[#F5B900] text-black font-black' : 'border border-gray-300 bg-white'
+                            }`}>
+                              {isChecked && <Check className="w-3 h-3 stroke-[3]" />}
+                            </div>
+                            <div>
+                              <span className={`text-xs font-bold block ${isChecked ? 'text-gray-900' : 'text-gray-700'}`}>
+                                {work.label}
+                              </span>
+                              <span className="text-[10px] text-gray-500 block">
+                                {work.marathi}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Other Custom Work Input */}
                   <div>
-                    <h3 className="text-lg font-black uppercase tracking-tight text-white font-sans">
-                      REQUIRED RESTORATION WORK (आवश्यक कामांची यादी)
-                    </h3>
-                    <p className="text-xs text-neutral-400">खालीलपैकी आवश्यक कामांसमोर ✓ करा:</p>
+                    <label className="block font-bold text-gray-600 mb-1">
+                      Other Work Details (इतर कामांची नोंद असल्यास येथे लिहा):
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="उदा. Custom chrome crash guard, specialized horn..."
+                      value={formData.otherWorkText}
+                      onChange={(e) => setFormData({ ...formData, otherWorkText: e.target.value })}
+                      className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 px-3 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#F5B900]"
+                    />
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 self-start sm:self-auto">
-                  <button
-                    type="button"
-                    onClick={selectAllWorks}
-                    className="text-[11px] font-bold text-[#F5B900] hover:underline px-2.5 py-1 rounded bg-[#F5B900]/10"
-                  >
-                    Select All (सर्व निवडा)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={clearAllWorks}
-                    className="text-[11px] font-bold text-neutral-400 hover:text-white px-2.5 py-1 rounded bg-neutral-800"
-                  >
-                    Clear All
-                  </button>
-                  <span className="text-xs font-black text-neutral-300 px-2.5 py-1 rounded-full bg-black border border-neutral-800">
-                    {formData.selectedWorks.length} Selected
-                  </span>
-                </div>
-              </div>
+                {/* ─── 5. SPARE PARTS REQUIREMENT ─── */}
+                <div className="space-y-4 pt-4 border-t border-gray-100">
+                  <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
+                    <span className="w-6 h-6 rounded-full bg-amber-100 text-[#DFA500] font-black text-xs flex items-center justify-center">
+                      5
+                    </span>
+                    <h3 className="font-black text-gray-900 uppercase text-sm tracking-wide">
+                      Spare Parts Requirement (स्पेअर पार्ट्स आवश्यकता)
+                    </h3>
+                  </div>
 
-              {errors.selectedWorks && <p className="text-rose-400 text-xs">{errors.selectedWorks}</p>}
-
-              {/* 20 Checkboxes Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-2.5">
-                {RESTORATION_WORKS.map((work) => {
-                  const isChecked = formData.selectedWorks.includes(work.label);
-                  return (
-                    <div
-                      key={work.id}
-                      onClick={() => toggleWorkItem(work.label)}
-                      className={`p-3 rounded-2xl border cursor-pointer select-none transition-all flex items-center justify-between ${
-                        isChecked
-                          ? 'bg-[#1C1C1C] border-[#F5B900] shadow-md shadow-[#F5B900]/10'
-                          : 'bg-[#181818] border-[#2B2B2B] hover:border-neutral-600'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-5 h-5 rounded-lg flex items-center justify-center transition-colors ${
-                          isChecked ? 'bg-[#F5B900] text-black font-black' : 'border border-neutral-600'
-                        }`}>
-                          {isChecked && <CheckCircle2 className="w-3.5 h-3.5 stroke-[3]" />}
-                        </div>
-                        <div>
-                          <span className={`text-xs sm:text-sm font-bold block ${isChecked ? 'text-white' : 'text-neutral-300'}`}>
-                            {work.label}
-                          </span>
-                          <span className="text-[10px] text-[#F5B900]/80 block font-medium">
-                            {work.marathi}
-                          </span>
-                        </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="p-3.5 rounded-xl bg-gray-50 border border-gray-200">
+                      <span className="text-xs font-bold text-gray-900 block mb-1">
+                        Original / Genuine Spare Parts Required:
+                      </span>
+                      <span className="text-[11px] text-gray-500 block mb-2.5">
+                        १००% ओरिजिनल स्पेअर पार्ट्स हवे आहेत का?
+                      </span>
+                      <div className="flex gap-2">
+                        {(['Yes', 'No'] as const).map((val) => (
+                          <button
+                            key={val}
+                            type="button"
+                            onClick={() => setFormData({ ...formData, originalPartsRequired: val })}
+                            className={`flex-1 py-1.5 px-3 rounded-lg border text-xs font-bold transition-all ${
+                              formData.originalPartsRequired === val
+                                ? 'bg-[#F5B900] text-black border-[#F5B900] font-black shadow-sm'
+                                : 'bg-white text-gray-700 border-gray-200'
+                            }`}
+                          >
+                            {val === 'Yes' ? '✓ Yes (होय)' : 'No (नाही)'}
+                          </button>
+                        ))}
                       </div>
                     </div>
-                  );
-                })}
-              </div>
 
-              {/* Other Custom Work Input */}
-              <div className="pt-2">
-                <label className="block text-xs font-bold text-neutral-400 uppercase tracking-wider mb-1.5">
-                  Other Work Details (इतर आवश्यक कामांची नोंद असल्यास येथे लिहा):
-                </label>
-                <input
-                  type="text"
-                  placeholder="उदा. Custom headlight visor, extra loud horn, special chrome crash guard..."
-                  value={formData.otherWorkText}
-                  onChange={(e) => setFormData({ ...formData, otherWorkText: e.target.value })}
-                  className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] rounded-xl py-2 px-3 text-xs text-white placeholder-neutral-500 outline-none"
-                />
-              </div>
-            </div>
-
-            {/* ─── SECTION 5: SPARE PARTS REQUIREMENT ─── */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-[#141414] border border-[#242424] shadow-xl space-y-5">
-              <div className="flex items-center gap-3 border-b border-neutral-800 pb-3">
-                <div className="w-8 h-8 rounded-xl bg-[#F5B900]/10 text-[#F5B900] flex items-center justify-center font-black text-sm">
-                  5
-                </div>
-                <div>
-                  <h3 className="text-lg font-black uppercase tracking-tight text-white font-sans">
-                    SPARE PARTS REQUIREMENT (स्पेअर पार्ट्स आवश्यकता)
-                  </h3>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {/* 100% Original Genuine Parts */}
-                <div className="p-4 rounded-2xl bg-[#181818] border border-[#2B2B2B]">
-                  <span className="text-xs font-bold text-white block mb-2">
-                    Original / Genuine Spare Parts Required:
-                  </span>
-                  <span className="text-[11px] text-neutral-400 block mb-3">
-                    १००% ओरिजिनल स्पेअर पार्ट्स हवे आहेत का?
-                  </span>
-                  <div className="flex gap-2.5">
-                    {(['Yes', 'No'] as const).map((val) => (
-                      <button
-                        key={val}
-                        type="button"
-                        onClick={() => setFormData({ ...formData, originalPartsRequired: val })}
-                        className={`flex-1 py-2 px-3 rounded-xl border text-xs font-bold transition-all ${
-                          formData.originalPartsRequired === val
-                            ? 'bg-[#F5B900] text-black border-[#F5B900] font-black'
-                            : 'bg-[#222222] text-neutral-300 border-[#333333]'
-                        }`}
-                      >
-                        {val === 'Yes' ? '✓ Yes (होय)' : 'No (नाही)'}
-                      </button>
-                    ))}
+                    <div className="p-3.5 rounded-xl bg-gray-50 border border-gray-200">
+                      <span className="text-xs font-bold text-gray-900 block mb-1">
+                        Customer Supplied Parts:
+                      </span>
+                      <span className="text-[11px] text-gray-500 block mb-2.5">
+                        ग्राहक स्वतः काही पार्ट्स आणून देणार आहेत का?
+                      </span>
+                      <div className="flex gap-2">
+                        {(['Yes', 'No'] as const).map((val) => (
+                          <button
+                            key={val}
+                            type="button"
+                            onClick={() => setFormData({ ...formData, customerSuppliedParts: val })}
+                            className={`flex-1 py-1.5 px-3 rounded-lg border text-xs font-bold transition-all ${
+                              formData.customerSuppliedParts === val
+                                ? 'bg-[#F5B900] text-black border-[#F5B900] font-black shadow-sm'
+                                : 'bg-white text-gray-700 border-gray-200'
+                            }`}
+                          >
+                            {val === 'Yes' ? '✓ Yes (होय)' : 'No (नाही)'}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Customer Supplied Parts */}
-                <div className="p-4 rounded-2xl bg-[#181818] border border-[#2B2B2B]">
-                  <span className="text-xs font-bold text-white block mb-2">
-                    Customer Supplied Parts:
-                  </span>
-                  <span className="text-[11px] text-neutral-400 block mb-3">
-                    ग्राहक स्वतः काही पार्ट्स आणून देणार आहेत का?
-                  </span>
-                  <div className="flex gap-2.5">
-                    {(['Yes', 'No'] as const).map((val) => (
-                      <button
-                        key={val}
-                        type="button"
-                        onClick={() => setFormData({ ...formData, customerSuppliedParts: val })}
-                        className={`flex-1 py-2 px-3 rounded-xl border text-xs font-bold transition-all ${
-                          formData.customerSuppliedParts === val
-                            ? 'bg-[#F5B900] text-black border-[#F5B900] font-black'
-                            : 'bg-[#222222] text-neutral-300 border-[#333333]'
-                        }`}
-                      >
-                        {val === 'Yes' ? '✓ Yes (होय)' : 'No (नाही)'}
-                      </button>
-                    ))}
+                {/* ─── 6. CUSTOMER SPECIAL REQUIREMENTS ─── */}
+                <div className="space-y-3 pt-4 border-t border-gray-100">
+                  <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
+                    <span className="w-6 h-6 rounded-full bg-amber-100 text-[#DFA500] font-black text-xs flex items-center justify-center">
+                      6
+                    </span>
+                    <h3 className="font-black text-gray-900 uppercase text-sm tracking-wide">
+                      Customer Special Requirements (खास सूचना)
+                    </h3>
                   </div>
-                </div>
-              </div>
-            </div>
 
-            {/* ─── SECTION 6: INSPECTION & ESTIMATE ─── */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-[#141414] border border-[#242424] shadow-xl space-y-5">
-              <div className="flex items-center gap-3 border-b border-neutral-800 pb-3">
-                <div className="w-8 h-8 rounded-xl bg-[#F5B900]/10 text-[#F5B900] flex items-center justify-center font-black text-sm">
-                  6
+                  <textarea
+                    rows={3}
+                    placeholder="रंगाची शेड (उदा. Candy Maroon, Jet Black), सायलेंसरचा आवाज, ओरिजिनल स्टिकर्स, किंवा इतर कोणत्याही खास सूचना येथे नोंदवा..."
+                    value={formData.specialRequirements}
+                    onChange={(e) => setFormData({ ...formData, specialRequirements: e.target.value })}
+                    className="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#F5B900] leading-relaxed"
+                  />
                 </div>
-                <div>
-                  <h3 className="text-lg font-black uppercase tracking-tight text-white font-sans">
-                    INSPECTION & ESTIMATE (तपासणी व अंदाजपत्रक)
-                  </h3>
-                </div>
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div>
-                  <label className="block text-[11px] font-bold text-neutral-300 uppercase tracking-wider mb-1.5">
-                    Bike Inspection Date (तपासणी तारीख)
+                {/* ─── 7. CONFIRMATION & SIGNATURE ─── */}
+                <div className="space-y-4 pt-4 border-t border-gray-100">
+                  <div className="flex items-center gap-2 border-b border-gray-100 pb-2">
+                    <span className="w-6 h-6 rounded-full bg-amber-100 text-[#DFA500] font-black text-xs flex items-center justify-center">
+                      7
+                    </span>
+                    <h3 className="font-black text-gray-900 uppercase text-sm tracking-wide">
+                      Confirmation & Signature (खात्री व स्वाक्षरी)
+                    </h3>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">
+                        Customer Signature / Name (स्वाक्षरी / नाव)
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="ग्राहकाचे पूर्ण नाव"
+                        value={formData.customerSignature}
+                        onChange={(e) => setFormData({ ...formData, customerSignature: e.target.value })}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2.5 px-3 text-sm text-gray-900 placeholder-gray-400 font-serif italic focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#F5B900]"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block font-bold text-gray-700 mb-1">
+                        Date (तारीख)
+                      </label>
+                      <input
+                        type="date"
+                        value={formData.formDate}
+                        onChange={(e) => setFormData({ ...formData, formDate: e.target.value })}
+                        className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2 px-3 text-sm text-gray-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#F5B900]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Agreement Checkbox */}
+                  <label className="flex items-start gap-2.5 cursor-pointer select-none pt-1">
+                    <input
+                      type="checkbox"
+                      checked={formData.agreementConfirmed}
+                      onChange={(e) => setFormData({ ...formData, agreementConfirmed: e.target.checked })}
+                      className="w-4 h-4 mt-0.5 rounded border-gray-300 text-[#F5B900] focus:ring-[#F5B900]"
+                    />
+                    <span className="text-xs text-gray-600 leading-relaxed">
+                      मी वरील सर्व माहिती व ठरलेली कामे तपासून नोंदणी करत आहे. चौधरी ऑटो सेंटरच्या रिस्टोरेशन मार्गदर्शक तत्त्वांनुसार काम करण्यास माझी संमती आहे.
+                    </span>
                   </label>
-                  <input
-                    type="date"
-                    value={formData.inspectionDate}
-                    onChange={(e) => setFormData({ ...formData, inspectionDate: e.target.value })}
-                    className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] rounded-xl py-2 px-3 text-xs text-white outline-none"
-                  />
+                  {errors.agreementConfirmed && <p className="text-red-500 text-[11px]">{errors.agreementConfirmed}</p>}
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-neutral-300 uppercase tracking-wider mb-1.5">
-                    Estimated Cost (अंदाजे खर्च — ₹)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="उदा. २५,०००"
-                    value={formData.estimatedCost}
-                    onChange={(e) => setFormData({ ...formData, estimatedCost: e.target.value })}
-                    className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] rounded-xl py-2 px-3 text-xs text-white placeholder-neutral-500 outline-none"
-                  />
+                {/* Submit CTA */}
+                <div className="pt-4 border-t border-gray-100">
+                  <button
+                    type="submit"
+                    className="w-full py-3.5 px-6 rounded-lg bg-[#F5B900] hover:bg-[#E5AC00] active:scale-[0.98] text-black font-extrabold text-xs uppercase tracking-wider shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <ClipboardList className="w-4 h-4" />
+                    <span>Submit Restoration Job Sheet • फॉर्म नोंदणी करा</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-bold text-neutral-300 uppercase tracking-wider mb-1.5">
-                    Advance Amount (अ‍ॅडव्हान्स — ₹)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="उदा. ५,०००"
-                    value={formData.advanceAmount}
-                    onChange={(e) => setFormData({ ...formData, advanceAmount: e.target.value })}
-                    className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] rounded-xl py-2 px-3 text-xs text-white placeholder-neutral-500 outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-bold text-neutral-300 uppercase tracking-wider mb-1.5">
-                    Expected Delivery (डिलिव्हरी तारीख)
-                  </label>
-                  <input
-                    type="date"
-                    value={formData.expectedDeliveryDate}
-                    onChange={(e) => setFormData({ ...formData, expectedDeliveryDate: e.target.value })}
-                    className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] rounded-xl py-2 px-3 text-xs text-white outline-none"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* ─── SECTION 7: CUSTOMER SPECIAL REQUIREMENTS ─── */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-[#141414] border border-[#242424] shadow-xl space-y-4">
-              <div className="flex items-center gap-3 border-b border-neutral-800 pb-3">
-                <div className="w-8 h-8 rounded-xl bg-[#F5B900]/10 text-[#F5B900] flex items-center justify-center font-black text-sm">
-                  7
-                </div>
-                <div>
-                  <h3 className="text-lg font-black uppercase tracking-tight text-white font-sans">
-                    CUSTOMER SPECIAL REQUIREMENTS (खास सूचना)
-                  </h3>
-                </div>
-              </div>
-
-              <textarea
-                rows={4}
-                placeholder="रंगाची शेड (उदा. Candy Maroon, Metallic Black), सायलेंसरचा आवाज, ओरिजिनल स्टिकर्स, किंवा इतर कोणत्याही खास सूचना येथे नोंदवा..."
-                value={formData.specialRequirements}
-                onChange={(e) => setFormData({ ...formData, specialRequirements: e.target.value })}
-                className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] rounded-xl p-3 text-sm text-white placeholder-neutral-500 outline-none leading-relaxed"
-              />
-            </div>
-
-            {/* ─── SECTION 8: SIGNATURE & SUBMIT ─── */}
-            <div className="p-6 sm:p-8 rounded-3xl bg-[#141414] border border-[#F5B900]/30 shadow-xl space-y-5">
-              <div className="flex items-center gap-3 border-b border-neutral-800 pb-3">
-                <div className="w-8 h-8 rounded-xl bg-[#F5B900]/10 text-[#F5B900] flex items-center justify-center font-black text-sm">
-                  8
-                </div>
-                <div>
-                  <h3 className="text-lg font-black uppercase tracking-tight text-white font-sans">
-                    CONFIRMATION & SIGNATURE (खात्री व स्वाक्षरी)
-                  </h3>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
-                <div>
-                  <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1.5">
-                    Customer Signature / Full Name (ग्राहकाची सही / नाव)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="ग्राहकाचे पूर्ण नाव सही म्हणून टाका"
-                    value={formData.customerSignature}
-                    onChange={(e) => setFormData({ ...formData, customerSignature: e.target.value })}
-                    className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] rounded-xl py-2.5 px-3 text-sm text-white placeholder-neutral-500 font-serif italic outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-neutral-300 uppercase tracking-wider mb-1.5">
-                    Date (तारीख)
-                  </label>
-                  <input
-                    type="date"
-                    value={formData.formDate}
-                    onChange={(e) => setFormData({ ...formData, formDate: e.target.value })}
-                    className="w-full bg-[#1C1C1C] border border-[#303030] focus:border-[#F5B900] rounded-xl py-2.5 px-3 text-sm text-white outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Agreement checkbox */}
-              <div className="pt-2">
-                <label className="flex items-start gap-3 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={formData.agreementConfirmed}
-                    onChange={(e) => setFormData({ ...formData, agreementConfirmed: e.target.checked })}
-                    className="w-4 h-4 mt-1 rounded border-neutral-600 text-[#F5B900] focus:ring-[#F5B900]"
-                  />
-                  <span className="text-xs text-neutral-300 leading-relaxed">
-                    मी वरील सर्व माहिती व ठरलेली कामे तपासून नोंदणी करत आहे. चौधरी ऑटो सेंटरच्या रिस्टोरेशन मार्गदर्शक तत्त्वांनुसार काम करण्यास माझी संमती आहे.
-                  </span>
-                </label>
-                {errors.agreementConfirmed && <p className="text-rose-400 text-xs mt-1">{errors.agreementConfirmed}</p>}
-              </div>
-
-              {/* Submit Button */}
-              <div className="pt-4 border-t border-neutral-800 flex flex-col sm:flex-row items-center gap-3">
-                <button
-                  type="submit"
-                  className="w-full sm:flex-1 py-4 px-6 rounded-2xl bg-[#F5B900] hover:bg-[#E5AC00] active:scale-[0.98] text-black font-black text-sm uppercase tracking-wider shadow-xl shadow-[#F5B900]/20 flex items-center justify-center gap-2 transition-all cursor-pointer"
-                >
-                  <ClipboardList className="w-4 h-4" />
-                  <span>Submit Restoration Job Sheet • फॉर्म नोंदणी करा</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
+              </form>
 
             </div>
-
-          </form>
+          </ScrollReveal>
         )}
 
       </div>

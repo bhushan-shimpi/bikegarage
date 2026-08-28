@@ -4,7 +4,6 @@ import { Navbar } from '../components/common/Navbar';
 import { Footer } from '../components/common/Footer';
 import { LiveFloatingHelp } from '../components/common/LiveFloatingHelp';
 import { MobileActionBar } from '../components/common/MobileActionBar';
-import { LiveWorkshopStatus } from '../components/common/LiveWorkshopStatus';
 
 export const PublicLayout: React.FC = () => {
   const { pathname } = useLocation();
@@ -18,8 +17,6 @@ export const PublicLayout: React.FC = () => {
       <Navbar />
       {/* Spacer to offset fixed navbar height */}
       <div className="h-14 sm:h-16 shrink-0" />
-      {/* Live Workshop Status Bar on all inner pages */}
-      {pathname !== '/' && <LiveWorkshopStatus />}
       <main className="flex-1 pb-16 sm:pb-0">
         <Outlet />
       </main>
