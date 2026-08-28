@@ -64,11 +64,7 @@ export const InstagramHighlight: React.FC = () => {
   ];
 
   return (
-    <section className="mt-6 sm:mt-8 lg:mt-10 mb-6 sm:mb-8 lg:mb-10 py-3.5 sm:py-4.5 bg-[#0A0A0A] border-y border-[#181818] text-white relative overflow-hidden">
-      {/* Ambient background lighting */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-72 h-72 bg-[#F5B900]/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-72 h-72 bg-[#E1306C]/10 rounded-full blur-3xl pointer-events-none" />
-
+    <section className="my-5 sm:my-8 lg:my-10 bg-[#0B0B0B] text-white relative">
       <div className="max-w-6xl mx-auto px-3 sm:px-5 relative z-10">
         
         {/* Equal 2-Column Split: 50% Stats on Left + 50% Social on Right (NO awkward center gap) */}
