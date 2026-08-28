@@ -101,7 +101,7 @@ export const HeroSection: React.FC = () => {
         </div>
 
         {/* Content container — aligned left, max-w-lg to prevent overlap with bike on right */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-6 lg:py-8 xl:py-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full pt-6 lg:pt-8 xl:pt-10 pb-8 lg:pb-12 xl:pb-14">
           <div className="max-w-lg lg:max-w-xl">
             {/* Eyebrow */}
             <p className="text-[#F5B900] text-xs lg:text-sm font-bold uppercase tracking-[0.22em] mb-2 animate-fade-in-up">
