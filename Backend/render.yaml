@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: chaudhari-auto-api
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        value: postgresql://postgres.itjidjypbdkhgduerqvn:Bhush%402503%23%40@aws-0-ap-south-1.pooler.supabase.com:6543/postgres
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGIN
+        value: "*"

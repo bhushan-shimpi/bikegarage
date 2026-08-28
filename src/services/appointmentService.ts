@@ -1,5 +1,6 @@
 import { Appointment, AppointmentFormData } from '../types/appointment';
 import { storageService } from './storageService';
+import { apiClient } from './apiClient';
 
 const STORAGE_KEY = 'chaudhari_auto_appointments';
 
@@ -35,11 +36,28 @@ const defaultAppointments: Appointment[] = [
     additionalProblem: 'Engine oil replacement, brake overhaul, chain lubrication, and complete foam wash.',
     status: 'confirmed',
     createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-  }
+  },
 ];
 
 export const appointmentService = {
+  // Syncs from Supabase PostgreSQL API, updates local cache
+  syncWithBackend: async (): Promise<Appointment[]> => {
+    try {
+      const res = await apiClient.get<{ success: boolean; data: Appointment[] }>('/api/appointments');
+      if (res.success && Array.isArray(res.data) && res.data.length > 0) {
+        storageService.set(STORAGE_KEY, res.data);
+        return res.data;
+      }
+    } catch {
+      // Graceful offline fallback to local cache
+    }
+    return appointmentService.getAll();
+  },
+
   getAll: (): Appointment[] => {
+    // Fire background sync with live Supabase PostgreSQL
+    appointmentService.syncWithBackend().catch(() => {});
+
     const saved = storageService.get<Appointment[]>(STORAGE_KEY, defaultAppointments);
     if (!saved || saved.length === 0) {
       storageService.set(STORAGE_KEY, defaultAppointments);
@@ -74,6 +92,22 @@ export const appointmentService = {
 
     const updated = [newAppointment, ...all];
     storageService.set(STORAGE_KEY, updated);
+
+    // Persist asynchronously to live Supabase PostgreSQL
+    apiClient.post<{ success: boolean; data: Appointment }>('/api/appointments', formData)
+      .then((res) => {
+        if (res.success && res.data) {
+          // Replace temporary client ID with database record ID
+          const latest = storageService.get<Appointment[]>(STORAGE_KEY, []);
+          const idx = latest.findIndex((a) => a.id === newAppointment.id);
+          if (idx !== -1) {
+            latest[idx] = res.data;
+            storageService.set(STORAGE_KEY, latest);
+          }
+        }
+      })
+      .catch((err) => console.warn('Saved appointment locally, live sync pending:', err));
+
     return newAppointment;
   },
 
@@ -83,6 +117,10 @@ export const appointmentService = {
     if (index === -1) return null;
     all[index].status = status;
     storageService.set(STORAGE_KEY, all);
+
+    // Sync status with backend
+    apiClient.patch(`/api/appointments/${id}/status`, { status }).catch(() => {});
+
     return all[index];
-  }
+  },
 };

@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environments & Keys
+.env
+.env.*
+!.env.example
+
+# Backend build & packages
+Backend/node_modules
+Backend/dist

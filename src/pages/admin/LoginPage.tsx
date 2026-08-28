@@ -11,13 +11,13 @@ export const LoginPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
 
-    setTimeout(() => {
-      const result = authService.login(username, password);
+    try {
+      const result = await authService.login(username, password);
       setIsLoading(false);
 
       if (result.success) {
@@ -25,7 +25,10 @@ export const LoginPage: React.FC = () => {
       } else {
         setError(result.error || 'Invalid credentials');
       }
-    }, 400);
+    } catch {
+      setIsLoading(false);
+      setError('Login failed. Please try again.');
+    }
   };
 
   const handleDemoFill = () => {
