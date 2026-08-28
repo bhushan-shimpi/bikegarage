@@ -5,7 +5,7 @@ export const testimonialsData: TestimonialItem[] = [
     id: 't1',
     name: 'Sanjay Patil',
     location: 'Pahur Kasba, Pahur',
-    bikeModel: 'Royal Enfield Classic 350',
+    bikeModel: 'Bajaj Pulsar 150',
     serviceType: 'Full Engine Overhaul & Servicing',
     rating: 5,
     comment: 'चौधरी ऑटो सेंटरमध्ये ३० वर्षांपासून आमचे संपूर्ण कुटुंब बाईक्स सर्व्हिसिंगला आणत आहे. इंजिनचे काम एवढे परफेक्ट करतात की गाडी चालवताना मक्खनसारखी वाटते. पारदर्शक दर आणि प्रामाणिक काम!',

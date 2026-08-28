@@ -30,11 +30,11 @@ export const ServicesOverview: React.FC = () => {
               Professional Motorcycle Care
             </span>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-wide text-gray-900 font-sans mt-1">
-              OUR TWO-WHEELER SERVICES
+              OUR MOTORCYCLE & BIKE SERVICES
             </h2>
             <div className="w-12 h-1 bg-[#F5B900] mx-auto mt-2 rounded-full" />
             <p className="text-xs sm:text-sm text-gray-600 max-w-xl mx-auto mt-2.5">
-              From everyday commuter bikes like Hero, Honda, Yamaha, and KTM to classic 2-stroke restorations — expert care for every bike.
+              From everyday commuter bikes like Hero, Honda, Bajaj, Yamaha, and KTM to classic 2-stroke restorations — expert care for motorcycles only (No Scooters / Mopeds).
             </p>
           </div>
         </ScrollReveal>

@@ -7,7 +7,7 @@ export const servicesData: ServiceItem[] = [
     name: 'General Bike Service',
     iconName: 'Wrench',
     shortDescription: 'Complete periodic tune-up, oil check & 24-point safety inspection',
-    fullDescription: 'Comprehensive periodic servicing for all motorcycles and scooters. Includes 24-point safety inspection, engine oil replacement, spark plug cleaning, carburetor/throttle body cleaning, brake adjustment, drive chain lubrication, and high-pressure foam wash.',
+    fullDescription: 'Comprehensive periodic servicing for all motorcycles and commuter bikes (फक्त मोटरसायकल व बाईक — स्कूटर/मोपेड नाही). Includes 24-point safety inspection, engine oil replacement, spark plug cleaning, carburetor/throttle body cleaning, brake adjustment, drive chain lubrication, and high-pressure foam wash.',
     included: [
       'Engine oil replacement & oil strainer clean',
       'Spark plug cleaning and electrode gap adjustment',
@@ -204,7 +204,7 @@ export const servicesData: ServiceItem[] = [
     slug: 'spare-parts-replacement',
     name: 'Spare Parts Replacement',
     iconName: 'Wrench',
-    shortDescription: '100% genuine Hero, Bajaj, TVS, Enfield & Yamaha OEM spares',
+    shortDescription: '100% genuine Hero, Bajaj, Yamaha & Honda OEM spares only',
     fullDescription: 'Direct fitment of genuine motorcycle components: chain-sprocket kits, clutch assemblies, throttle/clutch cables, shock absorbers, brake discs, control levers, and mirrors.',
     included: [
       'Original brand warranty on all fitted parts',

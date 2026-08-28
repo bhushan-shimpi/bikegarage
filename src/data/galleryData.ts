@@ -20,7 +20,7 @@ export const galleryData: GalleryItem[] = [
   },
   {
     id: 'g2',
-    title: 'Royal Enfield Bullet 350 Restoration',
+    title: 'Bajaj Pulsar & Yamaha Restoration',
     category: 'restoration',
     bikeName: 'RE Bullet 350 Standard',
     beforeImage: '/images/services/bike-restoration.jpg',

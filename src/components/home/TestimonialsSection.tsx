@@ -44,10 +44,10 @@ export const TestimonialsSection: React.FC = () => {
     },
     {
       name: 'Kisan More',
-      bike: 'Royal Enfield Classic 350',
+      bike: 'Bajaj Pulsar 150',
       avatar: '/images/testimonials/kisan.jpg',
       rating: 5,
-      comment: 'Best motorcycle garage in Pahur. Genuine Royal Enfield spares, precise tappet setting, and very reasonable rates.',
+      comment: 'Best motorcycle garage in Pahur. Genuine Bajaj and Honda OEM spares, precise tappet setting, and very reasonable rates.',
     },
     {
       name: 'Rohit Chaudhari',

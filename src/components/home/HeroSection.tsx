@@ -12,7 +12,7 @@ export const HeroSection: React.FC = () => {
         <div className="relative w-full aspect-[16/9] overflow-hidden bg-[#0B0B0B]">
           <img
             src="/images/hero-bike-mobile.jpg"
-            alt="Royal Enfield Meteor 350 motorcycle at Chaudhari Auto Centre"
+            alt="Motorcycle at Chaudhari Auto Centre"
             fetchPriority="high"
             decoding="async"
             className="w-full h-full object-contain object-center"
@@ -43,10 +43,10 @@ export const HeroSection: React.FC = () => {
 
           {/* Supporting Text with Marathi line */}
           <p className="text-neutral-200 text-sm font-medium leading-relaxed mb-1 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-            Professional two-wheeler service, repair &amp; restoration in Pahur.
+            Professional motorcycle &amp; bike service, repair &amp; restoration in Pahur.
           </p>
           <p className="text-neutral-400 text-xs xs:text-[13px] leading-relaxed mb-3.5 animate-fade-in-up" style={{ animationDelay: '250ms' }}>
-            Regular servicing पासून Complete Bike Restoration पर्यंत — तुमच्या Bike ची संपूर्ण काळजी एकाच ठिकाणी.
+            फक्त मोटरसायकल व बाईक सर्व्हिसिंग (स्कूटर/मोपेड नाही) — Regular Servicing पासून Complete Bike Restoration पर्यंत.
           </p>
 
           {/* Single-Row CTA Buttons on Mobile */}
@@ -80,7 +80,7 @@ export const HeroSection: React.FC = () => {
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
             src="/images/hero-bike.jpg"
-            alt="Royal Enfield Meteor 350 motorcycle at Chaudhari Auto Centre"
+            alt="Motorcycle at Chaudhari Auto Centre"
             fetchPriority="high"
             decoding="async"
             className="w-full h-full object-cover object-[78%_center] lg:object-[82%_center] xl:object-[86%_center] brightness-105 contrast-105"
@@ -123,10 +123,10 @@ export const HeroSection: React.FC = () => {
 
             {/* Supporting Text with Marathi line */}
             <p className="text-neutral-200 text-base lg:text-lg font-medium leading-relaxed mb-1 max-w-md animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-              Professional two-wheeler service, repair &amp; restoration in Pahur.
+              Professional motorcycle &amp; bike service, repair &amp; restoration in Pahur.
             </p>
             <p className="text-neutral-400 text-xs lg:text-sm leading-relaxed mb-5 max-w-md animate-fade-in-up" style={{ animationDelay: '250ms' }}>
-              Regular servicing पासून Complete Bike Restoration पर्यंत — तुमच्या Bike ची संपूर्ण काळजी एकाच ठिकाणी.
+              फक्त मोटरसायकल व बाईक सर्व्हिसिंग (स्कूटर/मोपेड नाही) — Regular Servicing पासून Complete Bike Restoration पर्यंत.
             </p>
 
             {/* Inline Action Buttons */}
@@ -174,9 +174,9 @@ export const HeroSection: React.FC = () => {
               <span className="text-neutral-700">|</span>
               <div className="flex items-center gap-1.5 text-[#F5B900] font-bold">
                 <Sparkles className="w-3.5 h-3.5 text-[#F5B900]" />
-                <span className="text-white font-black text-sm">4.9/5</span>
+                <span className="text-white font-black text-sm">5.0/5</span>
                 <span className="text-neutral-400 text-[10px] lg:text-[11px] uppercase tracking-wider font-bold">
-                  Rating
+                  5-Star Rating
                 </span>
               </div>
             </div>

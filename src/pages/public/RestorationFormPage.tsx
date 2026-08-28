@@ -517,8 +517,7 @@ _Chaudhari Auto Centre, Jalgaon Road, Pahur_`;
                         className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2.5 px-3 text-sm text-gray-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#F5B900]"
                       >
                         <option value="Yamaha">Yamaha</option>
-                        <option value="Royal Enfield">Royal Enfield</option>
-                        <option value="Bajaj">Bajaj</option>
+                                                <option value="Bajaj">Bajaj</option>
                         <option value="Honda">Honda</option>
                         <option value="Hero">Hero / Hero Honda</option>
                         <option value="TVS">TVS</option>

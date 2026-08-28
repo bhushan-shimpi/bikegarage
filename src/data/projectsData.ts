@@ -44,8 +44,8 @@ export const projectsData: ProjectItem[] = [
   },
   {
     id: 'p3',
-    title: 'Royal Enfield Bullet 350 Heavy Overhaul',
-    bikeModel: 'Royal Enfield Bullet 350 Standard',
+    title: 'Bajaj Pulsar 150 Master Overhaul',
+    bikeModel: 'Bajaj Pulsar 150 DTS-i',
     category: 'servicing',
     yearBuilt: '2012',
     problem: 'Heavy tappet noise, excessive engine vibration at 60 km/h, oil dripping from pushrod tubes, and hard clutch operation.',
@@ -56,7 +56,7 @@ export const projectsData: ProjectItem[] = [
       'Chain and sprocket replacement with heavy-roller O-ring kit',
       'Castrol 15W-50 semi-synthetic oil flush and filter renewal'
     ],
-    result: 'Trademark Royal Enfield deep rhythmic thump back without any oil drops, feather-soft clutch lever, and silky ride quality.',
+    result: 'Original factory engine compression and performance restored without any oil drops, feather-soft clutch lever, and silky ride quality.',
     completionTime: '3 Days',
     beforeImage: '/images/services/engine-repair.jpg',
     afterImage: '/images/why-choose-us.jpg',

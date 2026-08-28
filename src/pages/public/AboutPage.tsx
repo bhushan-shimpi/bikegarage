@@ -8,7 +8,7 @@ import { ScrollReveal } from '../../components/common/ScrollReveal';
 export const AboutPage: React.FC = () => {
   const checkmarks = [
     'Specialist Two-Wheeler Mechanics',
-    'Genuine Hero, Bajaj, Yamaha & Enfield Spares',
+    'Genuine Hero, Bajaj, Yamaha & Honda Spares Only',
     '30+ Years Experience Since 1994',
     'Specialized 2-Stroke Restoration Mastery',
   ];
@@ -35,7 +35,7 @@ export const AboutPage: React.FC = () => {
   const stats = [
     { value: 30, suffix: '+', label: 'Years Legacy (Est. 1994)', icon: Award },
     { value: 10000, suffix: '+', formatWithCommas: true, label: 'Happy Riders in Pahur', icon: Users },
-    { value: 15000, suffix: '+', formatWithCommas: true, label: 'Bikes & Scooters Serviced', icon: Bike },
+    { value: 15000, suffix: '+', formatWithCommas: true, label: 'Motorcycles & Bikes Serviced (Bikes Only)', icon: Bike },
     { value: 100, suffix: '%', label: 'Genuine Two-Wheeler Parts', icon: Wrench },
   ];
 
@@ -63,11 +63,11 @@ export const AboutPage: React.FC = () => {
               </p>
 
               <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                Founded in 1994, Chaudhari Auto Centre has grown from a humble single-bench repair shop into Pahur's most respected two-wheeler service and restoration hub. Over the last 30 years, we have worked on thousands of commuter motorcycles, automatic scooters, high-performance bikes, and vintage classics.
+                Founded in 1994, Chaudhari Auto Centre has grown from a humble single-bench repair shop into Pahur's most respected two-wheeler service and restoration hub. Over the last 30 years, we have worked on thousands of commuter motorcycles (Hero, Honda, Bajaj, Yamaha) and vintage classics (फक्त मोटरसायकल व बाईक — स्कूटर किंवा मोपेडचे काम केले जात नाही).
               </p>
 
               <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                Whether it is diagnosing a stubborn cold-start problem, fine-tuning modern Fuel Injection (FI) systems, or breathing new life into a 1996 Yamaha RX100 or Royal Enfield Bullet, our passion for motorcycles shows in every bolt we tighten.
+                Whether it is diagnosing a stubborn cold-start problem, fine-tuning modern Fuel Injection (FI) systems, or breathing new life into a Yamaha RX100, Bajaj Pulsar, Hero Splendor, or Honda Shine, our passion for motorcycles shows in every bolt we tighten.
               </p>
 
               {/* Checkmarks */}

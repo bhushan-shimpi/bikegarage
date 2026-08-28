@@ -253,7 +253,7 @@ export const InquiryPage: React.FC = () => {
               {/* Bike Model */}
               <div>
                 <label className="block font-bold text-gray-700 mb-1">
-                  Bike / Scooter Model <span className="text-red-500">*</span>
+                  Bike Model (फक्त बाईक / मोटरसायकल) <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <Bike className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />

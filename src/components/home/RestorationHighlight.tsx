@@ -17,7 +17,6 @@ import {
   Video,
   Film
 } from 'lucide-react';
-import { BeforeAfterSlider } from '../common/BeforeAfterSlider';
 import { Button } from '../common/Button';
 import { ScrollReveal } from '../common/ScrollReveal';
 
@@ -325,16 +324,7 @@ export const RestorationHighlight: React.FC = () => {
           </div>
         </div>
 
-        {/* ─── INTERACTIVE BEFORE & AFTER SLIDER ─── */}
-        <ScrollReveal direction="up" delay={150}>
-          <div className="mb-14 sm:mb-16">
-            <BeforeAfterSlider
-              bikeName="1996 Yamaha RX100 Retro Master Restoration"
-              beforeImage="/images/about/bay3-restoration.jpg"
-              afterImage="/images/services/bike-restoration.jpg"
-            />
-          </div>
-        </ScrollReveal>
+        
 
         {/* ─── 🔧 OUR RESTORATION PROCESS (6 Pillars) ─── */}
         <div className="mb-14">
