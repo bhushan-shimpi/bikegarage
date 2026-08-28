@@ -12,10 +12,10 @@ export const HeroSection: React.FC = () => {
         <div className="relative w-full aspect-[16/9] overflow-hidden bg-[#0B0B0B]">
           <img
             src="/images/hero-bike-mobile.jpg"
-            alt="Motorcycle at Chaudhari Auto Centre"
+            alt="Bajaj Pulsar 125 Red and Black at Chaudhari Auto Centre"
             fetchPriority="high"
             decoding="async"
-            className="w-full h-full object-contain object-center"
+            className="w-full h-full object-cover object-center"
           />
           {/* Subtle directional fade at bottom into the content area */}
           <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-[#0B0B0B] to-transparent pointer-events-none" />
@@ -80,10 +80,10 @@ export const HeroSection: React.FC = () => {
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
             src="/images/hero-bike.jpg"
-            alt="Motorcycle at Chaudhari Auto Centre"
+            alt="Bajaj Pulsar 125 Red and Black at Chaudhari Auto Centre"
             fetchPriority="high"
             decoding="async"
-            className="w-full h-full object-cover object-[78%_center] lg:object-[82%_center] xl:object-[86%_center] brightness-105 contrast-105"
+            className="w-full h-full object-cover object-[70%_center] lg:object-[75%_center] xl:object-[80%_center] brightness-105 contrast-105"
           />
 
           {/* Left-to-right directional gradient: dark on left for text readability, warm & open on right */}
