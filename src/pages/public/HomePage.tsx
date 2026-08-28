@@ -3,6 +3,8 @@ import { HeroSection } from '../../components/home/HeroSection';
 import { ServicesOverview } from '../../components/home/ServicesOverview';
 import { RestorationHighlight } from '../../components/home/RestorationHighlight';
 import { WhyChooseUs } from '../../components/home/WhyChooseUs';
+import { OwnerAchievementSection } from '../../components/home/OwnerAchievementSection';
+import { GallerySection } from '../../components/home/GallerySection';
 import { HowItWorks } from '../../components/home/HowItWorks';
 import { ProjectsShowcase } from '../../components/home/ProjectsShowcase';
 import { InstagramHighlight } from '../../components/home/InstagramHighlight';
@@ -27,7 +29,13 @@ export const HomePage: React.FC = () => {
       {/* 5. Why Choose Us */}
       <WhyChooseUs />
 
-      {/* 6. How It Works */}
+      {/* 6. Owner / Business Achievement (Awards) */}
+      <OwnerAchievementSection />
+
+      {/* 7. Workshop & Restoration Gallery */}
+      <GallerySection />
+
+      {/* 8. How It Works */}
       <HowItWorks />
 
       {/* 7. Our Projects */}

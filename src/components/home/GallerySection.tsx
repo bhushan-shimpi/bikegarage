@@ -1,139 +1,259 @@
 import React, { useState } from 'react';
-import { SectionHeading } from '../common/SectionHeading';
-import { galleryData, GalleryItem } from '../../data/galleryData';
-import { Modal } from '../common/Modal';
-import { BeforeAfterSlider } from '../common/BeforeAfterSlider';
-import { Maximize2 } from 'lucide-react';
+import { Camera, Maximize2, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ScrollReveal } from '../common/ScrollReveal';
+
+interface GalleryItem {
+  id: string;
+  src: string;
+  alt: string;
+  caption?: string;
+}
 
 export const GallerySection: React.FC = () => {
-  const [activeFilter, setActiveFilter] = useState<'all' | 'restoration' | 'servicing' | 'painting' | 'detailing'>('all');
-  const [activeItem, setActiveItem] = useState<GalleryItem | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [activeLightboxIndex, setActiveLightboxIndex] = useState<number | null>(null);
 
-  const categories = [
-    { key: 'all', label: 'All Work' },
-    { key: 'restoration', label: 'Restoration' },
-    { key: 'servicing', label: 'Servicing' },
-    { key: 'painting', label: 'Painting' },
-    { key: 'detailing', label: 'Detailing' },
-  ] as const;
+  const galleryImages: GalleryItem[] = [
+    {
+      id: 'gal-1',
+      src: '/images/Gallary/IMG_5148.JPG',
+      alt: 'Chaudhari Auto Workshop & Bike Restoration Bay',
+      caption: 'Full bike engine assembly and restoration work',
+    },
+    {
+      id: 'gal-2',
+      src: '/images/Gallary/IMG_5150.JPG',
+      alt: 'Precision mechanical service & spare parts',
+      caption: 'Original spare parts fitment and chassis tuning',
+    },
+    {
+      id: 'gal-3',
+      src: '/images/Gallary/IMG_5153.JPG',
+      alt: 'Engine overhaul & detailing in progress',
+      caption: 'High-precision engine rebuild and component cleaning',
+    },
+    {
+      id: 'gal-4',
+      src: '/images/Gallary/IMG_5154.JPG',
+      alt: 'Two-wheeler servicing workshop bays',
+      caption: 'Active hydraulic service ramp and diagnostics',
+    },
+    {
+      id: 'gal-5',
+      src: '/images/Gallary/IMG_5156.JPG',
+      alt: 'Finished motorcycle delivery check',
+      caption: 'Showroom finish after oven/bhatti paint & ceramic coat',
+    },
+    {
+      id: 'gal-6',
+      src: '/images/Gallary/SaveClip.App_763561185_17960641896175433_1354440259135450971_n.jpg',
+      alt: 'Classic 2-stroke bike transformation',
+      caption: 'Yamaha RX100 mirror shine fuel tank & decals',
+    },
+    {
+      id: 'gal-7',
+      src: '/images/Gallary/SaveClip.App_763684648_17960641551175433_1288108473921684178_n.jpg',
+      alt: 'High-gloss oven paint bake finish',
+      caption: 'Durable bhatti oven paint process at workshop',
+    },
+    {
+      id: 'gal-8',
+      src: '/images/Gallary/SaveClip.App_764116120_17960641887175433_663142152934308415_n.jpg',
+      alt: 'Chrome plating and metal restoration',
+      caption: 'Deep chrome luster on silencer and wheel rims',
+    },
+    {
+      id: 'gal-9',
+      src: '/images/Gallary/SaveClip.App_764676210_17960641563175433_2615807174010287203_n.jpg',
+      alt: 'Pahur workshop team at work',
+      caption: 'Experienced mechanics servicing commuter and performance bikes',
+    },
+    {
+      id: 'gal-10',
+      src: '/images/Gallary/SaveClip.App_764694001_17960641872175433_1259823115832174628_n.jpg',
+      alt: 'Complete bike detailing and ceramic shield',
+      caption: 'Hydrophobic ceramic coat protection on paintwork',
+    },
+    {
+      id: 'gal-11',
+      src: '/images/Gallary/SaveClip.App_764975447_17960641848175433_9031705044490108474_n.jpg',
+      alt: 'Custom seat work and body line restoration',
+      caption: 'Original comfort ergonomics and factory look',
+    },
+    {
+      id: 'gal-12',
+      src: '/images/Gallary/SaveClip.App_765619840_17960641572175433_3593156307828676883_n.jpg',
+      alt: 'Showroom delivery ready bike',
+      caption: 'Delivered to a happy customer at Chaudhari Auto Centre',
+    },
+  ];
 
-  const filteredItems = activeFilter === 'all'
-    ? galleryData
-    : galleryData.filter((item) => item.category === activeFilter);
+  // Show only 10 images initially; show all 12 when expanded
+  const displayedImages = isExpanded ? galleryImages : galleryImages.slice(0, 10);
+
+  const prevLightbox = () => {
+    if (activeLightboxIndex !== null) {
+      setActiveLightboxIndex((activeLightboxIndex - 1 + galleryImages.length) % galleryImages.length);
+    }
+  };
+
+  const nextLightbox = () => {
+    if (activeLightboxIndex !== null) {
+      setActiveLightboxIndex((activeLightboxIndex + 1) % galleryImages.length);
+    }
+  };
 
   return (
-    <section className="py-20 bg-[#0B0B0B]" id="gallery">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          badge="Visual Proof"
-          title="BEFORE & AFTER GALLERY"
-          subtitle="Explore the dramatic transformations achieved by our technicians and painters"
-          marathiSubtitle="कामाचा दर्जा स्वतः डोळ्यांनी पहा"
-          align="center"
-        />
+    <section className="py-16 sm:py-20 bg-[#0B0B0B] text-white relative overflow-hidden" id="gallery">
+      {/* Background ambient lighting */}
+      <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-[#F5B900]/5 rounded-full blur-3xl pointer-events-none" />
 
-        {/* Category Filter Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
-          {categories.map((cat) => (
-            <button
-              key={cat.key}
-              onClick={() => setActiveFilter(cat.key)}
-              className={`px-4 py-2 text-xs sm:text-sm font-bold uppercase tracking-wider rounded-lg transition-all ${
-                activeFilter === cat.key
-                  ? 'bg-[#F5B900] text-black shadow-yellow-sm'
-                  : 'bg-[#181818] text-neutral-400 hover:text-white border border-[#2B2B2B]'
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        {/* Header */}
+        <ScrollReveal direction="up">
+          <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+            <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 rounded-full border border-[#F5B900]/30 bg-[#F5B900]/10 text-[#F5B900] text-xs font-black uppercase tracking-widest">
+              <Camera className="w-3.5 h-3.5" />
+              <span>LIVE WORKSHOP MOMENTS</span>
+            </div>
 
-        {/* Responsive Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => setActiveItem(item)}
-              className="group relative h-64 sm:h-72 rounded-xl overflow-hidden cursor-pointer border border-[#262626] bg-[#151515] hover:border-[#F5B900] transition-all duration-300 shadow-md"
-            >
-              <img
-                src={item.afterImage}
-                alt={item.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                loading="lazy"
-              />
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-tight text-white font-sans">
+              WORKSHOP &amp; RESTORATION GALLERY
+            </h2>
 
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-90 group-hover:opacity-95 transition-opacity" />
+            <p className="text-xs sm:text-sm text-[#F5B900] font-semibold mt-1">
+              चौधरी ऑटो सेंटर — वर्कशॉप व रिस्टोरेशन फोटो गॅलरी
+            </p>
 
-              {/* Badges */}
-              <div className="absolute top-3 left-3 flex items-center gap-2">
-                <span className="px-2.5 py-1 text-[10px] font-black uppercase tracking-wider rounded bg-[#F5B900] text-black">
-                  {item.category}
-                </span>
-                <span className="px-2 py-0.5 text-[10px] font-semibold rounded bg-black/70 text-neutral-300 backdrop-blur border border-white/10">
-                  Before / After
-                </span>
-              </div>
+            <p className="text-xs sm:text-sm text-neutral-400 mt-2 max-w-xl mx-auto">
+              A glimpse into our workshop craftsmanship, engine overhauls, custom paint finishes, and completed bike restorations in Pahur.
+            </p>
+          </div>
+        </ScrollReveal>
 
-              {/* Expand Icon Hint */}
-              <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/60 backdrop-blur flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                <Maximize2 className="w-4 h-4 text-[#F5B900]" />
-              </div>
+        {/* Gallery Grid (Initial 10 Photos) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+          {displayedImages.map((img, idx) => (
+            <ScrollReveal key={img.id} direction="up" delay={(idx % 5) * 60}>
+              <div
+                onClick={() => setActiveLightboxIndex(idx)}
+                className="group relative h-[170px] xs:h-[190px] sm:h-[220px] rounded-2xl overflow-hidden bg-[#141414] border border-[#242424] hover:border-[#F5B900]/60 cursor-pointer shadow-lg transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#F5B900]/15"
+              >
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  loading="lazy"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                />
 
-              {/* Bottom Details */}
-              <div className="absolute bottom-0 left-0 right-0 p-5">
-                <h4 className="text-lg font-bold text-white uppercase tracking-tight group-hover:text-[#F5B900] transition-colors">
-                  {item.title}
-                </h4>
-                <p className="text-xs text-neutral-300 mt-1 line-clamp-1">
-                  {item.description}
-                </p>
-                <div className="mt-2 text-[11px] font-semibold text-[#F5B900] uppercase tracking-wider flex items-center gap-1">
-                  <span>Click to view comparison slider</span>
-                  <span>→</span>
+                {/* Dark Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
+
+                {/* Top Badge */}
+                <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-sm border border-white/10 text-[9px] font-bold text-white/90">
+                  #{idx + 1}
+                </div>
+
+                {/* Hover Maximize Icon */}
+                <div className="absolute top-2.5 right-2.5 w-7 h-7 rounded-lg bg-black/70 backdrop-blur-sm border border-white/20 text-[#F5B900] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Maximize2 className="w-3.5 h-3.5" />
+                </div>
+
+                {/* Bottom Caption */}
+                <div className="absolute inset-x-0 bottom-0 p-2.5 sm:p-3 text-left">
+                  <p className="text-[11px] sm:text-xs font-bold text-white leading-tight line-clamp-1 group-hover:text-[#F5B900] transition-colors">
+                    {img.caption || img.alt}
+                  </p>
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
+
+        {/* View All / Show Less Button */}
+        <div className="mt-8 sm:mt-10 text-center">
+          <button
+            type="button"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#1A1A1A] hover:bg-[#242424] border border-[#333] hover:border-[#F5B900] text-white hover:text-[#F5B900] font-black text-xs uppercase tracking-wider transition-all active:scale-95 shadow-md shadow-black/50 cursor-pointer"
+          >
+            {isExpanded ? (
+              <>
+                <span>Show Less (१० फोटो दाखवा)</span>
+                <ChevronUp className="w-4 h-4 text-[#F5B900]" />
+              </>
+            ) : (
+              <>
+                <span>View All Photos ({galleryImages.length}) • सर्व फोटो पहा</span>
+                <ChevronDown className="w-4 h-4 text-[#F5B900]" />
+              </>
+            )}
+          </button>
+        </div>
+
       </div>
 
-      {/* Lightbox / Comparison Modal */}
-      {activeItem && (
-        <Modal
-          isOpen={Boolean(activeItem)}
-          onClose={() => setActiveItem(null)}
-          title={`${activeItem.title} (${activeItem.bikeName})`}
-          maxWidth="4xl"
+      {/* ─── FULLSCREEN LIGHTBOX MODAL ─── */}
+      {activeLightboxIndex !== null && (
+        <div
+          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-3 sm:p-6"
+          onClick={() => setActiveLightboxIndex(null)}
         >
-          <div className="space-y-6">
-            <BeforeAfterSlider
-              beforeImage={activeItem.beforeImage}
-              afterImage={activeItem.afterImage}
-              bikeName={activeItem.bikeName}
-            />
-
-            <div className="p-4 bg-[#1A1A1A] rounded-xl border border-[#2A2A2A] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div>
-                <span className="text-xs font-bold text-[#F5B900] uppercase tracking-wider block">
-                  Transformation Summary
-                </span>
-                <p className="text-sm text-neutral-300 mt-1">
-                  {activeItem.description}
-                </p>
-              </div>
-
-              <a
-                href={`/inquiry?service=Bike%20Restoration&notes=Inquiring%20about%20gallery%20project:%20${encodeURIComponent(activeItem.title)}`}
-                className="shrink-0 px-4 py-2 rounded-lg bg-[#F5B900] text-black text-xs font-bold uppercase tracking-wider hover:bg-[#DFA500] transition-colors"
+          <div
+            className="relative max-w-4xl w-full flex flex-col items-center animate-fade-in-up"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top Bar with counter & close */}
+            <div className="w-full flex items-center justify-between text-xs text-neutral-300 pb-3 mb-1">
+              <span className="font-mono font-bold text-[#F5B900]">
+                PHOTO {activeLightboxIndex + 1} OF {galleryImages.length}
+              </span>
+              <button
+                onClick={() => setActiveLightboxIndex(null)}
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                aria-label="Close"
               >
-                Inquire This Look
-              </a>
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* High-res Image Box */}
+            <div className="relative w-full max-h-[75vh] rounded-2xl overflow-hidden bg-black/80 flex items-center justify-center border border-white/10">
+              <img
+                src={galleryImages[activeLightboxIndex].src}
+                alt={galleryImages[activeLightboxIndex].alt}
+                className="max-h-[75vh] w-auto object-contain select-none"
+              />
+
+              {/* Prev / Next Nav Buttons */}
+              <button
+                onClick={(e) => { e.stopPropagation(); prevLightbox(); }}
+                className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/70 border border-white/20 hover:border-[#F5B900] text-white hover:text-[#F5B900] flex items-center justify-center transition-colors"
+                aria-label="Previous image"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); nextLightbox(); }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/70 border border-white/20 hover:border-[#F5B900] text-white hover:text-[#F5B900] flex items-center justify-center transition-colors"
+                aria-label="Next image"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Bottom Caption */}
+            <div className="w-full mt-3 text-center">
+              <p className="text-sm font-bold text-white">
+                {galleryImages[activeLightboxIndex].caption}
+              </p>
+              <p className="text-xs text-neutral-400 mt-0.5">
+                Chaudhari Auto Centre • Pahur, Dist. Jalgaon
+              </p>
             </div>
           </div>
-        </Modal>
+        </div>
       )}
     </section>
   );

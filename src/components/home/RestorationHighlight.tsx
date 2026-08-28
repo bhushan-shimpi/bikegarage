@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Sparkles, 
@@ -10,13 +10,177 @@ import {
   Gem, 
   CheckCircle2, 
   Award,
-  Quote
+  Quote,
+  Play,
+  Volume2,
+  VolumeX,
+  Video,
+  Film
 } from 'lucide-react';
 import { BeforeAfterSlider } from '../common/BeforeAfterSlider';
 import { Button } from '../common/Button';
 import { ScrollReveal } from '../common/ScrollReveal';
 
+// ─── Individual Restoration Video Card Component ───
+interface VideoCardProps {
+  src: string;
+  title: string;
+  subtitle: string;
+  badge: string;
+  isAutoPlayOnScroll?: boolean;
+  sectionInView: boolean;
+}
+
+const RestorationVideoCard: React.FC<VideoCardProps> = ({
+  src,
+  title,
+  subtitle,
+  badge,
+  isAutoPlayOnScroll,
+  sectionInView,
+}) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+
+  // 1. Auto-play when user reaches the section (for the featured video)
+  useEffect(() => {
+    if (isAutoPlayOnScroll && videoRef.current) {
+      if (sectionInView) {
+        videoRef.current.play()
+          .then(() => setIsPlaying(true))
+          .catch(() => {
+            // Browsers may block if audio is unmuted, but it is muted by default
+          });
+      } else {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      }
+    }
+  }, [sectionInView, isAutoPlayOnScroll]);
+
+  // 2. Start playing when dragging mouse on / hovering over (for the other videos)
+  const handleMouseEnter = () => {
+    if (!isAutoPlayOnScroll && videoRef.current) {
+      videoRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch(() => {});
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (!isAutoPlayOnScroll && videoRef.current) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  // 3. Click to toggle play / pause
+  const togglePlay = () => {
+    if (!videoRef.current) return;
+    if (isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      videoRef.current.play()
+        .then(() => setIsPlaying(true))
+        .catch(() => {});
+    }
+  };
+
+  // 4. Toggle Sound (Mute/Unmute)
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!videoRef.current) return;
+    videoRef.current.muted = !isMuted;
+    setIsMuted(!isMuted);
+  };
+
+  return (
+    <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={togglePlay}
+      className="group relative w-[280px] xs:w-[300px] md:w-auto shrink-0 snap-center md:snap-align-none rounded-3xl overflow-hidden bg-[#111111] border border-[#272727] hover:border-[#F5B900]/70 shadow-xl transition-all duration-300 hover:shadow-2xl hover:shadow-[#F5B900]/15 cursor-pointer flex flex-col justify-between select-none"
+    >
+      {/* Video Container Frame */}
+      <div className="relative w-full aspect-[9/14] sm:aspect-[9/13] bg-black overflow-hidden flex items-center justify-center">
+        <video
+          ref={videoRef}
+          src={src}
+          loop
+          muted={isMuted}
+          playsInline
+          preload="metadata"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+        />
+
+        {/* Ambient Top & Bottom Vignettes */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-black/60 pointer-events-none" />
+
+        {/* Top Status & Badge */}
+        <div className="absolute top-3 inset-x-3 flex items-center justify-between z-10">
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/75 backdrop-blur-md border border-white/15 text-[10px] font-extrabold uppercase tracking-wider text-[#F5B900]">
+            <Film className="w-3 h-3 text-[#F5B900]" />
+            <span>{badge}</span>
+          </div>
+
+          {/* Sound Toggle Button */}
+          <button
+            onClick={toggleMute}
+            className="w-8 h-8 rounded-full bg-black/80 backdrop-blur-md border border-white/20 text-white hover:text-[#F5B900] flex items-center justify-center transition-colors shadow-md"
+            aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+          >
+            {isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5 text-[#F5B900]" />}
+          </button>
+        </div>
+
+        {/* Center Play / Pause Indicator (shows briefly or when paused) */}
+        {!isPlaying && (
+          <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+            <div className="w-14 h-14 rounded-full bg-[#F5B900]/90 text-black flex items-center justify-center shadow-xl shadow-black/60 group-hover:scale-110 transition-transform">
+              <Play className="w-6 h-6 fill-black ml-0.5" />
+            </div>
+          </div>
+        )}
+
+        {/* Bottom Details Overlay */}
+        <div className="absolute inset-x-0 bottom-0 p-4 z-10">
+          <span className="text-[10px] font-bold text-[#F5B900] uppercase tracking-wider block mb-1">
+            {isAutoPlayOnScroll ? '• Auto-Playing Live' : '• Hover to Play'}
+          </span>
+          <h4 className="text-base font-extrabold text-white font-sans tracking-tight leading-snug group-hover:text-[#F5B900] transition-colors">
+            {title}
+          </h4>
+          <p className="text-xs text-neutral-300 mt-0.5 leading-relaxed line-clamp-1">
+            {subtitle}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const RestorationHighlight: React.FC = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [sectionInView, setSectionInView] = useState(false);
+
+  // IntersectionObserver to detect when user reaches the section
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setSectionInView(entry.isIntersecting);
+      },
+      { threshold: 0.25 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   const restorationProcess = [
     {
       icon: Search,
@@ -69,7 +233,11 @@ export const RestorationHighlight: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 sm:py-24 bg-[#070707] border-y border-[#222222] relative overflow-hidden" id="restoration">
+    <section
+      ref={sectionRef}
+      className="py-16 sm:py-24 bg-[#070707] border-y border-[#222222] relative overflow-hidden"
+      id="restoration"
+    >
       {/* Subtle Background Glows */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#F5B900]/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-orange-600/5 rounded-full blur-3xl pointer-events-none" />
@@ -98,6 +266,64 @@ export const RestorationHighlight: React.FC = () => {
             </p>
           </div>
         </ScrollReveal>
+
+        {/* ─── 3 RESTORATION VIDEOS (1 ROW ON DESKTOP, SCROLLABLE ON MOBILE) ─── */}
+        <div className="mb-14 sm:mb-16">
+          <ScrollReveal direction="up">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 sm:mb-8 gap-2">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-[#F5B900] flex items-center gap-1.5">
+                  <Video className="w-3.5 h-3.5" />
+                  <span>Real Workshop Restoration Videos</span>
+                </span>
+                <h3 className="text-xl sm:text-2xl lg:text-3xl font-black uppercase text-white font-sans mt-0.5">
+                  WATCH OUR RESTORATION IN ACTION
+                </h3>
+              </div>
+              <p className="text-xs text-neutral-400 max-w-sm">
+                First video autoplays live. Hover or drag mouse to play other videos.
+              </p>
+            </div>
+          </ScrollReveal>
+
+          {/* 3 Videos Container: 1 Row on Desktop (Grid-cols-3), Scrollable on Mobile without scrollbar */}
+          <div className="flex md:grid md:grid-cols-3 overflow-x-auto no-scrollbar gap-4 sm:gap-6 snap-x snap-mandatory pb-3 pt-1">
+            {/* Video 1: Featured (Autoplays on section reach) */}
+            <RestorationVideoCard
+              src="/images/restoration/SaveClip.App_AQM5Tt49XZZuRrBLsAC8kFWf85miepLEVtHAKgNKJjNR257EWOpx_bLq8R0Moxj_kpi7F7KN7mS_4qSl7PpA0H3yA5IK37LEcz962fY.mp4"
+              title="Pulsar Full Restoration Reel"
+              subtitle="Oven Bhatti Finish & Detailed Assembly"
+              badge="AUTO-PLAYS ON SCROLL"
+              isAutoPlayOnScroll={true}
+              sectionInView={sectionInView}
+            />
+
+            {/* Video 2: Plays on hover / mouse drag */}
+            <RestorationVideoCard
+              src="/images/restoration/pulsar%20150.mp4"
+              title="Pulsar 150 Engine & Paint Restoration"
+              subtitle="Precision Engine Buffing, Spares & Paint"
+              badge="HOVER TO PLAY"
+              isAutoPlayOnScroll={false}
+              sectionInView={sectionInView}
+            />
+
+            {/* Video 3: Plays on hover / mouse drag */}
+            <RestorationVideoCard
+              src="/images/restoration/PULSAR%209617%204K.mp4"
+              title="Pulsar 9617 4K Walkaround & Detail"
+              subtitle="Showroom Mirror Shine Final Inspection"
+              badge="HOVER TO PLAY"
+              isAutoPlayOnScroll={false}
+              sectionInView={sectionInView}
+            />
+          </div>
+
+          {/* Mobile Swipe Hint */}
+          <div className="md:hidden text-center mt-3 text-[11px] text-neutral-500">
+            Swipe sideways to view all 3 videos
+          </div>
+        </div>
 
         {/* ─── INTERACTIVE BEFORE & AFTER SLIDER ─── */}
         <ScrollReveal direction="up" delay={150}>
