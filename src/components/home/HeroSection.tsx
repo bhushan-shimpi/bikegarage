@@ -83,15 +83,15 @@ export const HeroSection: React.FC = () => {
             alt="Bajaj Pulsar 125 Red and Black at Chaudhari Auto Centre"
             fetchPriority="high"
             decoding="async"
-            className="w-full h-full object-cover object-[70%_center] lg:object-[75%_center] xl:object-[80%_center] brightness-105 contrast-105"
+            className="w-full h-full object-cover object-right md:object-right brightness-105 contrast-105"
           />
 
-          {/* Left-to-right directional gradient: dark on left for text readability, warm & open on right */}
+          {/* Left-to-right directional gradient: dark on left for text readability, open on right for bike */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                'linear-gradient(90deg, #0B0B0B 0%, rgba(11,11,11,0.92) 26%, rgba(11,11,11,0.60) 42%, rgba(11,11,11,0.12) 62%, transparent 80%)',
+                'linear-gradient(90deg, #0B0B0B 0%, rgba(11,11,11,0.95) 32%, rgba(11,11,11,0.70) 48%, rgba(11,11,11,0.10) 66%, transparent 85%)',
             }}
           />
 
