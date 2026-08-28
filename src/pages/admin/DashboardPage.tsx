@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Inbox,
-  Calendar,
   Wrench,
   Search,
   Phone,
@@ -20,7 +19,7 @@ import { CreateEnquiryModal } from '../../components/admin/CreateEnquiryModal';
 export const DashboardPage: React.FC = () => {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | EnquiryStatus | 'today_appointments'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | EnquiryStatus>('all');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
@@ -32,14 +31,12 @@ export const DashboardPage: React.FC = () => {
     loadData();
   }, []);
 
-  const todayStr = new Date().toISOString().split('T')[0];
-
-  // 3 Core Metrics
+  // 3 Core Garage Metrics: New -> In Service -> Completed
   const newCount = enquiries.filter((e) => e.status === 'new').length;
-  const todayAppointmentsCount = enquiries.filter((e) => e.service?.preferredDate === todayStr).length;
   const inServiceCount = enquiries.filter(
     (e) => e.status === 'in_progress' || e.status === 'contacted'
   ).length;
+  const completedCount = enquiries.filter((e) => e.status === 'completed').length;
 
   const handleStatusChange = (id: string, newStatus: EnquiryStatus) => {
     enquiryService.updateStatus(id, newStatus);
@@ -50,11 +47,7 @@ export const DashboardPage: React.FC = () => {
 
   // Filter list
   const filtered = enquiries.filter((item) => {
-    if (statusFilter === 'today_appointments') {
-      if (item.service?.preferredDate !== todayStr) return false;
-    } else if (statusFilter !== 'all') {
-      if (item.status !== statusFilter) return false;
-    }
+    if (statusFilter !== 'all' && item.status !== statusFilter) return false;
 
     const q = searchQuery.trim().toLowerCase();
     if (!q) return true;
@@ -111,7 +104,7 @@ export const DashboardPage: React.FC = () => {
         </div>
       )}
 
-      {/* ─── ONLY 3 MAIN STATS (Local garage owner focus) ─── */}
+      {/* ─── ONLY 3 MAIN STATS (New, In Service, Completed) ─── */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         {/* Stat 1: New Enquiries */}
         <button
@@ -138,53 +131,53 @@ export const DashboardPage: React.FC = () => {
           </div>
         </button>
 
-        {/* Stat 2: Today's Appointments */}
+        {/* Stat 2: In Service */}
         <button
-          onClick={() => setStatusFilter(statusFilter === 'today_appointments' ? 'all' : 'today_appointments')}
+          onClick={() => setStatusFilter(statusFilter === 'in_progress' ? 'all' : 'in_progress')}
           className={`p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs ${
-            statusFilter === 'today_appointments'
+            statusFilter === 'in_progress'
               ? 'bg-blue-50/80 border-blue-500 ring-2 ring-blue-500/50'
               : 'bg-white border-gray-200 hover:border-blue-300 hover:bg-gray-50/50'
           }`}
         >
           <div className="space-y-1">
             <span className="text-xs font-semibold text-gray-500 block">
-              Today's Appointments
+              In Service
             </span>
             <span className="text-2xl sm:text-3xl font-bold text-blue-950">
-              {todayAppointmentsCount}
+              {inServiceCount}
             </span>
             <span className="text-[11px] text-blue-700 font-medium block">
-              Scheduled for today
+              Bikes under repair
             </span>
           </div>
           <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center shrink-0">
-            <Calendar className="w-6 h-6" />
+            <Wrench className="w-6 h-6" />
           </div>
         </button>
 
-        {/* Stat 3: In Service */}
+        {/* Stat 3: Completed */}
         <button
-          onClick={() => setStatusFilter(statusFilter === 'in_progress' ? 'all' : 'in_progress')}
+          onClick={() => setStatusFilter(statusFilter === 'completed' ? 'all' : 'completed')}
           className={`p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs ${
-            statusFilter === 'in_progress'
+            statusFilter === 'completed'
               ? 'bg-emerald-50/80 border-emerald-500 ring-2 ring-emerald-500/50'
               : 'bg-white border-gray-200 hover:border-emerald-300 hover:bg-gray-50/50'
           }`}
         >
           <div className="space-y-1">
             <span className="text-xs font-semibold text-gray-500 block">
-              In Service
+              Completed
             </span>
             <span className="text-2xl sm:text-3xl font-bold text-emerald-950">
-              {inServiceCount}
+              {completedCount}
             </span>
             <span className="text-[11px] text-emerald-700 font-medium block">
-              Bikes under repair
+              Delivered to rider
             </span>
           </div>
           <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
-            <Wrench className="w-6 h-6" />
+            <CheckCircle2 className="w-6 h-6" />
           </div>
         </button>
       </div>
@@ -319,11 +312,9 @@ export const DashboardPage: React.FC = () => {
                         <span className="inline-block font-medium text-amber-900 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded text-[11px]">
                           {item.service.serviceName}
                         </span>
-                        {item.service.preferredDate && (
-                          <span className="block text-[11px] text-gray-500 mt-0.5">
-                            📅 {formatDate(item.service.preferredDate)}
-                          </span>
-                        )}
+                        <span className="block text-[11px] text-gray-400 mt-0.5">
+                          {formatDate(item.createdAt)}
+                        </span>
                       </td>
 
                       {/* Status Dropdown: Simple 5 options */}
@@ -434,11 +425,9 @@ export const DashboardPage: React.FC = () => {
                     <div className="text-amber-900 font-medium truncate">
                       🔧 {item.service.serviceName}
                     </div>
-                    {item.service.preferredDate && (
-                      <div className="text-gray-500 text-[11px]">
-                        📅 {formatDate(item.service.preferredDate)}
-                      </div>
-                    )}
+                    <div className="text-gray-400 text-[10px]">
+                      {formatDate(item.createdAt)}
+                    </div>
                   </div>
 
                   {/* Card Bottom: Status dropdown & View details */}

@@ -24,7 +24,6 @@ import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 import { AdminServicesPricingPage } from './pages/admin/AdminServicesPricingPage';
 import { AdminRepairHistoryPage } from './pages/admin/AdminRepairHistoryPage';
 import { AdminPartsInventoryPage } from './pages/admin/AdminPartsInventoryPage';
-import { AdminAppointmentsPage } from './pages/admin/AdminAppointmentsPage';
 import { AdminRestorationsPage } from './pages/admin/AdminRestorationsPage';
 
 export const App: React.FC = () => {
@@ -54,7 +53,6 @@ export const App: React.FC = () => {
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="enquiries" element={<EnquiriesListPage />} />
           <Route path="enquiries/:id" element={<EnquiryDetailsPage />} />
-          <Route path="appointments" element={<AdminAppointmentsPage />} />
           <Route path="repair-history" element={<AdminRepairHistoryPage />} />
           <Route path="restorations" element={<AdminRestorationsPage />} />
           <Route path="customers" element={<AdminCustomersPage />} />
