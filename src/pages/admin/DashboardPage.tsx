@@ -10,17 +10,20 @@ import {
   PlusCircle,
   RotateCcw,
   CheckCircle2,
+  Receipt,
 } from 'lucide-react';
 import { enquiryService } from '../../services/enquiryService';
 import { Enquiry, EnquiryStatus } from '../../types/enquiry';
 import { formatDate, formatPhone } from '../../utils/formatters';
 import { CreateEnquiryModal } from '../../components/admin/CreateEnquiryModal';
+import { CreateBillModal } from '../../components/admin/CreateBillModal';
 
 export const DashboardPage: React.FC = () => {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | EnquiryStatus>('all');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isCreateBillModalOpen, setIsCreateBillModalOpen] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   const loadData = () => {
@@ -80,15 +83,35 @@ export const DashboardPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Single Primary Call To Action */}
-        <button
-          onClick={() => setIsCreateModalOpen(true)}
-          className="px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all active:scale-98"
-        >
-          <PlusCircle className="w-4 h-4" />
-          <span>+ New Enquiry</span>
-        </button>
+        {/* Action Buttons: Create Bill & New Enquiry */}
+        <div className="flex items-center gap-2.5 self-stretch sm:self-auto">
+          <button
+            onClick={() => setIsCreateBillModalOpen(true)}
+            className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-gray-900 hover:bg-black text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all active:scale-98"
+          >
+            <Receipt className="w-4 h-4 text-[#F5B900]" />
+            <span>+ Create Bill</span>
+          </button>
+
+          <button
+            onClick={() => setIsCreateModalOpen(true)}
+            className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all active:scale-98"
+          >
+            <PlusCircle className="w-4 h-4" />
+            <span>+ New Enquiry</span>
+          </button>
+        </div>
       </div>
+
+      <CreateBillModal
+        isOpen={isCreateBillModalOpen}
+        onClose={() => setIsCreateBillModalOpen(false)}
+        onSuccess={() => {
+          loadData();
+          setSuccessMsg('Repair Bill created and saved in records!');
+          setTimeout(() => setSuccessMsg(null), 3000);
+        }}
+      />
 
       <CreateEnquiryModal
         isOpen={isCreateModalOpen}
