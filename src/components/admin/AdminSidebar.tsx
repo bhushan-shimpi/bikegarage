@@ -28,12 +28,12 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
   };
 
   const navItems = [
-    { name: 'Dashboard', marathi: 'गॅरेज आढावा', path: '/garage/dashboard', icon: LayoutDashboard },
-    { name: 'Bike Repair History', marathi: 'बाईक दुरुस्ती व बिल', path: '/garage/repair-history', icon: FileText },
-    { name: 'Customer Directory', marathi: 'ग्राहक यादी', path: '/garage/customers', icon: Users },
-    { name: 'Enquiries & Bookings', marathi: 'नवीन चौकशी', path: '/garage/enquiries', icon: Inbox },
-    { name: 'Services & Pricing', marathi: 'सेवा व दरपत्रक', path: '/garage/services', icon: Tag },
-    { name: 'Garage Settings', marathi: 'गॅरेज सेटिंग्ज', path: '/garage/settings', icon: Settings },
+    { name: 'Dashboard', path: '/garage/dashboard', icon: LayoutDashboard },
+    { name: 'Bike Repair History', path: '/garage/repair-history', icon: FileText },
+    { name: 'Customer Directory', path: '/garage/customers', icon: Users },
+    { name: 'Enquiries & Bookings', path: '/garage/enquiries', icon: Inbox },
+    { name: 'Services & Pricing', path: '/garage/services', icon: Tag },
+    { name: 'Garage Settings', path: '/garage/settings', icon: Settings },
   ];
 
   return (
@@ -73,7 +73,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
           </div>
 
           {/* Navigation Links */}
-          <nav className="p-3 space-y-2">
+          <nav className="p-3 space-y-1.5">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -82,21 +82,16 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
                   to={item.path}
                   onClick={onClose}
                   className={({ isActive }) =>
-                    `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs transition-all ${
+                    `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
                       isActive
-                        ? 'bg-[#F5B900] text-black shadow-xs font-black ring-1 ring-[#DFA500]'
-                        : 'text-gray-700 hover:text-black hover:bg-gray-100 font-bold'
+                        ? 'bg-[#F5B900] text-black shadow-xs font-black'
+                        : 'text-gray-700 hover:text-black hover:bg-gray-100'
                     }`
                   }
                 >
                   <div className="flex items-center gap-3">
                     <Icon className="w-4 h-4 shrink-0" />
-                    <div className="flex flex-col text-left">
-                      <span className="leading-tight">{item.name}</span>
-                      <span className="text-[10px] font-medium opacity-75 leading-tight">
-                        {item.marathi}
-                      </span>
-                    </div>
+                    <span>{item.name}</span>
                   </div>
                   <ChevronRight className="w-3.5 h-3.5 opacity-40 shrink-0" />
                 </NavLink>

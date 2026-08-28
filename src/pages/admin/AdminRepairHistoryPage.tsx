@@ -206,10 +206,10 @@ export const AdminRepairHistoryPage: React.FC = () => {
         <div>
           <h1 className="text-xl sm:text-2xl font-black uppercase text-gray-900 tracking-tight font-sans flex items-center gap-2.5">
             <Wrench className="w-6 h-6 text-[#DFA500]" />
-            बाईक दुरुस्ती व बिल (Bike Repair History & Bills)
+            Bike Repair History & Bills
           </h1>
           <p className="text-xs text-gray-500 mt-0.5">
-            गॅरेजमधील सर्व दुरुस्त्यांची नोंद, सुटे भाग (Parts), मजुरी व आजची एकूण कमाई ट्रॅकर
+            Workshop repair log, parts replaced, labor billing, and daily revenue tracker
           </p>
         </div>
 
@@ -218,7 +218,7 @@ export const AdminRepairHistoryPage: React.FC = () => {
           className="px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-sm transition-all self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
-          <span>+ नवीन काम / बिल बनवा</span>
+          <span>+ Log New Bike Repair</span>
         </button>
       </div>
 
@@ -239,7 +239,7 @@ export const AdminRepairHistoryPage: React.FC = () => {
           </div>
           <div>
             <span className="text-[11px] font-bold text-gray-500 block leading-tight">
-              आज पूर्ण गाड्या (Today Repaired)
+              Today's Completed
             </span>
             <span className="text-xl sm:text-2xl font-black text-gray-900 font-mono">
               {stats.todayCompletedCount}
@@ -254,7 +254,7 @@ export const AdminRepairHistoryPage: React.FC = () => {
           </div>
           <div>
             <span className="text-[11px] font-bold text-gray-500 block leading-tight">
-              आजची कमाई (Today's Earnings)
+              Today's Revenue
             </span>
             <span className="text-xl sm:text-2xl font-black text-emerald-700 font-mono">
               ₹{stats.todayRevenue.toLocaleString('en-IN')}
@@ -269,7 +269,7 @@ export const AdminRepairHistoryPage: React.FC = () => {
           </div>
           <div>
             <span className="text-[11px] font-bold text-gray-500 block leading-tight">
-              चालू कामे (In Workshop)
+              In Workshop
             </span>
             <span className="text-xl sm:text-2xl font-black text-gray-900 font-mono">
               {stats.inWorkshopCount}
@@ -284,7 +284,7 @@ export const AdminRepairHistoryPage: React.FC = () => {
           </div>
           <div>
             <span className="text-[11px] font-bold text-gray-500 block leading-tight">
-              एकूण कामे (Total Lifetime)
+              Total Lifetime
             </span>
             <span className="text-xl sm:text-2xl font-black text-gray-900 font-mono">
               {stats.lifetimeRepairsCount}
@@ -726,8 +726,8 @@ export const AdminRepairHistoryPage: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, paymentStatus: e.target.value as any })}
                     className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
                   >
-                    <option value="Paid">Paid (रोख / UPI)</option>
-                    <option value="Pending">Pending (बाकी)</option>
+                    <option value="Paid">Paid (Cash / UPI)</option>
+                    <option value="Pending">Pending (Unpaid)</option>
                     <option value="Partial">Partial</option>
                   </select>
                 </div>

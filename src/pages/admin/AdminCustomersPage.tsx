@@ -119,10 +119,10 @@ export const AdminCustomersPage: React.FC = () => {
         <div>
           <h1 className="text-xl sm:text-2xl font-black uppercase text-gray-900 tracking-tight font-sans flex items-center gap-2.5">
             <Users className="w-6 h-6 text-[#DFA500]" />
-            ग्राहक यादी (Customer Directory)
+            Customer Directory
           </h1>
           <p className="text-xs text-gray-500 mt-0.5">
-            पाहूर गॅरेजमधील नोंदणीकृत ग्राहक, वाहने, फोन नंबर आणि त्यांची मागील कामे
+            Registered motorcycle owners in Pahur • Contact info, bike details, and repair records
           </p>
         </div>
 
@@ -131,7 +131,7 @@ export const AdminCustomersPage: React.FC = () => {
           className="px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-sm transition-all self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
-          <span>+ नवीन ग्राहक नोंदवा</span>
+          <span>+ Register Customer</span>
         </button>
       </div>
 
@@ -151,13 +151,13 @@ export const AdminCustomersPage: React.FC = () => {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="ग्राहकाचे नाव, मोबाईल नंबर किंवा गाडीचा नंबर शोधा..."
+            placeholder="Search by customer name, mobile number, or registration (e.g. MH 19)..."
             className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-4 py-2 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#F5B900] focus:bg-white"
           />
         </div>
 
         <div className="text-xs text-gray-500 flex items-center gap-2 self-start sm:self-auto">
-          <span>नोंदणीकृत ग्राहक (Total Customers):</span>
+          <span>Registered Customers:</span>
           <span className="font-bold text-gray-900 bg-gray-100 px-2.5 py-1 rounded-md">
             {customers.length}
           </span>
@@ -169,10 +169,10 @@ export const AdminCustomersPage: React.FC = () => {
         <div className="bg-white rounded-2xl border border-gray-200 p-12 text-center">
           <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
           <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
-            कोणताही ग्राहक सापडला नाही
+            No Customers Found
           </h3>
           <p className="text-xs text-gray-500 mt-1">
-            नवीन ग्राहक सेव्ह करण्यासाठी वर दिलेल्या "+ नवीन ग्राहक नोंदवा" बटणावर क्लिक करा.
+            Click "+ Register Customer" above to add a customer profile to the database.
           </p>
         </div>
       ) : (
@@ -202,7 +202,7 @@ export const AdminCustomersPage: React.FC = () => {
                     <button
                       onClick={() => handleDelete(item.id || item.mobile, item.name)}
                       className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-700 transition-colors"
-                      title="ग्राहक डिलीट करा (Delete Customer)"
+                      title="Delete Customer"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -219,12 +219,12 @@ export const AdminCustomersPage: React.FC = () => {
                   </div>
                   {item.registrationNumber && (
                     <div className="text-xs text-gray-600 font-mono pl-6">
-                      गाडी नंबर: <span className="font-bold text-gray-900 uppercase">{item.registrationNumber}</span>
+                      Reg: <span className="font-bold text-gray-900 uppercase">{item.registrationNumber}</span>
                     </div>
                   )}
                   {item.currentKm && (
                     <div className="text-[11px] text-gray-500 pl-6 font-mono">
-                      मीटर: {item.currentKm} KM
+                      Odometer: {item.currentKm} KM
                     </div>
                   )}
                 </div>
@@ -237,7 +237,7 @@ export const AdminCustomersPage: React.FC = () => {
                   className="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-2xs"
                 >
                   <History className="w-3.5 h-3.5 text-[#DFA500]" />
-                  <span>मागील कामे (History)</span>
+                  <span>Repair History</span>
                 </button>
 
                 <div className="flex items-center gap-1.5">
@@ -247,7 +247,7 @@ export const AdminCustomersPage: React.FC = () => {
                     title="Call Customer"
                   >
                     <Phone className="w-3.5 h-3.5 text-gray-700" />
-                    <span>कॉल</span>
+                    <span>Call</span>
                   </a>
                   <a
                     href={`https://wa.me/91${item.mobile}`}
@@ -257,7 +257,7 @@ export const AdminCustomersPage: React.FC = () => {
                     title="WhatsApp"
                   >
                     <MessageCircle className="w-3.5 h-3.5" />
-                    <span>व्हॉट्सॲप</span>
+                    <span>WhatsApp</span>
                   </a>
                 </div>
               </div>

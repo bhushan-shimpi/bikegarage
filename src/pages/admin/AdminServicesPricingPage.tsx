@@ -536,7 +536,7 @@ export const AdminServicesPricingPage: React.FC = () => {
                     type="text"
                     value={formData.marathiName}
                     onChange={(e) => setFormData({ ...formData, marathiName: e.target.value })}
-                    placeholder="उदा. कार्बोरेटर ट्युनिंग व क्लीन"
+                    placeholder="e.g. Carburetor Tuning & Clean (optional)"
                     className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
                   />
                 </div>
