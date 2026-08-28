@@ -1,6 +1,7 @@
 import { Enquiry, EnquiryStatus, InternalNote } from '../types/enquiry';
 import { storage } from './storageService';
 import { apiClient } from './apiClient';
+import { customerService } from './customerService';
 
 export const enquiryService = {
   // Syncs with Supabase PostgreSQL API, updates local cache
@@ -185,6 +186,18 @@ export const enquiryService = {
 
     // Sync with backend API
     apiClient.patch(`/api/enquiries/${id}/status`, { status: newStatus }).catch(() => {});
+
+    // When enquiry is marked as in_progress, automatically save to Customer Directory
+    if (newStatus === 'in_progress' && updated.customer?.name && updated.customer?.mobile) {
+      customerService.create({
+        name: updated.customer.name,
+        mobile: updated.customer.mobile,
+        bikeBrand: updated.bike?.brand,
+        bikeModel: updated.bike?.model,
+        registrationNumber: updated.bike?.registrationNumber,
+        currentKm: updated.bike?.currentKm,
+      }).catch((err) => console.warn('Customer directory auto-save error:', err));
+    }
 
     return updated;
   },

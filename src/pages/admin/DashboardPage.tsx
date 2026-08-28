@@ -45,8 +45,12 @@ export const DashboardPage: React.FC = () => {
   const handleStatusChange = (id: string, newStatus: EnquiryStatus) => {
     enquiryService.updateStatus(id, newStatus);
     loadData();
-    setSuccessMsg(`Status updated to ${newStatus.toUpperCase().replace('_', ' ')}`);
-    setTimeout(() => setSuccessMsg(null), 2500);
+    setSuccessMsg(
+      `Status updated to ${newStatus.toUpperCase().replace('_', ' ')}${
+        newStatus === 'in_progress' ? ' • Saved to Customer Directory!' : ''
+      }`
+    );
+    setTimeout(() => setSuccessMsg(null), 3000);
   };
 
   // Filter list
@@ -128,80 +132,80 @@ export const DashboardPage: React.FC = () => {
         </div>
       )}
 
-      {/* ─── ONLY 3 MAIN STATS (New, In Service, Completed) ─── */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+      {/* ─── 3 MAIN STATS (2 COLUMNS ON MOBILE, 3 ON DESKTOP) ─── */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4">
         {/* Stat 1: New Enquiries */}
         <button
           onClick={() => setStatusFilter(statusFilter === 'new' ? 'all' : 'new')}
-          className={`p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs ${
+          className={`p-3 sm:p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs ${
             statusFilter === 'new'
               ? 'bg-amber-50/80 border-[#F5B900] ring-2 ring-[#F5B900]/50'
               : 'bg-white border-gray-200 hover:border-amber-300 hover:bg-gray-50/50'
           }`}
         >
-          <div className="space-y-1">
-            <span className="text-xs font-semibold text-gray-500 block">
+          <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1 pr-1">
+            <span className="text-[11px] sm:text-xs font-semibold text-gray-500 block truncate">
               New Enquiries
             </span>
-            <span className="text-2xl sm:text-3xl font-bold text-gray-900">
+            <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 block">
               {newCount}
             </span>
-            <span className="text-[11px] text-amber-700 font-medium block">
-              Awaiting customer call
+            <span className="text-[10px] sm:text-[11px] text-amber-700 font-medium block truncate">
+              Awaiting response
             </span>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
-            <Inbox className="w-6 h-6" />
+          <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+            <Inbox className="w-4 h-4 sm:w-6 sm:h-6" />
           </div>
         </button>
 
         {/* Stat 2: In Service */}
         <button
           onClick={() => setStatusFilter(statusFilter === 'in_progress' ? 'all' : 'in_progress')}
-          className={`p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs ${
+          className={`p-3 sm:p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs ${
             statusFilter === 'in_progress'
               ? 'bg-blue-50/80 border-blue-500 ring-2 ring-blue-500/50'
               : 'bg-white border-gray-200 hover:border-blue-300 hover:bg-gray-50/50'
           }`}
         >
-          <div className="space-y-1">
-            <span className="text-xs font-semibold text-gray-500 block">
+          <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1 pr-1">
+            <span className="text-[11px] sm:text-xs font-semibold text-gray-500 block truncate">
               In Service
             </span>
-            <span className="text-2xl sm:text-3xl font-bold text-blue-950">
+            <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-blue-950 block">
               {inServiceCount}
             </span>
-            <span className="text-[11px] text-blue-700 font-medium block">
-              Bikes under repair
+            <span className="text-[10px] sm:text-[11px] text-blue-700 font-medium block truncate">
+              Bikes in repair
             </span>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center shrink-0">
-            <Wrench className="w-6 h-6" />
+          <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center shrink-0">
+            <Wrench className="w-4 h-4 sm:w-6 sm:h-6" />
           </div>
         </button>
 
         {/* Stat 3: Completed */}
         <button
           onClick={() => setStatusFilter(statusFilter === 'completed' ? 'all' : 'completed')}
-          className={`p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs ${
+          className={`p-3 sm:p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs col-span-2 md:col-span-1 ${
             statusFilter === 'completed'
               ? 'bg-emerald-50/80 border-emerald-500 ring-2 ring-emerald-500/50'
               : 'bg-white border-gray-200 hover:border-emerald-300 hover:bg-gray-50/50'
           }`}
         >
-          <div className="space-y-1">
-            <span className="text-xs font-semibold text-gray-500 block">
+          <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1 pr-1">
+            <span className="text-[11px] sm:text-xs font-semibold text-gray-500 block truncate">
               Completed
             </span>
-            <span className="text-2xl sm:text-3xl font-bold text-emerald-950">
+            <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-emerald-950 block">
               {completedCount}
             </span>
-            <span className="text-[11px] text-emerald-700 font-medium block">
+            <span className="text-[10px] sm:text-[11px] text-emerald-700 font-medium block truncate">
               Delivered to rider
             </span>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
-            <CheckCircle2 className="w-6 h-6" />
+          <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+            <CheckCircle2 className="w-4 h-4 sm:w-6 sm:h-6" />
           </div>
         </button>
       </div>
@@ -230,8 +234,8 @@ export const DashboardPage: React.FC = () => {
             )}
           </div>
 
-          {/* Simple Status Filters: New, Contacted, In Progress, Completed, Cancelled */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+          {/* Simple Status Filters: New, Contacted, In Progress, Completed, Cancelled (with no-scrollbar) */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 no-scrollbar">
             {[
               { key: 'all', label: 'All' },
               { key: 'new', label: 'New' },

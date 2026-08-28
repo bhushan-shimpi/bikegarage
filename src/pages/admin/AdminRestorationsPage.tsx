@@ -143,7 +143,7 @@ export const AdminRestorationsPage: React.FC = () => {
         </div>
 
         {/* Status Filter Tabs */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-t border-gray-100 pt-2">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-t border-gray-100 pt-2 no-scrollbar">
           <span className="text-xs font-medium text-gray-500 mr-2 flex items-center gap-1">
             <Filter className="w-3.5 h-3.5 text-[#DFA500]" />
             Status:

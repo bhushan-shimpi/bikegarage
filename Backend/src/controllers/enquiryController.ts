@@ -213,7 +213,40 @@ export const updateEnquiryStatus = async (req: Request, res: Response): Promise<
       return;
     }
 
-    res.json({ success: true, data: result.rows[0] });
+    const row = result.rows[0];
+
+    // If marked as in_progress, automatically save customer to customer directory
+    if (status === 'in_progress' && row.customer_name && row.customer_mobile) {
+      const cleanMobile = row.customer_mobile.replace(/\D/g, '').slice(-10);
+      const custId = `cust-${Date.now()}`;
+      try {
+        await query(
+          `INSERT INTO customers (
+            id, name, mobile, email, city, bike_brand, bike_model, registration_number, created_at, updated_at
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())
+          ON CONFLICT (mobile) DO UPDATE SET
+            name = EXCLUDED.name,
+            bike_brand = COALESCE(EXCLUDED.bike_brand, customers.bike_brand),
+            bike_model = COALESCE(EXCLUDED.bike_model, customers.bike_model),
+            registration_number = COALESCE(EXCLUDED.registration_number, customers.registration_number),
+            updated_at = NOW()`,
+          [
+            custId,
+            row.customer_name.trim(),
+            cleanMobile,
+            row.customer_email?.trim() || null,
+            row.customer_city?.trim() || 'Pahur',
+            row.bike_brand?.trim() || null,
+            row.bike_model?.trim() || null,
+            row.registration_number?.trim() || null,
+          ]
+        );
+      } catch (custErr) {
+        console.warn('Could not auto-register customer on in_progress:', custErr);
+      }
+    }
+
+    res.json({ success: true, data: row });
   } catch (error) {
     console.error('Error updating enquiry status:', error);
     res.status(500).json({ success: false, error: 'Failed to update status' });
