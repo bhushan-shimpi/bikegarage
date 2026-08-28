@@ -1,6 +1,5 @@
 import React from 'react';
-import { Menu, PlusCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Menu } from 'lucide-react';
 
 interface AdminHeaderProps {
   onToggleSidebar: () => void;
@@ -26,11 +25,11 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
         </button>
 
         <div>
-          <h1 className="text-lg sm:text-xl font-extrabold uppercase tracking-tight text-gray-900 font-sans">
+          <h1 className="text-lg sm:text-xl font-bold text-gray-900">
             {title}
           </h1>
           {subtitle && (
-            <p className="text-xs text-gray-500 font-medium hidden sm:block">
+            <p className="text-xs text-gray-500 font-normal hidden sm:block">
               {subtitle}
             </p>
           )}
@@ -39,15 +38,6 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
 
       {/* Right actions */}
       <div className="flex items-center gap-3">
-        {/* Quick Link to Public Enquiry Form */}
-        <Link
-          to="/inquiry"
-          target="_blank"
-          className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#F5B900] text-black text-xs font-bold uppercase tracking-wider hover:bg-[#DFA500] shadow-xs transition-colors"
-        >
-          <PlusCircle className="w-3.5 h-3.5" />
-          <span>New Enquiry</span>
-        </Link>
 
         {/* Live Workshop Status */}
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-100 border border-gray-200 text-xs font-medium text-gray-700">

@@ -61,7 +61,7 @@ export const DashboardPage: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-black uppercase text-gray-900 tracking-tight font-sans">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
             Workshop Dashboard
           </h1>
           <p className="text-xs text-gray-500 mt-0.5">

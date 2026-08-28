@@ -94,6 +94,10 @@ export const AdminRepairHistoryPage: React.FC = () => {
   const [customerSuggestions, setCustomerSuggestions] = useState<Customer[]>([]);
   const [showCustomerSuggestions, setShowCustomerSuggestions] = useState(false);
 
+  // Search state for spare parts price list
+  const [partSearchQuery, setPartSearchQuery] = useState('');
+  const [showPartSuggestions, setShowPartSuggestions] = useState(false);
+
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -210,6 +214,21 @@ export const AdminRepairHistoryPage: React.FC = () => {
     }));
   };
 
+  const filteredSearchedParts = allParts.filter((p) => {
+    if (!partSearchQuery.trim()) return true;
+    const q = partSearchQuery.toLowerCase();
+    return p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
+  });
+
+  const handleSelectSearchedPart = (part: SparePart) => {
+    setFormData((prev) => ({
+      ...prev,
+      partsReplaced: [...prev.partsReplaced, { name: part.name, cost: part.price }],
+    }));
+    setPartSearchQuery('');
+    setShowPartSuggestions(false);
+  };
+
   const partsTotal = formData.partsReplaced.reduce((sum, p) => sum + (Number(p.cost) || 0), 0);
   const grandTotal = Math.max(
     0,
@@ -292,9 +311,9 @@ export const AdminRepairHistoryPage: React.FC = () => {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-black uppercase text-gray-900 tracking-tight font-sans flex items-center gap-2.5">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2.5">
             <Wrench className="w-6 h-6 text-[#DFA500]" />
-            Bike Repair History & Bills
+            <span>Bike Repair History & Bills</span>
           </h1>
           <p className="text-xs text-gray-500 mt-0.5">
             Workshop repair log, parts replaced, labor billing, and daily revenue tracker
@@ -303,7 +322,7 @@ export const AdminRepairHistoryPage: React.FC = () => {
 
         <button
           onClick={() => setIsCreateModalOpen(true)}
-          className="px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-sm transition-all self-start sm:self-auto"
+          className="px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-bold flex items-center gap-2 shadow-sm transition-all self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
           <span>+ Log New Bike Repair</span>
@@ -325,10 +344,10 @@ export const AdminRepairHistoryPage: React.FC = () => {
             <CheckCircle2 className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-[11px] font-bold text-gray-500 block leading-tight">
+            <span className="text-xs font-medium text-gray-500 block leading-tight">
               Today's Completed
             </span>
-            <span className="text-xl sm:text-2xl font-black text-gray-900 font-mono">
+            <span className="text-xl sm:text-2xl font-bold text-gray-900">
               {stats.todayCompletedCount}
             </span>
           </div>
@@ -339,10 +358,10 @@ export const AdminRepairHistoryPage: React.FC = () => {
             <IndianRupee className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-[11px] font-bold text-gray-500 block leading-tight">
+            <span className="text-xs font-medium text-gray-500 block leading-tight">
               Today's Revenue
             </span>
-            <span className="text-xl sm:text-2xl font-black text-emerald-700 font-mono">
+            <span className="text-xl sm:text-2xl font-bold text-emerald-700">
               ₹{stats.todayRevenue.toLocaleString('en-IN')}
             </span>
           </div>
@@ -353,10 +372,10 @@ export const AdminRepairHistoryPage: React.FC = () => {
             <Clock className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-[11px] font-bold text-gray-500 block leading-tight">
+            <span className="text-xs font-medium text-gray-500 block leading-tight">
               In Workshop
             </span>
-            <span className="text-xl sm:text-2xl font-black text-gray-900 font-mono">
+            <span className="text-xl sm:text-2xl font-bold text-gray-900">
               {stats.inWorkshopCount}
             </span>
           </div>
@@ -367,13 +386,13 @@ export const AdminRepairHistoryPage: React.FC = () => {
             <TrendingUp className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-[11px] font-bold text-gray-500 block leading-tight">
+            <span className="text-xs font-medium text-gray-500 block leading-tight">
               Total Lifetime
             </span>
-            <span className="text-xl sm:text-2xl font-black text-gray-900 font-mono">
+            <span className="text-xl sm:text-2xl font-bold text-gray-900">
               {stats.lifetimeRepairsCount}
             </span>
-            <span className="text-[10px] text-emerald-700 font-bold block font-mono">
+            <span className="text-xs text-emerald-700 font-semibold block">
               ₹{stats.lifetimeRevenue.toLocaleString('en-IN')}
             </span>
           </div>
@@ -783,52 +802,97 @@ export const AdminRepairHistoryPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* ─── SPARE PARTS SELECTION & ITEMIZER ─── */}
-              <div className="space-y-2 pt-2 border-t border-gray-100">
+              {/* ─── SPARE PARTS SELECTION & SEARCH BAR ─── */}
+              <div className="space-y-2.5 pt-2 border-t border-gray-100">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-[11px] font-black uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
+                  <label className="block text-xs font-semibold text-gray-800 flex items-center gap-1.5">
                     <Package className="w-3.5 h-3.5 text-[#DFA500]" />
-                    Spare Parts Replaced
-                  </h4>
-                  <span className="text-xs font-mono font-bold text-gray-700">
+                    <span>Spare Parts Replaced</span>
+                  </label>
+                  <span className="text-xs font-semibold text-gray-700">
                     Parts Total: ₹{partsTotal}
                   </span>
                 </div>
 
-                {/* Select directly from Parts Price List */}
-                <div className="p-2.5 rounded-xl bg-amber-50/70 border border-amber-200 space-y-1.5">
-                  <label className="block text-[10px] font-bold uppercase tracking-wider text-amber-900">
-                    🏷️ Pick from Spare Parts Price List (Auto-fills price):
-                  </label>
-                  <select
-                    className="w-full bg-white border border-amber-300 rounded-lg px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] font-medium"
-                    onChange={(e) => {
-                      const pId = e.target.value;
-                      if (!pId) return;
-                      const p = allParts.find((item) => item.id === pId);
-                      if (p) {
-                        setPartInputName(p.name);
-                        setPartInputCost(String(p.price));
-                      }
-                    }}
-                    value=""
-                  >
-                    <option value="">-- Choose Spare Part from Price List --</option>
-                    {allParts.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.name} ({p.category}) — ₹{p.price}
-                      </option>
-                    ))}
-                  </select>
+                {/* Search Bar for Spare Parts */}
+                <div className="relative">
+                  <div className="relative flex items-center">
+                    <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      value={partSearchQuery}
+                      onChange={(e) => {
+                        setPartSearchQuery(e.target.value);
+                        setShowPartSuggestions(true);
+                      }}
+                      onFocus={() => setShowPartSuggestions(true)}
+                      placeholder="Type word to search spare parts (e.g. oil, brake, filter, plug)..."
+                      className="w-full bg-white border border-amber-300 rounded-lg pl-9 pr-8 py-2 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#F5B900] shadow-2xs"
+                    />
+                    {partSearchQuery && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPartSearchQuery('');
+                          setShowPartSuggestions(false);
+                        }}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Autocomplete Dropdown */}
+                  {showPartSuggestions && (
+                    <div className="absolute top-full left-0 right-0 z-30 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl divide-y divide-gray-100 max-h-56 overflow-y-auto">
+                      <div className="p-2 bg-gray-50 text-[11px] font-medium text-gray-500 flex justify-between items-center">
+                        <span>Click part to add directly:</span>
+                        <button
+                          type="button"
+                          onClick={() => setShowPartSuggestions(false)}
+                          className="text-gray-400 hover:text-gray-700 text-xs"
+                        >
+                          Close ✕
+                        </button>
+                      </div>
+                      {filteredSearchedParts.length === 0 ? (
+                        <div className="p-3 text-center text-xs text-gray-400">
+                          No matching spare parts found
+                        </div>
+                      ) : (
+                        filteredSearchedParts.map((p) => (
+                          <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => handleSelectSearchedPart(p)}
+                            className="w-full text-left p-2.5 hover:bg-amber-50/80 transition-colors flex items-center justify-between text-xs group"
+                          >
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium text-gray-900 group-hover:text-amber-900">
+                                {p.name}
+                              </span>
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 border border-gray-200">
+                                {p.category}
+                              </span>
+                            </div>
+                            <span className="font-semibold text-emerald-700 text-xs">
+                              ₹{p.price}
+                            </span>
+                          </button>
+                        ))
+                      )}
+                    </div>
+                  )}
                 </div>
 
-                {/* Add Part Form */}
+                {/* Add Custom / Non-Catalog Part Form */}
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={partInputName}
                     onChange={(e) => setPartInputName(e.target.value)}
-                    placeholder="Part description (or pick from list above)"
+                    placeholder="Or enter custom part name"
                     className="flex-1 bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
                   />
                   <input
@@ -837,14 +901,14 @@ export const AdminRepairHistoryPage: React.FC = () => {
                     onChange={(e) => setPartInputCost(e.target.value)}
                     placeholder="Price (₹)"
                     min="0"
-                    className="w-24 bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white font-mono"
+                    className="w-24 bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
                   />
                   <button
                     type="button"
                     onClick={handleAddPart}
-                    className="px-4 py-1.5 rounded-lg bg-gray-900 hover:bg-black text-white text-xs font-bold shrink-0 transition-colors"
+                    className="px-3.5 py-1.5 rounded-lg bg-gray-800 hover:bg-black text-white text-xs font-semibold shrink-0 transition-colors"
                   >
-                    + Add Part
+                    + Add
                   </button>
                 </div>
 

@@ -118,9 +118,9 @@ export const AdminCustomersPage: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-black uppercase text-gray-900 tracking-tight font-sans flex items-center gap-2.5">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2.5">
             <Users className="w-6 h-6 text-[#DFA500]" />
-            Customer Directory
+            <span>Customer Directory</span>
           </h1>
           <p className="text-xs text-gray-500 mt-0.5">
             Registered motorcycle owners in Pahur • Contact info, bike details, and repair records
@@ -129,7 +129,7 @@ export const AdminCustomersPage: React.FC = () => {
 
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-sm transition-all self-start sm:self-auto"
+          className="px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-bold flex items-center gap-2 shadow-sm transition-all self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
           <span>+ Register Customer</span>
@@ -169,7 +169,7 @@ export const AdminCustomersPage: React.FC = () => {
       {filtered.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-200 p-12 text-center">
           <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
+          <h3 className="text-sm font-bold text-gray-700">
             No Customers Found
           </h3>
           <p className="text-xs text-gray-500 mt-1">
@@ -181,7 +181,7 @@ export const AdminCustomersPage: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-gray-50/80 border-b border-gray-200 text-[11px] font-black uppercase text-gray-500 tracking-wider">
+                <tr className="bg-gray-50/80 border-b border-gray-200 text-xs font-semibold text-gray-600">
                   <th className="py-3.5 px-4">Customer Name & Location</th>
                   <th className="py-3.5 px-4">Mobile Number</th>
                   <th className="py-3.5 px-4">Motorcycle Details</th>
@@ -198,11 +198,11 @@ export const AdminCustomersPage: React.FC = () => {
                   >
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-800 font-black text-xs flex items-center justify-center shrink-0 border border-amber-200">
+                        <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-800 font-bold text-xs flex items-center justify-center shrink-0 border border-amber-200">
                           {item.name.charAt(0).toUpperCase()}
                         </div>
                         <div>
-                          <span className="font-bold text-gray-900 text-xs sm:text-sm block uppercase tracking-tight">
+                          <span className="font-semibold text-gray-900 text-xs sm:text-sm block">
                             {item.name}
                           </span>
                           {item.city && (
@@ -214,7 +214,7 @@ export const AdminCustomersPage: React.FC = () => {
                       </div>
                     </td>
 
-                    <td className="py-3.5 px-4 font-mono font-bold text-gray-900">
+                    <td className="py-3.5 px-4 font-medium text-gray-900">
                       {formatPhone(item.mobile)}
                     </td>
 

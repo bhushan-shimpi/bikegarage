@@ -143,9 +143,9 @@ export const AdminPartsInventoryPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl sm:text-2xl font-black uppercase text-gray-900 tracking-tight font-sans flex items-center gap-2.5">
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2.5">
             <Tag className="w-6 h-6 text-[#DFA500]" />
-            Spare Parts Price List
+            <span>Spare Parts Price List</span>
           </h1>
           <p className="text-xs text-gray-500 mt-0.5">
             Standard pricing reference for two-wheeler parts used for fast job card billing
@@ -154,7 +154,7 @@ export const AdminPartsInventoryPage: React.FC = () => {
 
         <button
           onClick={handleOpenAdd}
-          className="px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-sm transition-all self-start sm:self-auto"
+          className="px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-bold flex items-center gap-2 shadow-sm transition-all self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
           <span>+ Add New Part & Price</span>
@@ -176,8 +176,8 @@ export const AdminPartsInventoryPage: React.FC = () => {
             <Tag className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-[11px] font-bold text-gray-500 block">Total Parts in Price List</span>
-            <span className="text-xl font-black text-gray-900 font-mono">{parts.length}</span>
+            <span className="text-xs font-medium text-gray-500 block">Total Parts in Price List</span>
+            <span className="text-xl font-bold text-gray-900">{parts.length}</span>
           </div>
         </div>
 
@@ -186,8 +186,8 @@ export const AdminPartsInventoryPage: React.FC = () => {
             <Layers className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-[11px] font-bold text-gray-500 block">Active Categories</span>
-            <span className="text-xl font-black text-blue-950 font-mono">
+            <span className="text-xs font-medium text-gray-500 block">Active Categories</span>
+            <span className="text-xl font-bold text-gray-900">
               {uniqueCategories}
             </span>
           </div>
@@ -198,9 +198,9 @@ export const AdminPartsInventoryPage: React.FC = () => {
             <IndianRupee className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-[11px] font-bold text-gray-500 block">Average Part Rate</span>
-            <span className="text-xl font-black text-emerald-700 font-mono">
-              ₹{avgPrice} <span className="text-[11px] font-normal text-gray-400 font-sans">(₹{minPrice} - ₹{maxPrice})</span>
+            <span className="text-xs font-medium text-gray-500 block">Average Part Rate</span>
+            <span className="text-xl font-bold text-emerald-700">
+              ₹{avgPrice} <span className="text-xs font-normal text-gray-400">(₹{minPrice} - ₹{maxPrice})</span>
             </span>
           </div>
         </div>
@@ -259,7 +259,7 @@ export const AdminPartsInventoryPage: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
-                <tr className="bg-gray-50/80 border-b border-gray-200 text-[11px] font-black uppercase text-gray-500 tracking-wider">
+                <tr className="bg-gray-50/80 border-b border-gray-200 text-xs font-semibold text-gray-600">
                   <th className="py-3.5 px-4">Part Name</th>
                   <th className="py-3.5 px-4">Category</th>
                   <th className="py-3.5 px-4">Standard Selling Price (₹)</th>

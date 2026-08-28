@@ -200,7 +200,7 @@ export const EnquiriesListPage: React.FC = () => {
       {/* Bulk Delete Bar */}
       {selectedIds.length > 0 && (
         <div className="bg-amber-50 border border-amber-300 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs animate-fade-in">
-          <div className="flex items-center gap-2 text-xs font-black text-amber-950 uppercase">
+          <div className="flex items-center gap-2 text-xs font-semibold text-amber-950">
             <CheckSquare className="w-4 h-4 text-amber-700" />
             <span>{selectedIds.length} enquiry(s) selected</span>
           </div>
@@ -214,7 +214,7 @@ export const EnquiriesListPage: React.FC = () => {
             </button>
             <button
               onClick={handleDeleteMultiple}
-              className="px-4 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase flex items-center gap-1.5 transition-colors shadow-xs"
+              className="px-4 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-bold flex items-center gap-1.5 transition-colors shadow-xs"
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Delete Selected ({selectedIds.length})</span>
@@ -226,7 +226,7 @@ export const EnquiriesListPage: React.FC = () => {
       {/* Main Table / Mobile Card View */}
       <div className="bg-white border border-gray-200 rounded-2xl p-5 sm:p-6 shadow-xs">
         <div className="flex items-center justify-between pb-4 mb-4 border-b border-gray-100">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
+          <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
             <span>Two-Wheeler Enquiries</span>
             <span className="text-xs text-[#DFA500] font-normal">
               ({filtered.length} found)
@@ -240,7 +240,7 @@ export const EnquiriesListPage: React.FC = () => {
             <div className="hidden md:block overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-gray-200 text-[11px] font-extrabold uppercase tracking-wider text-gray-500 bg-gray-50/60">
+                  <tr className="border-b border-gray-200 text-xs font-semibold text-gray-600 bg-gray-50/60">
                     <th className="py-3 px-3 w-10 text-center">
                       <input
                         type="checkbox"
