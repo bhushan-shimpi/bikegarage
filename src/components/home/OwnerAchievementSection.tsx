@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Trophy, ChevronLeft, ChevronRight, Award, Maximize2, X } from 'lucide-react';
+import { Trophy, ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react';
 import { ScrollReveal } from '../common/ScrollReveal';
 
 interface AwardItem {
@@ -129,11 +129,7 @@ export const OwnerAchievementSection: React.FC = () => {
                   className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                 />
 
-                {/* Top Badge */}
-                <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-[10px] font-bold text-[#F5B900]">
-                  <Award className="w-3 h-3" />
-                  <span>{award.category}</span>
-                </div>
+
 
                 {/* Expand Overlay Icon */}
                 <div className="absolute bottom-2.5 right-2.5 w-8 h-8 rounded-lg bg-black/70 backdrop-blur-md border border-white/20 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">

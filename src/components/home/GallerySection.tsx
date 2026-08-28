@@ -6,7 +6,6 @@ interface GalleryItem {
   id: string;
   src: string;
   alt: string;
-  caption?: string;
 }
 
 export const GallerySection: React.FC = () => {
@@ -14,78 +13,18 @@ export const GallerySection: React.FC = () => {
   const [activeLightboxIndex, setActiveLightboxIndex] = useState<number | null>(null);
 
   const galleryImages: GalleryItem[] = [
-    {
-      id: 'gal-1',
-      src: '/images/Gallary/IMG_5148.JPG',
-      alt: 'Chaudhari Auto Workshop & Bike Restoration Bay',
-      caption: 'Full bike engine assembly and restoration work',
-    },
-    {
-      id: 'gal-2',
-      src: '/images/Gallary/IMG_5150.JPG',
-      alt: 'Precision mechanical service & spare parts',
-      caption: 'Original spare parts fitment and chassis tuning',
-    },
-    {
-      id: 'gal-3',
-      src: '/images/Gallary/IMG_5153.JPG',
-      alt: 'Engine overhaul & detailing in progress',
-      caption: 'High-precision engine rebuild and component cleaning',
-    },
-    {
-      id: 'gal-4',
-      src: '/images/Gallary/IMG_5154.JPG',
-      alt: 'Two-wheeler servicing workshop bays',
-      caption: 'Active hydraulic service ramp and diagnostics',
-    },
-    {
-      id: 'gal-5',
-      src: '/images/Gallary/IMG_5156.JPG',
-      alt: 'Finished motorcycle delivery check',
-      caption: 'Showroom finish after oven/bhatti paint & ceramic coat',
-    },
-    {
-      id: 'gal-6',
-      src: '/images/Gallary/SaveClip.App_763561185_17960641896175433_1354440259135450971_n.jpg',
-      alt: 'Classic 2-stroke bike transformation',
-      caption: 'Yamaha RX100 mirror shine fuel tank & decals',
-    },
-    {
-      id: 'gal-7',
-      src: '/images/Gallary/SaveClip.App_763684648_17960641551175433_1288108473921684178_n.jpg',
-      alt: 'High-gloss oven paint bake finish',
-      caption: 'Durable bhatti oven paint process at workshop',
-    },
-    {
-      id: 'gal-8',
-      src: '/images/Gallary/SaveClip.App_764116120_17960641887175433_663142152934308415_n.jpg',
-      alt: 'Chrome plating and metal restoration',
-      caption: 'Deep chrome luster on silencer and wheel rims',
-    },
-    {
-      id: 'gal-9',
-      src: '/images/Gallary/SaveClip.App_764676210_17960641563175433_2615807174010287203_n.jpg',
-      alt: 'Pahur workshop team at work',
-      caption: 'Experienced mechanics servicing commuter and performance bikes',
-    },
-    {
-      id: 'gal-10',
-      src: '/images/Gallary/SaveClip.App_764694001_17960641872175433_1259823115832174628_n.jpg',
-      alt: 'Complete bike detailing and ceramic shield',
-      caption: 'Hydrophobic ceramic coat protection on paintwork',
-    },
-    {
-      id: 'gal-11',
-      src: '/images/Gallary/SaveClip.App_764975447_17960641848175433_9031705044490108474_n.jpg',
-      alt: 'Custom seat work and body line restoration',
-      caption: 'Original comfort ergonomics and factory look',
-    },
-    {
-      id: 'gal-12',
-      src: '/images/Gallary/SaveClip.App_765619840_17960641572175433_3593156307828676883_n.jpg',
-      alt: 'Showroom delivery ready bike',
-      caption: 'Delivered to a happy customer at Chaudhari Auto Centre',
-    },
+    { id: 'gal-1', src: '/images/Gallary/IMG_5148.JPG', alt: 'Chaudhari Auto Workshop' },
+    { id: 'gal-2', src: '/images/Gallary/IMG_5150.JPG', alt: 'Chaudhari Auto Workshop' },
+    { id: 'gal-3', src: '/images/Gallary/IMG_5153.JPG', alt: 'Chaudhari Auto Workshop' },
+    { id: 'gal-4', src: '/images/Gallary/IMG_5154.JPG', alt: 'Chaudhari Auto Workshop' },
+    { id: 'gal-5', src: '/images/Gallary/IMG_5156.JPG', alt: 'Chaudhari Auto Workshop' },
+    { id: 'gal-6', src: '/images/Gallary/SaveClip.App_763561185_17960641896175433_1354440259135450971_n.jpg', alt: 'Chaudhari Auto Workshop' },
+    { id: 'gal-7', src: '/images/Gallary/SaveClip.App_763684648_17960641551175433_1288108473921684178_n.jpg', alt: 'Chaudhari Auto Workshop' },
+    { id: 'gal-8', src: '/images/Gallary/SaveClip.App_764116120_17960641887175433_663142152934308415_n.jpg', alt: 'Chaudhari Auto Workshop' },
+    { id: 'gal-9', src: '/images/Gallary/SaveClip.App_764676210_17960641563175433_2615807174010287203_n.jpg', alt: 'Chaudhari Auto Workshop' },
+    { id: 'gal-10', src: '/images/Gallary/SaveClip.App_764694001_17960641872175433_1259823115832174628_n.jpg', alt: 'Chaudhari Auto Workshop' },
+    { id: 'gal-11', src: '/images/Gallary/SaveClip.App_764975447_17960641848175433_9031705044490108474_n.jpg', alt: 'Chaudhari Auto Workshop' },
+    { id: 'gal-12', src: '/images/Gallary/SaveClip.App_765619840_17960641572175433_3593156307828676883_n.jpg', alt: 'Chaudhari Auto Workshop' },
   ];
 
   // Show only 10 images initially; show all 12 when expanded
@@ -132,7 +71,7 @@ export const GallerySection: React.FC = () => {
           </div>
         </ScrollReveal>
 
-        {/* Gallery Grid (Initial 10 Photos) */}
+        {/* Gallery Grid (Pure Clean Images: NO text overlays) */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
           {displayedImages.map((img, idx) => (
             <ScrollReveal key={img.id} direction="up" delay={(idx % 5) * 60}>
@@ -147,24 +86,9 @@ export const GallerySection: React.FC = () => {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                 />
 
-                {/* Dark Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent opacity-60 group-hover:opacity-90 transition-opacity" />
-
-                {/* Top Badge */}
-                <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-black/60 backdrop-blur-sm border border-white/10 text-[9px] font-bold text-white/90">
-                  #{idx + 1}
-                </div>
-
-                {/* Hover Maximize Icon */}
+                {/* Subtle Hover Maximize Icon */}
                 <div className="absolute top-2.5 right-2.5 w-7 h-7 rounded-lg bg-black/70 backdrop-blur-sm border border-white/20 text-[#F5B900] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                   <Maximize2 className="w-3.5 h-3.5" />
-                </div>
-
-                {/* Bottom Caption */}
-                <div className="absolute inset-x-0 bottom-0 p-2.5 sm:p-3 text-left">
-                  <p className="text-[11px] sm:text-xs font-bold text-white leading-tight line-clamp-1 group-hover:text-[#F5B900] transition-colors">
-                    {img.caption || img.alt}
-                  </p>
                 </div>
               </div>
             </ScrollReveal>
@@ -219,11 +143,11 @@ export const GallerySection: React.FC = () => {
             </div>
 
             {/* High-res Image Box */}
-            <div className="relative w-full max-h-[75vh] rounded-2xl overflow-hidden bg-black/80 flex items-center justify-center border border-white/10">
+            <div className="relative w-full max-h-[80vh] rounded-2xl overflow-hidden bg-black/80 flex items-center justify-center border border-white/10">
               <img
                 src={galleryImages[activeLightboxIndex].src}
                 alt={galleryImages[activeLightboxIndex].alt}
-                className="max-h-[75vh] w-auto object-contain select-none"
+                className="max-h-[80vh] w-auto object-contain select-none"
               />
 
               {/* Prev / Next Nav Buttons */}
@@ -241,16 +165,6 @@ export const GallerySection: React.FC = () => {
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
-            </div>
-
-            {/* Bottom Caption */}
-            <div className="w-full mt-3 text-center">
-              <p className="text-sm font-bold text-white">
-                {galleryImages[activeLightboxIndex].caption}
-              </p>
-              <p className="text-xs text-neutral-400 mt-0.5">
-                Chaudhari Auto Centre • Pahur, Dist. Jalgaon
-              </p>
             </div>
           </div>
         </div>
