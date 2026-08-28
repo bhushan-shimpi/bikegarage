@@ -3,13 +3,13 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   Inbox,
-  Users,
+  Calendar,
+  Wrench,
+  Sparkles,
   Settings,
-  Tag,
   LogOut,
   ExternalLink,
   ChevronRight,
-  FileText,
 } from 'lucide-react';
 import { authService } from '../../services/authService';
 
@@ -29,12 +29,11 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
 
   const navItems = [
     { name: 'Dashboard', path: '/garage/dashboard', icon: LayoutDashboard },
-    { name: 'Bike Repair History', path: '/garage/repair-history', icon: FileText },
-    { name: 'Spare Parts Price List', path: '/garage/parts', icon: Tag },
-    { name: 'Customer Directory', path: '/garage/customers', icon: Users },
-    { name: 'Enquiries & Bookings', path: '/garage/enquiries', icon: Inbox },
-    { name: 'Services & Pricing', path: '/garage/services', icon: Tag },
-    { name: 'Garage Settings', path: '/garage/settings', icon: Settings },
+    { name: 'Enquiries', path: '/garage/enquiries', icon: Inbox },
+    { name: 'Appointments', path: '/garage/appointments', icon: Calendar },
+    { name: 'Bike History', path: '/garage/repair-history', icon: Wrench },
+    { name: 'Restorations', path: '/garage/restorations', icon: Sparkles },
+    { name: 'Settings', path: '/garage/settings', icon: Settings },
   ];
 
   return (

@@ -24,6 +24,8 @@ import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 import { AdminServicesPricingPage } from './pages/admin/AdminServicesPricingPage';
 import { AdminRepairHistoryPage } from './pages/admin/AdminRepairHistoryPage';
 import { AdminPartsInventoryPage } from './pages/admin/AdminPartsInventoryPage';
+import { AdminAppointmentsPage } from './pages/admin/AdminAppointmentsPage';
+import { AdminRestorationsPage } from './pages/admin/AdminRestorationsPage';
 
 export const App: React.FC = () => {
   return (
@@ -52,11 +54,12 @@ export const App: React.FC = () => {
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="enquiries" element={<EnquiriesListPage />} />
           <Route path="enquiries/:id" element={<EnquiryDetailsPage />} />
-          <Route path="services" element={<AdminServicesPricingPage />} />
-          <Route path="appointments" element={<Navigate to="/garage/enquiries" replace />} />
-          <Route path="customers" element={<AdminCustomersPage />} />
+          <Route path="appointments" element={<AdminAppointmentsPage />} />
           <Route path="repair-history" element={<AdminRepairHistoryPage />} />
+          <Route path="restorations" element={<AdminRestorationsPage />} />
+          <Route path="customers" element={<AdminCustomersPage />} />
           <Route path="parts" element={<AdminPartsInventoryPage />} />
+          <Route path="services" element={<AdminServicesPricingPage />} />
           <Route path="settings" element={<AdminSettingsPage />} />
         </Route>
       </Routes>

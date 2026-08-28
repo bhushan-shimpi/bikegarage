@@ -13,8 +13,9 @@ export const AdminLayout: React.FC = () => {
   const getHeaderTitle = (pathname: string) => {
     if (pathname.includes('/garage/enquiries/')) return { title: 'Enquiry Details', subtitle: 'View customer problem, vehicle specs & update status' };
     if (pathname.includes('/garage/enquiries')) return { title: 'Garage Enquiries', subtitle: 'Manage customer service inquiries & vehicle leads' };
-    if (pathname.includes('/garage/services')) return { title: 'Services & Pricing', subtitle: 'Set and edit two-wheeler service prices live' };
-    if (pathname.includes('/garage/customers')) return { title: 'Customer Directory', subtitle: 'Registered vehicle owners & contact history' };
+    if (pathname.includes('/garage/appointments')) return { title: 'Appointments', subtitle: 'Scheduled service bookings & visits' };
+    if (pathname.includes('/garage/repair-history')) return { title: 'Bike History', subtitle: 'Repair logs, job cards & customer bills' };
+    if (pathname.includes('/garage/restorations')) return { title: 'Bike Restorations', subtitle: 'Vintage & classic bike restoration requests' };
     if (pathname.includes('/garage/settings')) return { title: 'Garage Settings', subtitle: 'Workshop timings, helpline alerts & profile' };
     return { title: 'Workshop Dashboard', subtitle: 'Overview of inquiries, service requests & active vehicles' };
   };
@@ -40,7 +41,7 @@ export const AdminLayout: React.FC = () => {
           title={title}
           subtitle={subtitle}
         />
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <main className="flex-1 p-3 sm:p-6 lg:p-8 overflow-y-auto max-w-full overflow-x-hidden">
           <Outlet />
         </main>
       </div>
