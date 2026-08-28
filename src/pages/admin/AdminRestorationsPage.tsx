@@ -12,7 +12,7 @@ import {
   Wrench,
 } from 'lucide-react';
 import { enquiryService } from '../../services/enquiryService';
-import { Enquiry, EnquiryStatus } from '../../types/enquiry';
+import { Enquiry, EnquiryStatus, isRestorationEnquiry } from '../../types/enquiry';
 import { formatDate, formatPhone } from '../../utils/formatters';
 
 export const AdminRestorationsPage: React.FC = () => {
@@ -30,12 +30,7 @@ export const AdminRestorationsPage: React.FC = () => {
   }, []);
 
   // Filter restoration inquiries
-  const restorationsList = enquiries.filter(
-    (e) =>
-      e.service?.serviceName?.toLowerCase().includes('restoration') ||
-      e.service?.problemDescription?.toLowerCase().includes('restoration') ||
-      (e.service?.quickIssues && e.service.quickIssues.some((q) => q.toLowerCase().includes('restoration')))
-  );
+  const restorationsList = enquiries.filter(isRestorationEnquiry);
 
   const handleStatusChange = (id: string, newStatus: EnquiryStatus) => {
     enquiryService.updateStatus(id, newStatus);

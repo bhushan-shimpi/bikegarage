@@ -10,7 +10,7 @@ import {
   CheckSquare,
 } from 'lucide-react';
 import { enquiryService } from '../../services/enquiryService';
-import { Enquiry, EnquiryStatus } from '../../types/enquiry';
+import { Enquiry, EnquiryStatus, isRestorationEnquiry } from '../../types/enquiry';
 import { EnquiryTableRow } from '../../components/admin/EnquiryTableRow';
 import { EnquiryCardMobile } from '../../components/admin/EnquiryCardMobile';
 import { CreateEnquiryModal } from '../../components/admin/CreateEnquiryModal';
@@ -27,7 +27,8 @@ export const EnquiriesListPage: React.FC = () => {
   const typeFilter = searchParams.get('type') || 'all';
 
   const loadData = () => {
-    setEnquiries(enquiryService.getAll());
+    const all = enquiryService.getAll();
+    setEnquiries(all.filter((e) => !isRestorationEnquiry(e)));
   };
 
   useEffect(() => {

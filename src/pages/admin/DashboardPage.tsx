@@ -13,7 +13,7 @@ import {
   Receipt,
 } from 'lucide-react';
 import { enquiryService } from '../../services/enquiryService';
-import { Enquiry, EnquiryStatus } from '../../types/enquiry';
+import { Enquiry, EnquiryStatus, isRestorationEnquiry } from '../../types/enquiry';
 import { formatDate, formatPhone } from '../../utils/formatters';
 import { CreateEnquiryModal } from '../../components/admin/CreateEnquiryModal';
 import { CreateBillModal } from '../../components/admin/CreateBillModal';
@@ -27,7 +27,8 @@ export const DashboardPage: React.FC = () => {
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   const loadData = () => {
-    setEnquiries(enquiryService.getAll());
+    const all = enquiryService.getAll();
+    setEnquiries(all.filter((e) => !isRestorationEnquiry(e)));
   };
 
   useEffect(() => {

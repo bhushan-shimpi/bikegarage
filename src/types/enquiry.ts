@@ -46,3 +46,15 @@ export interface Enquiry {
   createdAt: string;
   updatedAt: string;
 }
+
+export const isRestorationEnquiry = (e: Enquiry): boolean => {
+  if (!e) return false;
+  const sName = e.service?.serviceName?.toLowerCase() || '';
+  const pDesc = e.service?.problemDescription?.toLowerCase() || '';
+  const quick = e.service?.quickIssues || [];
+  return (
+    sName.includes('restoration') ||
+    pDesc.includes('restoration') ||
+    quick.some((q) => q.toLowerCase().includes('restoration') || q.toLowerCase().includes('paint'))
+  );
+};
