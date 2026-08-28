@@ -13,6 +13,7 @@ import dashboardRoutes from './routes/dashboardRoutes.js';
 import serviceRoutes from './routes/serviceRoutes.js';
 import customerRoutes from './routes/customerRoutes.js';
 import repairRoutes from './routes/repairRoutes.js';
+import partRoutes from './routes/partRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
@@ -46,6 +47,7 @@ app.use('/api/health', healthRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/repairs', repairRoutes);
+app.use('/api/parts', partRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/enquiries', enquiryRoutes);
 app.use('/api/restorations', restorationRoutes);

@@ -41,7 +41,9 @@ export const getAllRepairs = async (req: Request, res: Response): Promise<void> 
       partsReplaced: row.parts_replaced || [],
       laborCharge: parseFloat(row.labor_charge || 0),
       partsTotal: parseFloat(row.parts_total || 0),
+      discount: parseFloat(row.discount || 0),
       totalAmount: parseFloat(row.total_amount || 0),
+      paymentMode: row.payment_mode || 'Cash',
       paymentStatus: row.payment_status,
       status: row.status,
       photos: row.photos || [],
@@ -87,7 +89,9 @@ export const getRepairById = async (req: Request, res: Response): Promise<void> 
         partsReplaced: row.parts_replaced || [],
         laborCharge: parseFloat(row.labor_charge || 0),
         partsTotal: parseFloat(row.parts_total || 0),
+        discount: parseFloat(row.discount || 0),
         totalAmount: parseFloat(row.total_amount || 0),
+        paymentMode: row.payment_mode || 'Cash',
         paymentStatus: row.payment_status,
         status: row.status,
         photos: row.photos || [],
@@ -115,7 +119,9 @@ export const createRepair = async (req: Request, res: Response): Promise<void> =
       partsReplaced,
       laborCharge,
       partsTotal,
+      discount,
       totalAmount,
+      paymentMode,
       paymentStatus,
       status,
       photos,
@@ -139,15 +145,17 @@ export const createRepair = async (req: Request, res: Response): Promise<void> =
     const id = `job-${Date.now()}`;
     const dateStr = repairDate || new Date().toISOString().split('T')[0];
 
-    // Compute parts total and grand total if not supplied
+    // Compute parts total, discount and grand total
     const parts = Array.isArray(partsReplaced) ? partsReplaced : [];
     const calculatedPartsTotal = parts.reduce(
       (sum: number, p: any) => sum + (parseFloat(p.cost) || 0),
       0
     );
     const calculatedLabor = parseFloat(laborCharge || 0);
+    const calculatedDiscount = parseFloat(discount || 0);
     const calculatedTotal =
-      parseFloat(totalAmount) || calculatedPartsTotal + calculatedLabor;
+      parseFloat(totalAmount) || Math.max(0, (calculatedPartsTotal + calculatedLabor) - calculatedDiscount);
+    const cleanPaymentMode = paymentMode || 'Cash';
 
     // 1. Insert into repair_records
     const result = await query(
@@ -155,9 +163,9 @@ export const createRepair = async (req: Request, res: Response): Promise<void> =
         id, job_number, customer_id, customer_name, customer_mobile,
         bike_brand, bike_model, registration_number, current_km,
         service_type, problem_details, parts_replaced, labor_charge,
-        parts_total, total_amount, payment_status, status, photos,
-        repair_date
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)
+        parts_total, discount, total_amount, payment_mode, payment_status,
+        status, photos, repair_date
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)
       RETURNING *`,
       [
         id,
@@ -174,7 +182,9 @@ export const createRepair = async (req: Request, res: Response): Promise<void> =
         JSON.stringify(parts),
         calculatedLabor,
         calculatedPartsTotal,
+        calculatedDiscount,
         calculatedTotal,
+        cleanPaymentMode,
         paymentStatus || 'Paid',
         status || 'Completed',
         JSON.stringify(photos || []),
@@ -216,7 +226,11 @@ export const createRepair = async (req: Request, res: Response): Promise<void> =
         customerMobile: row.customer_mobile,
         bikeModel: row.bike_model,
         registrationNumber: row.registration_number,
+        partsTotal: parseFloat(row.parts_total || 0),
+        laborCharge: parseFloat(row.labor_charge || 0),
+        discount: parseFloat(row.discount || 0),
         totalAmount: parseFloat(row.total_amount),
+        paymentMode: row.payment_mode,
         paymentStatus: row.payment_status,
         status: row.status,
         repairDate: row.repair_date,
@@ -235,6 +249,8 @@ export const updateRepair = async (req: Request, res: Response): Promise<void> =
     const {
       status,
       paymentStatus,
+      paymentMode,
+      discount,
       laborCharge,
       partsReplaced,
       totalAmount,
@@ -246,17 +262,21 @@ export const updateRepair = async (req: Request, res: Response): Promise<void> =
       `UPDATE repair_records SET
         status = COALESCE($1, status),
         payment_status = COALESCE($2, payment_status),
-        labor_charge = COALESCE($3, labor_charge),
-        parts_replaced = COALESCE($4, parts_replaced),
-        total_amount = COALESCE($5, total_amount),
-        problem_details = COALESCE($6, problem_details),
-        photos = COALESCE($7, photos),
+        payment_mode = COALESCE($3, payment_mode),
+        discount = COALESCE($4, discount),
+        labor_charge = COALESCE($5, labor_charge),
+        parts_replaced = COALESCE($6, parts_replaced),
+        total_amount = COALESCE($7, total_amount),
+        problem_details = COALESCE($8, problem_details),
+        photos = COALESCE($9, photos),
         updated_at = NOW()
-      WHERE id = $8 OR job_number = $8
+      WHERE id = $10 OR job_number = $10
       RETURNING *`,
       [
         status || null,
         paymentStatus || null,
+        paymentMode || null,
+        discount !== undefined ? parseFloat(discount) : null,
         laborCharge !== undefined ? parseFloat(laborCharge) : null,
         partsReplaced !== undefined ? JSON.stringify(partsReplaced) : null,
         totalAmount !== undefined ? parseFloat(totalAmount) : null,

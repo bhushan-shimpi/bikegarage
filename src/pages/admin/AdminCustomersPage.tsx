@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Users,
   Phone,
@@ -232,13 +233,22 @@ export const AdminCustomersPage: React.FC = () => {
 
               {/* Action Buttons */}
               <div className="pt-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-2">
-                <button
-                  onClick={() => handleViewHistory(item)}
-                  className="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-2xs"
-                >
-                  <History className="w-3.5 h-3.5 text-[#DFA500]" />
-                  <span>Repair History</span>
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => handleViewHistory(item)}
+                    className="px-2.5 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300 text-xs font-bold flex items-center gap-1 transition-colors shadow-2xs"
+                  >
+                    <History className="w-3.5 h-3.5 text-[#DFA500]" />
+                    <span>History</span>
+                  </button>
+
+                  <Link
+                    to="/garage/repair-history"
+                    className="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-[#F5B900] hover:text-black text-gray-800 text-xs font-bold border border-gray-200 transition-colors"
+                  >
+                    + Job Card
+                  </Link>
+                </div>
 
                 <div className="flex items-center gap-1.5">
                   <a

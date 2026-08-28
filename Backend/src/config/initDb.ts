@@ -429,12 +429,65 @@ export async function initDb() {
         status VARCHAR(32) DEFAULT 'Completed',
         photos JSONB DEFAULT '[]'::jsonb,
         repair_date VARCHAR(32),
+        discount NUMERIC(10,2) DEFAULT 0,
+        payment_mode VARCHAR(50) DEFAULT 'Cash',
         created_at TIMESTAMPTZ DEFAULT NOW(),
         updated_at TIMESTAMPTZ DEFAULT NOW()
       );
     `);
 
-    // 8. Seed default admin users if none exist
+    // Ensure columns exist on repair_records if already created
+    await client.query(`
+      ALTER TABLE repair_records ADD COLUMN IF NOT EXISTS discount NUMERIC(10,2) DEFAULT 0;
+      ALTER TABLE repair_records ADD COLUMN IF NOT EXISTS payment_mode VARCHAR(50) DEFAULT 'Cash';
+    `);
+
+    // 8. Create Parts Inventory Table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS parts_inventory (
+        id VARCHAR(64) PRIMARY KEY,
+        name VARCHAR(128) NOT NULL,
+        category VARCHAR(64) DEFAULT 'General',
+        price NUMERIC(10,2) NOT NULL DEFAULT 0,
+        stock_quantity INT DEFAULT 10,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+
+    // Seed default common motorcycle spare parts if empty
+    const partsCheck = await client.query('SELECT COUNT(*) FROM parts_inventory');
+    if (parseInt(partsCheck.rows[0].count, 10) === 0) {
+      console.log('Seeding initial motorcycle spare parts inventory...');
+      const defaultParts = [
+        ['prt-1', '4T Engine Oil 10W-30 (1L)', 'Lubricants', 350, 25],
+        ['prt-2', '4T Engine Oil 20W-40 (1L)', 'Lubricants', 320, 20],
+        ['prt-3', 'Front Brake Shoe Set', 'Brakes', 180, 15],
+        ['prt-4', 'Rear Brake Shoe Set', 'Brakes', 180, 15],
+        ['prt-5', 'Front Disc Brake Pads', 'Brakes', 220, 12],
+        ['prt-6', 'Spark Plug (Champion / Bosch)', 'Electrical', 120, 30],
+        ['prt-7', 'Chain & Sprocket Kit', 'Transmission', 850, 8],
+        ['prt-8', 'Clutch Cable Assembly', 'Controls', 110, 15],
+        ['prt-9', 'Throttle / Accelerator Cable', 'Controls', 90, 12],
+        ['prt-10', 'OEM Air Filter Element', 'Engine', 150, 18],
+        ['prt-11', 'Halogen Headlight Bulb (12V 35W)', 'Electrical', 120, 25],
+        ['prt-12', '12V 4Ah Maintenance-Free Battery', 'Electrical', 1150, 6],
+        ['prt-13', 'Front Fork Oil Seal & Fork Oil', 'Suspension', 250, 10],
+        ['prt-14', 'Rear View Mirror Set (Pair)', 'Body', 180, 8],
+        ['prt-15', 'Drive Chain Lube & Cleaner Spray', 'General', 190, 14],
+      ];
+
+      for (const p of defaultParts) {
+        await client.query(
+          `INSERT INTO parts_inventory (id, name, category, price, stock_quantity)
+           VALUES ($1, $2, $3, $4, $5) ON CONFLICT (id) DO NOTHING`,
+          p
+        );
+      }
+      console.log('✅ Initial spare parts seeded successfully!');
+    }
+
+    // 9. Seed default admin users if none exist
     const adminCheck = await client.query('SELECT COUNT(*) FROM staff_users');
     if (parseInt(adminCheck.rows[0].count, 10) === 0) {
       console.log('Seeding default staff/admin user...');

@@ -32,12 +32,24 @@ export interface RepairRecord {
   partsReplaced: ReplacedPart[];
   laborCharge: number;
   partsTotal: number;
+  discount?: number;
   totalAmount: number;
+  paymentMode?: 'Cash' | 'Online' | 'Split' | 'Pending';
   paymentStatus: 'Paid' | 'Pending' | 'Partial';
   status: 'In Progress' | 'Completed' | 'Delivered';
   photos: string[];
   repairDate: string;
   createdAt: string;
+}
+
+export interface SparePart {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  stockQuantity: number;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface DailyRepairStats {

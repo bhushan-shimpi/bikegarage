@@ -7,7 +7,6 @@ import {
   Clock,
   IndianRupee,
   Calendar,
-  Image as ImageIcon,
   Trash2,
   Eye,
   X,
@@ -15,12 +14,67 @@ import {
   Bike,
   User,
   FileText,
-  UploadCloud,
   TrendingUp,
+  MessageCircle,
+  Package,
 } from 'lucide-react';
 import { repairService } from '../../services/repairService';
-import { RepairRecord, DailyRepairStats, ReplacedPart } from '../../types/customer';
+import { customerService } from '../../services/customerService';
+import { partService } from '../../services/partService';
+import {
+  RepairRecord,
+  DailyRepairStats,
+  ReplacedPart,
+  Customer,
+  SparePart,
+} from '../../types/customer';
 import { formatPhone } from '../../utils/formatters';
+
+export const getWhatsAppBillUrl = (record: RepairRecord): string => {
+  const cleanMobile = record.customerMobile.replace(/\D/g, '').slice(-10);
+  const partsList =
+    record.partsReplaced && record.partsReplaced.length > 0
+      ? record.partsReplaced.map((p) => `• ${p.name}: ₹${p.cost}`).join('\n')
+      : '• No parts replaced';
+
+  const partsTotal =
+    record.partsTotal ||
+    record.partsReplaced?.reduce((sum, p) => sum + (Number(p.cost) || 0), 0) ||
+    0;
+  const discountStr =
+    record.discount && record.discount > 0 ? `\n🎁 *Discount:* -₹${record.discount}` : '';
+  const paymentModeStr = record.paymentMode || 'Cash';
+
+  const message = `🏍️ *CHAUDHARI AUTO CENTRE, PAHUR*
+*Repair Invoice / Job Sheet: ${record.jobNumber}*
+----------------------------------------
+👤 *Customer:* ${record.customerName}
+📱 *Phone:* ${record.customerMobile}
+🛵 *Vehicle:* ${record.bikeBrand || ''} ${record.bikeModel || ''} ${
+    record.registrationNumber ? `(${record.registrationNumber})` : ''
+  }
+📅 *Date:* ${record.repairDate}
+
+🔧 *Service / Problem:*
+${record.serviceType}
+${record.problemDetails ? `Note: ${record.problemDetails}` : ''}
+
+📦 *Parts Replaced:*
+${partsList}
+*Parts Total:* ₹${partsTotal}
+
+⚙️ *Labor Charges:* ₹${record.laborCharge}${discountStr}
+----------------------------------------
+💰 *FINAL AMOUNT:* ₹${record.totalAmount}
+💳 *Payment Mode:* ${paymentModeStr}
+📊 *Payment Status:* ${record.paymentStatus}
+----------------------------------------
+🙏 *Thank you for choosing Chaudhari Auto Centre!*
+📍 Main Road, Near Bus Stand, Pahur, Jalgaon (MH)
+📞 Helpline: +91 7387448878 / 9503853143`;
+
+  return `https://wa.me/91${cleanMobile}?text=${encodeURIComponent(message)}`;
+};
 
 export const AdminRepairHistoryPage: React.FC = () => {
   const [repairs, setRepairs] = useState<RepairRecord[]>([]);
@@ -33,6 +87,13 @@ export const AdminRepairHistoryPage: React.FC = () => {
     todayDate: new Date().toISOString().split('T')[0],
   });
 
+  const [allCustomers, setAllCustomers] = useState<Customer[]>([]);
+  const [allParts, setAllParts] = useState<SparePart[]>([]);
+
+  // Autocomplete suggestions for customers
+  const [customerSuggestions, setCustomerSuggestions] = useState<Customer[]>([]);
+  const [showCustomerSuggestions, setShowCustomerSuggestions] = useState(false);
+
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -41,6 +102,10 @@ export const AdminRepairHistoryPage: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<RepairRecord | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+
+  // WhatsApp post-creation modal
+  const [createdBillRecord, setCreatedBillRecord] = useState<RepairRecord | null>(null);
+  const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
 
   // Create Form State
   const [formData, setFormData] = useState({
@@ -54,6 +119,8 @@ export const AdminRepairHistoryPage: React.FC = () => {
     problemDetails: '',
     partsReplaced: [] as ReplacedPart[],
     laborCharge: 200,
+    discount: 0,
+    paymentMode: 'Cash' as 'Cash' | 'Online' | 'Split' | 'Pending',
     paymentStatus: 'Paid' as 'Paid' | 'Pending' | 'Partial',
     status: 'Completed' as 'In Progress' | 'Completed' | 'Delivered',
     photos: [] as string[],
@@ -76,6 +143,12 @@ export const AdminRepairHistoryPage: React.FC = () => {
 
     const s = await repairService.getDailyStats();
     setStats(s);
+
+    const customersList = await customerService.getAll();
+    setAllCustomers(customersList);
+
+    const partsList = await partService.getAll();
+    setAllParts(partsList);
   };
 
   useEffect(() => {
@@ -85,6 +158,37 @@ export const AdminRepairHistoryPage: React.FC = () => {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     loadData();
+  };
+
+  // Customer search & autocomplete
+  const handleCustomerInputChange = (field: 'customerName' | 'customerMobile', val: string) => {
+    setFormData((prev) => ({ ...prev, [field]: val }));
+    if (val.trim().length >= 2) {
+      const q = val.trim().toLowerCase();
+      const matches = allCustomers.filter(
+        (c) =>
+          c.name.toLowerCase().includes(q) ||
+          c.mobile.includes(q) ||
+          (c.registrationNumber && c.registrationNumber.toLowerCase().includes(q))
+      );
+      setCustomerSuggestions(matches.slice(0, 5));
+      setShowCustomerSuggestions(matches.length > 0);
+    } else {
+      setShowCustomerSuggestions(false);
+    }
+  };
+
+  const handleSelectCustomer = (c: Customer) => {
+    setFormData((prev) => ({
+      ...prev,
+      customerName: c.name,
+      customerMobile: c.mobile,
+      bikeBrand: c.bikeBrand || prev.bikeBrand,
+      bikeModel: c.bikeModel || '',
+      registrationNumber: c.registrationNumber || '',
+      currentKm: c.currentKm || '',
+    }));
+    setShowCustomerSuggestions(false);
   };
 
   // Add a part to partsReplaced
@@ -106,34 +210,11 @@ export const AdminRepairHistoryPage: React.FC = () => {
     }));
   };
 
-  // Handle Photo Upload (reads local files into data URL for instant view & storage)
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-
-    Array.from(files).forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (loadEvt) => {
-        if (loadEvt.target?.result) {
-          setFormData((prev) => ({
-            ...prev,
-            photos: [...prev.photos, loadEvt.target!.result as string],
-          }));
-        }
-      };
-      reader.readAsDataURL(file);
-    });
-  };
-
-  const handleRemovePhoto = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      photos: prev.photos.filter((_, i) => i !== index),
-    }));
-  };
-
-  const partsTotal = formData.partsReplaced.reduce((sum, p) => sum + p.cost, 0);
-  const grandTotal = partsTotal + (Number(formData.laborCharge) || 0);
+  const partsTotal = formData.partsReplaced.reduce((sum, p) => sum + (Number(p.cost) || 0), 0);
+  const grandTotal = Math.max(
+    0,
+    partsTotal + (Number(formData.laborCharge) || 0) - (Number(formData.discount) || 0)
+  );
 
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -146,13 +227,18 @@ export const AdminRepairHistoryPage: React.FC = () => {
     setFormError(null);
 
     try {
-      await repairService.create({
+      const created = await repairService.create({
         ...formData,
         partsTotal,
+        discount: Number(formData.discount) || 0,
+        paymentMode: formData.paymentMode,
         totalAmount: grandTotal,
       });
 
       setIsCreateModalOpen(false);
+      setCreatedBillRecord(created);
+      setShowWhatsAppModal(true);
+
       setFormData({
         customerName: '',
         customerMobile: '',
@@ -164,6 +250,8 @@ export const AdminRepairHistoryPage: React.FC = () => {
         problemDetails: '',
         partsReplaced: [],
         laborCharge: 200,
+        discount: 0,
+        paymentMode: 'Cash',
         paymentStatus: 'Paid',
         status: 'Completed',
         photos: [],
@@ -171,7 +259,7 @@ export const AdminRepairHistoryPage: React.FC = () => {
       });
 
       loadData();
-      setSuccessMsg('Bike repair job card successfully logged in Supabase DB!');
+      setSuccessMsg('Job Card created successfully in database!');
       setTimeout(() => setSuccessMsg(null), 3000);
     } catch (err: any) {
       setFormError(err.message || 'Failed to save repair record');
@@ -232,7 +320,6 @@ export const AdminRepairHistoryPage: React.FC = () => {
 
       {/* ─── DAILY STATUS & WORKSHOP METRICS ─── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        {/* Today's Completed Bikes */}
         <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 shadow-xs flex items-center gap-3.5">
           <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
             <CheckCircle2 className="w-6 h-6" />
@@ -247,7 +334,6 @@ export const AdminRepairHistoryPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Today's Total Billed Revenue */}
         <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 shadow-xs flex items-center gap-3.5">
           <div className="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100">
             <IndianRupee className="w-6 h-6" />
@@ -262,7 +348,6 @@ export const AdminRepairHistoryPage: React.FC = () => {
           </div>
         </div>
 
-        {/* In-Workshop Active Bikes */}
         <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 shadow-xs flex items-center gap-3.5">
           <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100">
             <Clock className="w-6 h-6" />
@@ -277,7 +362,6 @@ export const AdminRepairHistoryPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Lifetime Repaired Bikes & Revenue */}
         <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 shadow-xs flex items-center gap-3.5">
           <div className="w-11 h-11 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 border border-purple-100">
             <TrendingUp className="w-6 h-6" />
@@ -304,18 +388,17 @@ export const AdminRepairHistoryPage: React.FC = () => {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search Job #, Customer, Mobile, or MH 19..."
+            placeholder="Search by Job Number, customer, bike model, or MH 19..."
             className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-4 py-2 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#F5B900] focus:bg-white"
           />
         </form>
 
-        {/* Status Filter Tabs */}
-        <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl self-start sm:self-auto text-xs font-bold">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 bg-gray-100 p-1 rounded-xl text-xs font-bold">
           {['all', 'Completed', 'In Progress', 'Delivered'].map((st) => (
             <button
               key={st}
               onClick={() => setStatusFilter(st)}
-              className={`px-3 py-1.5 rounded-lg capitalize transition-all ${
+              className={`px-3 py-1.5 rounded-lg whitespace-nowrap transition-all ${
                 statusFilter === st
                   ? 'bg-white text-black shadow-xs font-black'
                   : 'text-gray-600 hover:text-black'
@@ -392,81 +475,103 @@ export const AdminRepairHistoryPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Customer & Bike Info */}
-                <div className="space-y-1 text-xs">
-                  <div className="font-black text-gray-900 uppercase">
+                {/* Customer Details */}
+                <div className="text-xs">
+                  <div className="font-black text-gray-900 uppercase text-sm">
                     {rep.customerName}
                   </div>
-                  <div className="text-gray-500 font-mono text-[11px]">
-                    {formatPhone(rep.customerMobile)}
-                  </div>
-
-                  <div className="mt-2 p-2.5 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 text-gray-800 font-bold">
-                      <Bike className="w-3.5 h-3.5 text-[#DFA500] shrink-0" />
-                      <span>{rep.bikeBrand} {rep.bikeModel || 'Motorcycle'}</span>
-                    </div>
-                    {rep.registrationNumber && (
-                      <span className="font-mono text-[11px] text-gray-600 font-semibold uppercase">
-                        {rep.registrationNumber}
-                      </span>
-                    )}
+                  <div className="font-mono text-gray-500 text-[11px] mt-0.5">
+                    📞 {formatPhone(rep.customerMobile)}
                   </div>
                 </div>
 
-                {/* Service Details */}
+                {/* Bike Details Box */}
+                <div className="mt-3 p-3 rounded-xl bg-gray-50 border border-gray-100 text-xs text-gray-700 space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <Bike className="w-4 h-4 text-[#DFA500] shrink-0" />
+                    <span className="font-bold text-gray-900 text-sm">
+                      {rep.bikeBrand} {rep.bikeModel}
+                    </span>
+                  </div>
+                  {rep.registrationNumber && (
+                    <div className="text-xs text-gray-600 font-mono pl-6">
+                      Reg: <span className="font-bold text-gray-900 uppercase">{rep.registrationNumber}</span>
+                    </div>
+                  )}
+                  {rep.currentKm && (
+                    <div className="text-[11px] text-gray-500 pl-6 font-mono">
+                      Odometer: {rep.currentKm} KM
+                    </div>
+                  )}
+                </div>
+
+                {/* Service Type & Diagnosis */}
                 <div className="mt-3 text-xs">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">
-                    Service Rendered:
-                  </span>
-                  <span className="font-bold text-amber-700 block">
-                    {rep.serviceType}
+                  <span className="font-bold text-gray-900 block">
+                    🔧 {rep.serviceType}
                   </span>
                   {rep.problemDetails && (
-                    <p className="text-gray-500 text-[11px] line-clamp-1 mt-0.5">
+                    <p className="text-[11px] text-gray-500 line-clamp-2 mt-0.5">
                       {rep.problemDetails}
                     </p>
                   )}
                 </div>
 
-                {/* Photos Thumbnail strip */}
-                {rep.photos && rep.photos.length > 0 && (
-                  <div className="mt-3 flex items-center gap-1.5 overflow-x-auto">
-                    {rep.photos.map((ph, idx) => (
-                      <img
-                        key={idx}
-                        src={ph}
-                        alt="Service"
-                        className="w-10 h-10 rounded-lg object-cover border border-gray-200 shrink-0"
-                      />
-                    ))}
-                    <span className="text-[10px] text-gray-400 font-semibold">
-                      {rep.photos.length} Photo{rep.photos.length > 1 ? 's' : ''}
+                {/* Parts Replaced Summary */}
+                {rep.partsReplaced && rep.partsReplaced.length > 0 && (
+                  <div className="mt-2 text-[11px] text-gray-600 bg-amber-50/50 p-2 rounded-lg border border-amber-100 font-mono">
+                    <span className="font-bold font-sans block text-gray-700 mb-0.5">
+                      Parts Fitted ({rep.partsReplaced.length}):
                     </span>
+                    {rep.partsReplaced.map((p, idx) => (
+                      <div key={idx} className="flex justify-between">
+                        <span className="truncate max-w-[180px]">• {p.name}</span>
+                        <span className="font-bold">₹{p.cost}</span>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
 
-              {/* Total & Payment Row */}
+              {/* Total & Payment Row with WhatsApp Button */}
               <div className="pt-3 border-t border-gray-100 flex items-center justify-between font-mono">
                 <div>
                   <span className="text-[10px] font-bold uppercase text-gray-400 block font-sans">
                     Total Amount Billed
                   </span>
-                  <span className="text-base font-black text-gray-900">
-                    ₹{rep.totalAmount}
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-base font-black text-gray-900">
+                      ₹{rep.totalAmount}
+                    </span>
+                    {rep.discount && rep.discount > 0 ? (
+                      <span className="text-[10px] text-emerald-600 font-bold font-sans">
+                        (-₹{rep.discount})
+                      </span>
+                    ) : null}
+                  </div>
                 </div>
 
-                <span
-                  className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase font-sans ${
-                    rep.paymentStatus === 'Paid'
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                      : 'bg-amber-50 text-amber-700 border border-amber-200'
-                  }`}
-                >
-                  {rep.paymentStatus}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase font-sans ${
+                      rep.paymentStatus === 'Paid'
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                        : 'bg-amber-50 text-amber-700 border border-amber-200'
+                    }`}
+                  >
+                    {rep.paymentMode ? `${rep.paymentMode} • ` : ''}{rep.paymentStatus}
+                  </span>
+
+                  <a
+                    href={getWhatsAppBillUrl(rep)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-1.5 rounded-lg bg-[#25D366] hover:bg-[#1EBE5D] text-white transition-colors shadow-2xs"
+                    title="Send Bill via WhatsApp"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
             </div>
           ))}
@@ -494,31 +599,66 @@ export const AdminRepairHistoryPage: React.FC = () => {
 
             <form onSubmit={handleCreateSubmit} className="p-6 space-y-4 overflow-y-auto flex-1 text-xs">
               {formError && (
-                <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 font-medium">
+                <div className="p-3 bg-red-50 text-red-700 rounded-xl border border-red-200 font-medium">
                   {formError}
                 </div>
               )}
 
-              {/* Customer Info */}
+              {/* Customer Info with Auto-complete from Customer Directory */}
               <div className="space-y-2">
-                <h4 className="text-[11px] font-black uppercase tracking-wider text-gray-400 flex items-center gap-1">
-                  <User className="w-3.5 h-3.5 text-[#DFA500]" />
-                  Customer Details
-                </h4>
+                <div className="flex items-center justify-between">
+                  <h4 className="text-[11px] font-black uppercase tracking-wider text-gray-400 flex items-center gap-1">
+                    <User className="w-3.5 h-3.5 text-[#DFA500]" />
+                    Customer Details (Auto-links with Customer Directory)
+                  </h4>
+                  <span className="text-[10px] text-gray-400">
+                    Type to search registered owners
+                  </span>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
+                  <div className="relative">
                     <label className="block font-bold text-gray-700 mb-1">
                       Customer Name *
                     </label>
                     <input
                       type="text"
                       value={formData.customerName}
-                      onChange={(e) => setFormData({ ...formData, customerName: e.target.value })}
-                      placeholder="e.g. Rahul Patil"
+                      onChange={(e) => handleCustomerInputChange('customerName', e.target.value)}
+                      placeholder="Type name or search existing..."
                       required
                       className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
                     />
+
+                    {showCustomerSuggestions && customerSuggestions.length > 0 && (
+                      <div className="absolute top-full left-0 right-0 z-30 mt-1 bg-white border border-gray-200 rounded-xl shadow-xl divide-y divide-gray-100 overflow-hidden">
+                        <div className="p-1.5 bg-gray-50 text-[10px] font-bold text-gray-400 uppercase">
+                          Matching Registered Customers:
+                        </div>
+                        {customerSuggestions.map((c) => (
+                          <button
+                            key={c.id || c.mobile}
+                            type="button"
+                            onClick={() => handleSelectCustomer(c)}
+                            className="w-full text-left p-2.5 hover:bg-amber-50/80 transition-colors flex items-center justify-between text-xs"
+                          >
+                            <div>
+                              <div className="font-bold text-gray-900">{c.name}</div>
+                              <div className="text-[11px] text-gray-500 font-mono">
+                                {formatPhone(c.mobile)} • {c.bikeBrand} {c.bikeModel || ''}
+                              </div>
+                            </div>
+                            {c.registrationNumber && (
+                              <span className="text-[10px] font-mono font-bold bg-gray-100 text-gray-800 px-1.5 py-0.5 rounded">
+                                {c.registrationNumber}
+                              </span>
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
+
                   <div>
                     <label className="block font-bold text-gray-700 mb-1">
                       Mobile Number *
@@ -526,8 +666,8 @@ export const AdminRepairHistoryPage: React.FC = () => {
                     <input
                       type="tel"
                       value={formData.customerMobile}
-                      onChange={(e) => setFormData({ ...formData, customerMobile: e.target.value })}
-                      placeholder="e.g. 9876543210"
+                      onChange={(e) => handleCustomerInputChange('customerMobile', e.target.value)}
+                      placeholder="10-digit mobile number"
                       required
                       maxLength={10}
                       className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white font-mono"
@@ -570,7 +710,7 @@ export const AdminRepairHistoryPage: React.FC = () => {
                       type="text"
                       value={formData.bikeModel}
                       onChange={(e) => setFormData({ ...formData, bikeModel: e.target.value })}
-                      placeholder="e.g. Pulsar 125"
+                      placeholder="e.g. Pulsar 150 / Splendor"
                       className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
                     />
                   </div>
@@ -598,7 +738,7 @@ export const AdminRepairHistoryPage: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block font-bold text-gray-700 mb-1">
-                      Service Type
+                      Service Performed
                     </label>
                     <select
                       value={formData.serviceType}
@@ -606,16 +746,14 @@ export const AdminRepairHistoryPage: React.FC = () => {
                       className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
                     >
                       <option value="General Bike Service">General Bike Service</option>
-                      <option value="Premium Bike Service">Premium Bike Service</option>
                       <option value="Engine Repair & Overhaul">Engine Repair & Overhaul</option>
                       <option value="Oil & Filter Change">Oil & Filter Change</option>
-                      <option value="Brake System Repair">Brake System Repair</option>
-                      <option value="Electrical & Wiring">Electrical & Wiring</option>
-                      <option value="Vintage 2-Stroke Restoration">Vintage 2-Stroke Restoration</option>
-                      <option value="Foam Wash & Detailing">Foam Wash & Detailing</option>
+                      <option value="Brake Pad & Shoe Service">Brake Pad & Shoe Service</option>
+                      <option value="Battery & Electrical Repair">Battery & Electrical Repair</option>
                       <option value="Chain Sprocket Replacement">Chain Sprocket Replacement</option>
-                      <option value="Clutch & Gearbox Work">Clutch & Gearbox Work</option>
-                      <option value="Custom Repair">Custom Repair</option>
+                      <option value="Tyre & Wheel Service">Tyre & Wheel Service</option>
+                      <option value="Foam Washing & Detailing">Foam Washing & Detailing</option>
+                      <option value="Custom Bike Repair">Custom Bike Repair</option>
                     </select>
                   </div>
                   <div>
@@ -626,56 +764,85 @@ export const AdminRepairHistoryPage: React.FC = () => {
                       type="date"
                       value={formData.repairDate}
                       onChange={(e) => setFormData({ ...formData, repairDate: e.target.value })}
-                      className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white font-mono"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
                     />
                   </div>
                 </div>
 
                 <div>
                   <label className="block font-bold text-gray-700 mb-1">
-                    Problem Details / Work Done Remarks
+                    Problem Diagnostics / Technician Notes
                   </label>
                   <textarea
-                    rows={2}
                     value={formData.problemDetails}
                     onChange={(e) => setFormData({ ...formData, problemDetails: e.target.value })}
-                    placeholder="e.g. Engine oil changed, valve clearance adjusted, front disc pads renewed..."
-                    className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
+                    rows={2}
+                    placeholder="Work done, complaints solved, spark plug cleaned, etc."
+                    className="w-full bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
                   />
                 </div>
               </div>
 
-              {/* Parts Replaced Tracker */}
+              {/* ─── SPARE PARTS SELECTION & ITEMIZER ─── */}
               <div className="space-y-2 pt-2 border-t border-gray-100">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-[11px] font-black uppercase tracking-wider text-gray-400">
-                    Parts Replaced & Cost
+                  <h4 className="text-[11px] font-black uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
+                    <Package className="w-3.5 h-3.5 text-[#DFA500]" />
+                    Spare Parts Replaced
                   </h4>
-                  <span className="text-[11px] font-bold text-gray-600 font-mono">
+                  <span className="text-xs font-mono font-bold text-gray-700">
                     Parts Total: ₹{partsTotal}
                   </span>
                 </div>
 
-                {/* Input row for part */}
-                <div className="flex items-center gap-2">
+                {/* Select directly from Parts Inventory */}
+                <div className="p-2.5 rounded-xl bg-amber-50/70 border border-amber-200 space-y-1.5">
+                  <label className="block text-[10px] font-bold uppercase tracking-wider text-amber-900">
+                    📦 Pick from Parts Inventory (Auto-fills price):
+                  </label>
+                  <select
+                    className="w-full bg-white border border-amber-300 rounded-lg px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] font-medium"
+                    onChange={(e) => {
+                      const pId = e.target.value;
+                      if (!pId) return;
+                      const p = allParts.find((item) => item.id === pId);
+                      if (p) {
+                        setPartInputName(p.name);
+                        setPartInputCost(String(p.price));
+                      }
+                    }}
+                    value=""
+                  >
+                    <option value="">-- Choose Spare Part from List --</option>
+                    {allParts.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.name} ({p.category}) — ₹{p.price} ({p.stockQuantity} in stock)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Add Part Form */}
+                <div className="flex gap-2">
                   <input
                     type="text"
                     value={partInputName}
                     onChange={(e) => setPartInputName(e.target.value)}
-                    placeholder="Part Name (e.g. Brake Shoe, Engine Oil 10W-30)"
+                    placeholder="Part description (or pick from list above)"
                     className="flex-1 bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
                   />
                   <input
                     type="number"
                     value={partInputCost}
                     onChange={(e) => setPartInputCost(e.target.value)}
-                    placeholder="Cost (₹)"
+                    placeholder="Price (₹)"
+                    min="0"
                     className="w-24 bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white font-mono"
                   />
                   <button
                     type="button"
                     onClick={handleAddPart}
-                    className="px-3 py-1.5 rounded-lg bg-gray-200 hover:bg-[#F5B900] hover:text-black text-gray-700 font-bold text-xs"
+                    className="px-4 py-1.5 rounded-lg bg-gray-900 hover:bg-black text-white text-xs font-bold shrink-0 transition-colors"
                   >
                     + Add Part
                   </button>
@@ -703,8 +870,8 @@ export const AdminRepairHistoryPage: React.FC = () => {
                 )}
               </div>
 
-              {/* Labor Charge & Grand Total Calculation */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-gray-100">
+              {/* ─── LABOR, DISCOUNT & PAYMENT OPTIONS ─── */}
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2 border-t border-gray-100">
                 <div>
                   <label className="block font-bold text-gray-700 mb-1">
                     Labor Charges (₹)
@@ -713,8 +880,38 @@ export const AdminRepairHistoryPage: React.FC = () => {
                     type="number"
                     value={formData.laborCharge}
                     onChange={(e) => setFormData({ ...formData, laborCharge: Number(e.target.value) || 0 })}
+                    min="0"
                     className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white font-mono font-bold"
                   />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-emerald-800 mb-1">
+                    Discount in ₹ (Off)
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.discount}
+                    onChange={(e) => setFormData({ ...formData, discount: Number(e.target.value) || 0 })}
+                    min="0"
+                    placeholder="e.g. 50"
+                    className="w-full bg-emerald-50/50 border border-emerald-300 rounded-lg px-3 py-2 text-xs text-emerald-950 focus:outline-none focus:border-emerald-500 focus:bg-white font-mono font-bold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-gray-700 mb-1">
+                    Payment Mode
+                  </label>
+                  <select
+                    value={formData.paymentMode}
+                    onChange={(e) => setFormData({ ...formData, paymentMode: e.target.value as any })}
+                    className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white font-bold"
+                  >
+                    <option value="Cash">💵 Cash</option>
+                    <option value="Online">📱 Online (UPI / QR / GPay)</option>
+                    <option value="Split">💳 Split (Cash + Online)</option>
+                  </select>
                 </div>
 
                 <div>
@@ -726,87 +923,31 @@ export const AdminRepairHistoryPage: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, paymentStatus: e.target.value as any })}
                     className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
                   >
-                    <option value="Paid">Paid (Cash / UPI)</option>
-                    <option value="Pending">Pending (Unpaid)</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Pending">Pending</option>
                     <option value="Partial">Partial</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block font-bold text-gray-700 mb-1">
-                    Job Status
-                  </label>
-                  <select
-                    value={formData.status}
-                    onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-                    className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
-                  >
-                    <option value="Completed">Completed</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Delivered">Delivered to Customer</option>
                   </select>
                 </div>
               </div>
 
               {/* Total Calculation Banner */}
-              <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 flex items-center justify-between font-mono">
-                <span className="text-amber-800 font-bold font-sans">
-                  Total Bill (Parts ₹{partsTotal} + Labor ₹{formData.laborCharge}):
-                </span>
-                <span className="text-base font-black text-amber-900">
-                  ₹{grandTotal}
-                </span>
-              </div>
-
-              {/* Service Photos Upload Section */}
-              <div className="space-y-2 pt-2 border-t border-gray-100">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-[11px] font-black uppercase tracking-wider text-gray-400 flex items-center gap-1.5">
-                    <ImageIcon className="w-3.5 h-3.5 text-[#DFA500]" />
-                    Upload Bike Service Photos
-                  </h4>
-                  <span className="text-[10px] text-gray-400">
-                    Attach photos of repaired bike or replaced parts
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <label className="px-3.5 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs flex items-center gap-2 cursor-pointer border border-gray-200 transition-colors">
-                    <UploadCloud className="w-4 h-4" />
-                    <span>Choose Photos</span>
-                    <input
-                      type="file"
-                      multiple
-                      accept="image/*"
-                      onChange={handlePhotoUpload}
-                      className="hidden"
-                    />
-                  </label>
-                  <span className="text-gray-400 text-[11px]">
-                    {formData.photos.length} photo(s) selected
-                  </span>
-                </div>
-
-                {formData.photos.length > 0 && (
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {formData.photos.map((ph, idx) => (
-                      <div key={idx} className="relative group">
-                        <img
-                          src={ph}
-                          alt={`Uploaded ${idx + 1}`}
-                          className="w-16 h-16 rounded-lg object-cover border border-gray-300"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => handleRemovePhoto(idx)}
-                          className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-xs opacity-90 hover:opacity-100 shadow-xs"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
-                      </div>
-                    ))}
+              <div className="p-3.5 bg-amber-50 rounded-xl border border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2 font-mono">
+                <div className="text-xs text-amber-900 font-sans space-y-0.5">
+                  <div>Parts: <strong>₹{partsTotal}</strong> + Labor: <strong>₹{formData.laborCharge}</strong></div>
+                  {formData.discount > 0 && (
+                    <div className="text-emerald-700 font-bold">Discount: -₹{formData.discount} in Rs</div>
+                  )}
+                  <div className="text-[11px] text-gray-500">
+                    Mode: <strong>{formData.paymentMode}</strong> • Status: <strong>{formData.paymentStatus}</strong>
                   </div>
-                )}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-amber-800 uppercase font-sans">Final Payable:</span>
+                  <span className="text-xl font-black text-emerald-800">
+                    ₹{grandTotal}
+                  </span>
+                </div>
               </div>
 
               {/* Submit Buttons */}
@@ -824,10 +965,59 @@ export const AdminRepairHistoryPage: React.FC = () => {
                   className="px-5 py-2 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-extrabold uppercase tracking-wide flex items-center gap-1.5 shadow-sm disabled:opacity-50"
                 >
                   <Save className="w-4 h-4" />
-                  <span>{isSubmitting ? 'Saving to DB...' : 'Save Job Sheet'}</span>
+                  <span>{isSubmitting ? 'Saving to DB...' : 'Save Job Card & Generate Bill'}</span>
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ─── WHATSAPP BILL SEND MODAL (ON CREATION) ─── */}
+      {showWhatsAppModal && createdBillRecord && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
+          <div className="bg-white rounded-2xl w-full max-w-md border border-gray-200 shadow-2xl p-6 text-center space-y-4">
+            <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
+              <MessageCircle className="w-8 h-8" />
+            </div>
+
+            <div>
+              <h3 className="text-lg font-black text-gray-900 uppercase">
+                Job Card Created: {createdBillRecord.jobNumber}
+              </h3>
+              <p className="text-xs text-gray-500 mt-1">
+                Final Bill: <strong className="text-emerald-700">₹{createdBillRecord.totalAmount}</strong> ({createdBillRecord.paymentMode || 'Cash'} - {createdBillRecord.paymentStatus})
+              </p>
+            </div>
+
+            <div className="p-3 bg-gray-50 rounded-xl border border-gray-200 text-left text-xs space-y-1 font-sans">
+              <div>👤 Customer: <strong>{createdBillRecord.customerName}</strong></div>
+              <div>📱 Phone: <strong>{createdBillRecord.customerMobile}</strong></div>
+              <div>🛵 Bike: <strong>{createdBillRecord.bikeBrand} {createdBillRecord.bikeModel}</strong></div>
+              {createdBillRecord.discount ? (
+                <div className="text-emerald-700 font-bold">🎁 Discount Given: ₹{createdBillRecord.discount}</div>
+              ) : null}
+            </div>
+
+            <div className="flex flex-col gap-2 pt-2">
+              <a
+                href={getWhatsAppBillUrl(createdBillRecord)}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setShowWhatsAppModal(false)}
+                className="w-full py-3 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-black text-xs uppercase flex items-center justify-center gap-2 shadow-sm transition-all"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Send Bill to Customer via WhatsApp</span>
+              </a>
+
+              <button
+                onClick={() => setShowWhatsAppModal(false)}
+                className="w-full py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-xs"
+              >
+                Done / Close
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -922,37 +1112,38 @@ export const AdminRepairHistoryPage: React.FC = () => {
                   <span>Labor Charges:</span>
                   <span>₹{selectedRecord.laborCharge}</span>
                 </div>
+                {selectedRecord.discount && selectedRecord.discount > 0 ? (
+                  <div className="flex items-center justify-between text-emerald-700 font-bold">
+                    <span>Discount in ₹:</span>
+                    <span>-₹{selectedRecord.discount}</span>
+                  </div>
+                ) : null}
                 <div className="pt-2 border-t border-gray-200 flex items-center justify-between text-sm font-black text-gray-900">
-                  <span className="font-sans">Grand Total:</span>
+                  <span className="font-sans">Final Payable:</span>
                   <span className="text-emerald-700 font-bold">₹{selectedRecord.totalAmount}</span>
                 </div>
-              </div>
-
-              {/* Photos Gallery */}
-              {selectedRecord.photos && selectedRecord.photos.length > 0 && (
-                <div>
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-2">
-                    Service Photos
-                  </span>
-                  <div className="flex flex-wrap gap-2.5">
-                    {selectedRecord.photos.map((ph, idx) => (
-                      <img
-                        key={idx}
-                        src={ph}
-                        alt="Service proof"
-                        className="w-24 h-24 rounded-xl object-cover border border-gray-200 shadow-sm"
-                      />
-                    ))}
-                  </div>
+                <div className="flex items-center justify-between text-[11px] text-gray-500 font-sans pt-1">
+                  <span>Payment Mode: <strong>{selectedRecord.paymentMode || 'Cash'}</strong></span>
+                  <span>Status: <strong>{selectedRecord.paymentStatus}</strong></span>
                 </div>
-              )}
+              </div>
             </div>
 
-            {/* Footer */}
-            <div className="flex items-center justify-end px-6 py-4 border-t border-gray-100 bg-gray-50">
+            {/* Footer with Send WhatsApp Bill button */}
+            <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 bg-gray-50">
+              <a
+                href={getWhatsAppBillUrl(selectedRecord)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs flex items-center gap-2 shadow-sm transition-all"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Send Bill via WhatsApp</span>
+              </a>
+
               <button
                 onClick={() => setIsViewModalOpen(false)}
-                className="px-4 py-2 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold"
+                className="px-4 py-2 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold text-xs"
               >
                 Close Job Sheet
               </button>

@@ -23,6 +23,7 @@ import { AdminCustomersPage } from './pages/admin/AdminCustomersPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 import { AdminServicesPricingPage } from './pages/admin/AdminServicesPricingPage';
 import { AdminRepairHistoryPage } from './pages/admin/AdminRepairHistoryPage';
+import { AdminPartsInventoryPage } from './pages/admin/AdminPartsInventoryPage';
 
 export const App: React.FC = () => {
   return (
@@ -55,6 +56,7 @@ export const App: React.FC = () => {
           <Route path="appointments" element={<Navigate to="/garage/enquiries" replace />} />
           <Route path="customers" element={<AdminCustomersPage />} />
           <Route path="repair-history" element={<AdminRepairHistoryPage />} />
+          <Route path="parts" element={<AdminPartsInventoryPage />} />
           <Route path="settings" element={<AdminSettingsPage />} />
         </Route>
       </Routes>

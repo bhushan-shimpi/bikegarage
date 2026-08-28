@@ -10,6 +10,7 @@ import {
   ExternalLink,
   ChevronRight,
   FileText,
+  Package,
 } from 'lucide-react';
 import { authService } from '../../services/authService';
 
@@ -30,6 +31,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
   const navItems = [
     { name: 'Dashboard', path: '/garage/dashboard', icon: LayoutDashboard },
     { name: 'Bike Repair History', path: '/garage/repair-history', icon: FileText },
+    { name: 'Spare Parts Inventory', path: '/garage/parts', icon: Package },
     { name: 'Customer Directory', path: '/garage/customers', icon: Users },
     { name: 'Enquiries & Bookings', path: '/garage/enquiries', icon: Inbox },
     { name: 'Services & Pricing', path: '/garage/services', icon: Tag },
