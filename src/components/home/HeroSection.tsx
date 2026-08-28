@@ -75,7 +75,7 @@ export const HeroSection: React.FC = () => {
       </div>
 
       {/* ─── DESKTOP / TABLET COMPOSITION (>= sm / 640px) ─── */}
-      <div className="hidden sm:flex relative min-h-[440px] lg:min-h-[490px] xl:min-h-[530px] items-center w-full">
+      <div className="hidden sm:flex relative min-h-[470px] lg:min-h-[520px] xl:min-h-[560px] items-center w-full">
         {/* Full-width motorcycle image positioned towards the right */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
@@ -83,7 +83,7 @@ export const HeroSection: React.FC = () => {
             alt="Bajaj Pulsar 125 Red and Black at Chaudhari Auto Centre"
             fetchPriority="high"
             decoding="async"
-            className="w-full h-full object-cover object-right md:object-right brightness-105 contrast-105"
+            className="w-full h-full object-cover object-right scale-105 lg:scale-110 origin-right brightness-105 contrast-105"
           />
 
           {/* Left-to-right directional gradient: dark on left for text readability, open on right for bike */}
@@ -91,7 +91,7 @@ export const HeroSection: React.FC = () => {
             className="absolute inset-0"
             style={{
               background:
-                'linear-gradient(90deg, #0B0B0B 0%, rgba(11,11,11,0.95) 32%, rgba(11,11,11,0.70) 48%, rgba(11,11,11,0.10) 66%, transparent 85%)',
+                'linear-gradient(90deg, #0B0B0B 0%, rgba(11,11,11,0.95) 30%, rgba(11,11,11,0.65) 45%, rgba(11,11,11,0.08) 60%, transparent 78%)',
             }}
           />
 
