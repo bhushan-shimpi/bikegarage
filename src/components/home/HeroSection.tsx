@@ -23,15 +23,6 @@ export const HeroSection: React.FC = () => {
 
         {/* Mobile Content Area */}
         <div className="px-5 xs:px-6 pt-1 pb-4 flex flex-col">
-          {/* Live Workshop Open Status Pill */}
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 mb-2 rounded-full bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 text-[10px] xs:text-[11px] font-bold uppercase tracking-wider self-start animate-fade-in-down">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-            </span>
-            <span>LIVE: WORKSHOP OPEN TODAY</span>
-          </div>
-
           {/* Eyebrow */}
           <p className="text-[#F5B900] text-xs font-bold uppercase tracking-[0.2em] mb-1.5 animate-fade-in-up">
             TRUSTED BIKE SERVICE SINCE 1994
@@ -112,15 +103,6 @@ export const HeroSection: React.FC = () => {
         {/* Content container — aligned left, max-w-lg to prevent overlap with bike on right */}
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full py-6 lg:py-8 xl:py-10">
           <div className="max-w-lg lg:max-w-xl">
-            {/* Live Workshop Open Status Pill on Desktop */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 mb-2.5 rounded-full bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-wider animate-fade-in-down">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-              </span>
-              <span>LIVE: WORKSHOP OPEN TODAY • ACCEPTING APPOINTMENTS</span>
-            </div>
-
             {/* Eyebrow */}
             <p className="text-[#F5B900] text-xs lg:text-sm font-bold uppercase tracking-[0.22em] mb-2 animate-fade-in-up">
               TRUSTED BIKE SERVICE SINCE 1994

@@ -90,39 +90,6 @@ export const Navbar: React.FC = () => {
 
             {/* Desktop CTAs */}
             <div className="hidden lg:flex items-center gap-2.5">
-              {/* Instagram Official link */}
-              <a
-                href="https://www.instagram.com/chaudhari_auto_pahur/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                title="Follow @chaudhari_auto_pahur on Instagram"
-                className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#FD1D1D] via-[#E1306C] to-[#833AB4] hover:scale-110 active:scale-95 text-white flex items-center justify-center transition-all shadow-sm hover:shadow-[0_0_15px_rgba(225,48,108,0.5)]"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-4 h-4 text-white"
-                >
-                  <rect x="2" y="2" width="20" height="20" rx="5.5" ry="5.5" />
-                  <circle cx="12" cy="12" r="4.2" />
-                  <circle cx="17.6" cy="6.4" r="0.6" fill="currentColor" stroke="none" />
-                </svg>
-              </a>
-
-              <a
-                href="https://wa.me/919822000000"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#1A1A1A] hover:bg-emerald-600 text-emerald-400 hover:text-white font-bold text-xs tracking-wide border border-[#2E2E2E] hover:border-emerald-600 transition-all"
-              >
-                <MessageCircle className="w-3.5 h-3.5" />
-                <span>WhatsApp</span>
-              </a>
               <a
                 href="tel:+919822000000"
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#F5B900] hover:bg-[#DFA500] text-black font-extrabold text-xs tracking-wider uppercase shadow-sm transition-all active:scale-95"
