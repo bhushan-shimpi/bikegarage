@@ -13,22 +13,19 @@ export const GallerySection: React.FC = () => {
   const [activeLightboxIndex, setActiveLightboxIndex] = useState<number | null>(null);
 
   const galleryImages: GalleryItem[] = [
-    { id: 'gal-1', src: '/images/Gallary/IMG_5148.JPG', alt: 'Chaudhari Auto Workshop' },
-    { id: 'gal-2', src: '/images/Gallary/IMG_5150.JPG', alt: 'Chaudhari Auto Workshop' },
-    { id: 'gal-3', src: '/images/Gallary/IMG_5153.JPG', alt: 'Chaudhari Auto Workshop' },
-    { id: 'gal-4', src: '/images/Gallary/IMG_5154.JPG', alt: 'Chaudhari Auto Workshop' },
-    { id: 'gal-5', src: '/images/Gallary/IMG_5156.JPG', alt: 'Chaudhari Auto Workshop' },
-    { id: 'gal-6', src: '/images/Gallary/SaveClip.App_763561185_17960641896175433_1354440259135450971_n.jpg', alt: 'Chaudhari Auto Workshop' },
-    { id: 'gal-7', src: '/images/Gallary/SaveClip.App_763684648_17960641551175433_1288108473921684178_n.jpg', alt: 'Chaudhari Auto Workshop' },
-    { id: 'gal-8', src: '/images/Gallary/SaveClip.App_764116120_17960641887175433_663142152934308415_n.jpg', alt: 'Chaudhari Auto Workshop' },
-    { id: 'gal-9', src: '/images/Gallary/SaveClip.App_764676210_17960641563175433_2615807174010287203_n.jpg', alt: 'Chaudhari Auto Workshop' },
-    { id: 'gal-10', src: '/images/Gallary/SaveClip.App_764694001_17960641872175433_1259823115832174628_n.jpg', alt: 'Chaudhari Auto Workshop' },
-    { id: 'gal-11', src: '/images/Gallary/SaveClip.App_764975447_17960641848175433_9031705044490108474_n.jpg', alt: 'Chaudhari Auto Workshop' },
-    { id: 'gal-12', src: '/images/Gallary/SaveClip.App_765619840_17960641572175433_3593156307828676883_n.jpg', alt: 'Chaudhari Auto Workshop' },
+    { id: 'gal-1', src: '/images/Gallary/IMG_5148.JPG', alt: 'Chaudhari Auto Workshop Bay' },
+    { id: 'gal-2', src: '/images/Gallary/IMG_5150.JPG', alt: 'Chaudhari Auto Workshop Bay' },
+    { id: 'gal-3', src: '/images/Gallary/IMG_5153.JPG', alt: 'Chaudhari Auto Workshop Bay' },
+    { id: 'gal-4', src: '/images/Gallary/IMG_5154.JPG', alt: 'Chaudhari Auto Workshop Bay' },
+    { id: 'gal-5', src: '/images/Gallary/IMG_5156.JPG', alt: 'Chaudhari Auto Workshop Bay' },
+    { id: 'gal-6', src: '/images/Gallary/SaveClip.App_763561185_17960641896175433_1354440259135450971_n.jpg', alt: 'Chaudhari Auto Workshop Bay' },
+    { id: 'gal-7', src: '/images/Gallary/SaveClip.App_763684648_17960641551175433_1288108473921684178_n.jpg', alt: 'Chaudhari Auto Workshop Bay' },
+    { id: 'gal-8', src: '/images/Gallary/SaveClip.App_764116120_17960641887175433_663142152934308415_n.jpg', alt: 'Chaudhari Auto Workshop Bay' },
+    { id: 'gal-9', src: '/images/Gallary/SaveClip.App_764676210_17960641563175433_2615807174010287203_n.jpg', alt: 'Chaudhari Auto Workshop Bay' },
+    { id: 'gal-10', src: '/images/Gallary/SaveClip.App_764694001_17960641872175433_1259823115832174628_n.jpg', alt: 'Chaudhari Auto Workshop Bay' },
+    { id: 'gal-11', src: '/images/Gallary/SaveClip.App_764975447_17960641848175433_9031705044490108474_n.jpg', alt: 'Chaudhari Auto Workshop Bay' },
+    { id: 'gal-12', src: '/images/Gallary/SaveClip.App_765619840_17960641572175433_3593156307828676883_n.jpg', alt: 'Chaudhari Auto Workshop Bay' },
   ];
-
-  // Show only 10 images initially; show all 12 when expanded
-  const displayedImages = isExpanded ? galleryImages : galleryImages.slice(0, 10);
 
   const prevLightbox = () => {
     if (activeLightboxIndex !== null) {
@@ -71,28 +68,43 @@ export const GallerySection: React.FC = () => {
           </div>
         </ScrollReveal>
 
-        {/* Gallery Grid (Pure Clean Images: NO text overlays) */}
+        {/* Gallery Grid (Mobile: 6 images by default; Desktop: 10 images by default) */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
-          {displayedImages.map((img, idx) => (
-            <ScrollReveal key={img.id} direction="up" delay={(idx % 5) * 60}>
-              <div
-                onClick={() => setActiveLightboxIndex(idx)}
-                className="group relative h-[170px] xs:h-[190px] sm:h-[220px] rounded-2xl overflow-hidden bg-[#141414] border border-[#242424] hover:border-[#F5B900]/60 cursor-pointer shadow-lg transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#F5B900]/15"
-              >
-                <img
-                  src={img.src}
-                  alt={img.alt}
-                  loading="lazy"
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-                />
+          {galleryImages.map((img, idx) => {
+            // idx 0..5: always visible
+            // idx 6..9: hidden on mobile (<sm), visible on desktop (sm+)
+            // idx 10..11: hidden everywhere until expanded
+            const isHiddenMobileOnly = !isExpanded && idx >= 6 && idx < 10;
+            const isHiddenUntilExpanded = !isExpanded && idx >= 10;
 
-                {/* Subtle Hover Maximize Icon */}
-                <div className="absolute top-2.5 right-2.5 w-7 h-7 rounded-lg bg-black/70 backdrop-blur-sm border border-white/20 text-[#F5B900] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Maximize2 className="w-3.5 h-3.5" />
-                </div>
+            if (isHiddenUntilExpanded) return null;
+
+            return (
+              <div
+                key={img.id}
+                className={isHiddenMobileOnly ? 'hidden sm:block' : 'block'}
+              >
+                <ScrollReveal direction="up" delay={(idx % 5) * 60}>
+                  <div
+                    onClick={() => setActiveLightboxIndex(idx)}
+                    className="group relative h-[170px] xs:h-[190px] sm:h-[220px] rounded-2xl overflow-hidden bg-[#141414] border border-[#242424] hover:border-[#F5B900]/60 cursor-pointer shadow-lg transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#F5B900]/15"
+                  >
+                    <img
+                      src={img.src}
+                      alt={img.alt}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                    />
+
+                    {/* Subtle Hover Maximize Icon */}
+                    <div className="absolute top-2.5 right-2.5 w-7 h-7 rounded-lg bg-black/70 backdrop-blur-sm border border-white/20 text-[#F5B900] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Maximize2 className="w-3.5 h-3.5" />
+                    </div>
+                  </div>
+                </ScrollReveal>
               </div>
-            </ScrollReveal>
-          ))}
+            );
+          })}
         </div>
 
         {/* View All / Show Less Button */}
@@ -104,7 +116,7 @@ export const GallerySection: React.FC = () => {
           >
             {isExpanded ? (
               <>
-                <span>Show Less (१० फोटो दाखवा)</span>
+                <span>Show Less (कमी फोटो दाखवा)</span>
                 <ChevronUp className="w-4 h-4 text-[#F5B900]" />
               </>
             ) : (
