@@ -1,6 +1,5 @@
 import React from 'react';
 import { HeroSection } from '../../components/home/HeroSection';
-import { TrustBar } from '../../components/home/TrustBar';
 import { ServicesOverview } from '../../components/home/ServicesOverview';
 import { RestorationHighlight } from '../../components/home/RestorationHighlight';
 import { WhyChooseUs } from '../../components/home/WhyChooseUs';
@@ -16,10 +15,7 @@ export const HomePage: React.FC = () => {
       {/* 1. Hero */}
       <HeroSection />
 
-      {/* 2. Trust Stats */}
-      <TrustBar />
-
-      {/* 3. Services */}
+      {/* 2. Services */}
       <ServicesOverview />
 
       {/* 4. Bike Restoration */}
