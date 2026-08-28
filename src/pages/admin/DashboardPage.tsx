@@ -61,39 +61,24 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
-      {/* Top Header & Quick Action Buttons */}
+      {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-black uppercase text-gray-900 tracking-tight font-sans">
             Workshop Dashboard
           </h1>
           <p className="text-xs text-gray-500 mt-0.5">
-            Chaudhari Auto Centre, Pahur • Customer inquiries, active bike repairs, and garage metrics
+            Overview of inquiries, service requests & active vehicles
           </p>
         </div>
 
-        {/* Friendly Quick Action Buttons */}
-        <div className="flex flex-wrap items-center gap-2">
-          <Link
-            to="/garage/repair-history"
-            className="px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 font-bold text-xs flex items-center gap-1.5 border border-amber-300 transition-colors shadow-2xs"
-          >
-            <span>🏍️ + New Repair Job</span>
-          </Link>
-
-          <Link
-            to="/garage/customers"
-            className="px-3.5 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs flex items-center gap-1.5 border border-gray-300 transition-colors shadow-2xs"
-          >
-            <span>👥 + Add Customer</span>
-          </Link>
-
+        <div className="flex items-center gap-2.5">
           <button
             onClick={() => setIsCreateModalOpen(true)}
             className="px-4 py-2 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-colors"
           >
             <PlusCircle className="w-4 h-4" />
-            <span>+ New Enquiry</span>
+            <span>New Enquiry</span>
           </button>
         </div>
       </div>
