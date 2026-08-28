@@ -204,7 +204,7 @@ export const updateService = async (req: Request, res: Response): Promise<void> 
       sortOrder,
     } = req.body;
 
-    const existingResult = await query('SELECT * FROM bike_services WHERE id = $1', [id]);
+    const existingResult = await query('SELECT * FROM bike_services WHERE id = $1 OR slug = $1', [id]);
     if (existingResult.rows.length === 0) {
       res.status(404).json({ success: false, error: 'Service not found' });
       return;
@@ -228,7 +228,7 @@ export const updateService = async (req: Request, res: Response): Promise<void> 
         is_active = COALESCE($12, is_active),
         sort_order = COALESCE($13, sort_order),
         updated_at = NOW()
-      WHERE id = $14
+      WHERE id = $14 OR slug = $14
       RETURNING *`,
       [
         name !== undefined ? name.trim() : null,
@@ -278,7 +278,7 @@ export const deleteService = async (req: Request, res: Response): Promise<void> 
   try {
     const { id } = req.params;
 
-    const result = await query('DELETE FROM bike_services WHERE id = $1 RETURNING id', [id]);
+    const result = await query('DELETE FROM bike_services WHERE id = $1 OR slug = $1 RETURNING id', [id]);
 
     if (result.rows.length === 0) {
       res.status(404).json({ success: false, error: 'Service not found' });

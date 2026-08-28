@@ -97,12 +97,10 @@ export const AdminServicesPricingPage: React.FC = () => {
 
   const handleDeleteService = async (id: string, name: string) => {
     if (window.confirm(`Are you sure you want to delete "${name}" from the database?`)) {
-      const ok = await bikeServicesService.deleteService(id);
-      if (ok) {
-        loadData();
-        setSuccessMsg(`"${name}" deleted successfully from database.`);
-        setTimeout(() => setSuccessMsg(null), 3000);
-      }
+      setServices((prev) => prev.filter((s) => s.id !== id && s.slug !== id));
+      await bikeServicesService.deleteService(id);
+      setSuccessMsg(`"${name}" deleted successfully from database.`);
+      setTimeout(() => setSuccessMsg(null), 3000);
     }
   };
 

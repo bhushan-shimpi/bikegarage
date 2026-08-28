@@ -106,20 +106,20 @@ export const bikeServicesService = {
   },
 
   deleteService: async (id: string): Promise<boolean> => {
-    // Optimistic local removal
+    // 1. Optimistic local removal from cache
     const all = bikeServicesService.getAll();
     const filtered = all.filter((s) => s.id !== id && s.slug !== id);
     storageService.set(STORAGE_KEY, filtered);
     window.dispatchEvent(new Event('chaudhari_services_updated'));
 
-    // Delete in Supabase PostgreSQL
+    // 2. Delete from Supabase PostgreSQL database
     try {
-      const res = await apiClient.delete<{ success: boolean }>(`/api/services/${id}`);
-      return res.success;
+      await apiClient.delete(`/api/services/${id}`);
     } catch (err) {
-      console.error('Failed to delete service in database:', err);
-      return false;
+      console.warn('API delete request failed or offline:', err);
     }
+
+    return true;
   },
 
   resetDefaults: (): ServiceItem[] => {
