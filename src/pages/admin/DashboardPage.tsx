@@ -61,24 +61,39 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
-      {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      {/* Top Header & Quick Action Buttons */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-black uppercase text-gray-900 tracking-tight font-sans">
-            Garage Operations
+            गॅरेज डॅशबोर्ड (Garage Dashboard)
           </h1>
           <p className="text-xs text-gray-500 mt-0.5">
-            Overview of two-wheeler bookings, active bay repairs, and customer requests
+            चौधरी ऑटो सेंटर, पाहूर • ग्राहक चौकशी, चालू कामे आणि वर्कशॉप आढावा
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        {/* Big Friendly Quick Action Buttons */}
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            to="/garage/repair-history"
+            className="px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-950 font-bold text-xs flex items-center gap-1.5 border border-amber-300 transition-colors shadow-2xs"
+          >
+            <span>🏍️ + नवीन बिल / काम</span>
+          </Link>
+
+          <Link
+            to="/garage/customers"
+            className="px-3.5 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold text-xs flex items-center gap-1.5 border border-gray-300 transition-colors shadow-2xs"
+          >
+            <span>👥 + नवीन ग्राहक</span>
+          </Link>
+
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className="px-3.5 py-2 rounded-lg bg-[#F5B900] hover:bg-[#DFA500] text-black font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-colors"
+            className="px-4 py-2 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-colors"
           >
-            <PlusCircle className="w-3.5 h-3.5" />
-            <span>New Enquiry</span>
+            <PlusCircle className="w-4 h-4" />
+            <span>+ नवीन चौकशी</span>
           </button>
         </div>
       </div>
@@ -92,34 +107,34 @@ export const DashboardPage: React.FC = () => {
       {/* 4 Clickable Metric Cards that Filter the List */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <StatCard
-          label="All Requests"
+          label="All Enquiries (एकूण)"
           count={totalCount}
           icon={Inbox}
-          subtext="Click to show all"
+          subtext="सर्व चौकशी यादी"
           colorTheme="yellow"
           onClick={() => setStatusFilter('all')}
         />
         <StatCard
-          label="New Leads"
+          label="New Leads (नवीन)"
           count={newCount}
           icon={Sparkles}
-          subtext="Awaiting response"
+          subtext="ग्राहकांनी पाठवलेले"
           colorTheme="blue"
           onClick={() => setStatusFilter('new')}
         />
         <StatCard
-          label="In Service Bays"
+          label="Under Repair (काम सुरू)"
           count={inProgressCount}
           icon={Clock}
-          subtext="Under repair"
+          subtext="गॅरेजमध्ये चालू कामे"
           colorTheme="amber"
           onClick={() => setStatusFilter('in_progress')}
         />
         <StatCard
-          label="Completed"
+          label="Completed (पूर्ण झाले)"
           count={completedCount}
           icon={CheckCircle2}
-          subtext="Delivered to rider"
+          subtext="गाडी ग्राहकाला दिली"
           colorTheme="emerald"
           onClick={() => setStatusFilter('completed')}
         />

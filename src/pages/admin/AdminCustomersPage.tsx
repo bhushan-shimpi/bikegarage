@@ -119,10 +119,10 @@ export const AdminCustomersPage: React.FC = () => {
         <div>
           <h1 className="text-xl sm:text-2xl font-black uppercase text-gray-900 tracking-tight font-sans flex items-center gap-2.5">
             <Users className="w-6 h-6 text-[#DFA500]" />
-            Customer Directory & Repair Logs
+            ग्राहक यादी (Customer Directory)
           </h1>
           <p className="text-xs text-gray-500 mt-0.5">
-            Registered motorcycle owners in Pahur. View complete repair history, parts replaced, and contact details.
+            पाहूर गॅरेजमधील नोंदणीकृत ग्राहक, वाहने, फोन नंबर आणि त्यांची मागील कामे
           </p>
         </div>
 
@@ -131,7 +131,7 @@ export const AdminCustomersPage: React.FC = () => {
           className="px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-sm transition-all self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
-          <span>Add New Customer</span>
+          <span>+ नवीन ग्राहक नोंदवा</span>
         </button>
       </div>
 
@@ -151,13 +151,13 @@ export const AdminCustomersPage: React.FC = () => {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by customer name, mobile, bike model, or MH 19..."
+            placeholder="ग्राहकाचे नाव, मोबाईल नंबर किंवा गाडीचा नंबर शोधा..."
             className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-4 py-2 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#F5B900] focus:bg-white"
           />
         </div>
 
         <div className="text-xs text-gray-500 flex items-center gap-2 self-start sm:self-auto">
-          <span>Registered Customers in DB:</span>
+          <span>नोंदणीकृत ग्राहक (Total Customers):</span>
           <span className="font-bold text-gray-900 bg-gray-100 px-2.5 py-1 rounded-md">
             {customers.length}
           </span>
@@ -169,10 +169,10 @@ export const AdminCustomersPage: React.FC = () => {
         <div className="bg-white rounded-2xl border border-gray-200 p-12 text-center">
           <Users className="w-12 h-12 text-gray-300 mx-auto mb-3" />
           <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide">
-            No Customers Found
+            कोणताही ग्राहक सापडला नाही
           </h3>
           <p className="text-xs text-gray-500 mt-1">
-            Click "Add New Customer" above to register a bike owner in the database.
+            नवीन ग्राहक सेव्ह करण्यासाठी वर दिलेल्या "+ नवीन ग्राहक नोंदवा" बटणावर क्लिक करा.
           </p>
         </div>
       ) : (
@@ -188,11 +188,11 @@ export const AdminCustomersPage: React.FC = () => {
                     <h4 className="text-base font-black text-gray-900 uppercase tracking-tight">
                       {item.name}
                     </h4>
-                    <span className="text-[11px] text-gray-500 block font-mono mt-0.5">
-                      {formatPhone(item.mobile)}
+                    <span className="text-xs text-gray-600 block font-mono font-bold mt-0.5">
+                      📞 {formatPhone(item.mobile)}
                     </span>
                     {item.city && (
-                      <span className="text-[10px] text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded font-medium mt-1 inline-block">
+                      <span className="text-[10px] text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded font-medium mt-1 inline-block">
                         📍 {item.city}
                       </span>
                     )}
@@ -200,16 +200,9 @@ export const AdminCustomersPage: React.FC = () => {
 
                   <div className="flex items-center gap-1.5">
                     <button
-                      onClick={() => handleViewHistory(item)}
-                      className="p-1.5 rounded-lg border border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100 transition-colors"
-                      title="View Bike Repair History"
-                    >
-                      <History className="w-4 h-4" />
-                    </button>
-                    <button
                       onClick={() => handleDelete(item.id || item.mobile, item.name)}
                       className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-700 transition-colors"
-                      title="Delete Customer"
+                      title="ग्राहक डिलीट करा (Delete Customer)"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -217,52 +210,54 @@ export const AdminCustomersPage: React.FC = () => {
                 </div>
 
                 {/* Primary Bike Details */}
-                <div className="mt-3 p-3 rounded-xl bg-gray-50 border border-gray-100 text-xs text-gray-700 space-y-1">
+                <div className="mt-3 p-3 rounded-xl bg-gray-50 border border-gray-100 text-xs text-gray-700 space-y-1.5">
                   <div className="flex items-center gap-2">
                     <Bike className="w-4 h-4 text-[#DFA500] shrink-0" />
-                    <span className="font-bold text-gray-900">
+                    <span className="font-bold text-gray-900 text-sm">
                       {item.bikeBrand} {item.bikeModel || 'Motorcycle'}
                     </span>
                   </div>
                   {item.registrationNumber && (
-                    <div className="text-[11px] text-gray-500 font-mono pl-6">
-                      Reg: <span className="font-bold text-gray-800">{item.registrationNumber}</span>
+                    <div className="text-xs text-gray-600 font-mono pl-6">
+                      गाडी नंबर: <span className="font-bold text-gray-900 uppercase">{item.registrationNumber}</span>
                     </div>
                   )}
                   {item.currentKm && (
-                    <div className="text-[10px] text-gray-400 pl-6">
-                      Odometer: {item.currentKm} KM
+                    <div className="text-[11px] text-gray-500 pl-6 font-mono">
+                      मीटर: {item.currentKm} KM
                     </div>
                   )}
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 border-t border-gray-100 flex items-center justify-between">
+              <div className="pt-3 border-t border-gray-100 flex flex-wrap items-center justify-between gap-2">
                 <button
                   onClick={() => handleViewHistory(item)}
-                  className="text-xs font-bold text-gray-700 hover:text-black flex items-center gap-1 hover:underline"
+                  className="px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-2xs"
                 >
                   <History className="w-3.5 h-3.5 text-[#DFA500]" />
-                  <span>Repair History</span>
+                  <span>मागील कामे (History)</span>
                 </button>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
                   <a
                     href={`tel:+91${item.mobile}`}
-                    className="p-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-[#F5B900] hover:text-black transition-colors"
+                    className="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold text-xs flex items-center gap-1 transition-colors border border-gray-200"
                     title="Call Customer"
                   >
-                    <Phone className="w-3.5 h-3.5" />
+                    <Phone className="w-3.5 h-3.5 text-gray-700" />
+                    <span>कॉल</span>
                   </a>
                   <a
                     href={`https://wa.me/91${item.mobile}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 rounded-lg bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366] hover:text-white transition-colors"
+                    className="px-2.5 py-1.5 rounded-lg bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs flex items-center gap-1 transition-colors shadow-2xs"
                     title="WhatsApp"
                   >
                     <MessageCircle className="w-3.5 h-3.5" />
+                    <span>व्हॉट्सॲप</span>
                   </a>
                 </div>
               </div>
