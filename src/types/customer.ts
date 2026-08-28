@@ -47,7 +47,7 @@ export interface SparePart {
   name: string;
   category: string;
   price: number;
-  stockQuantity: number;
+  stockQuantity?: number;
   createdAt?: string;
   updatedAt?: string;
 }

@@ -9,20 +9,17 @@ import {
   Phone,
   MessageCircle,
   Eye,
-  PlusCircle,
   RotateCcw,
 } from 'lucide-react';
 import { StatCard } from '../../components/admin/StatCard';
 import { enquiryService } from '../../services/enquiryService';
 import { Enquiry, EnquiryStatus } from '../../types/enquiry';
 import { formatDate, formatPhone } from '../../utils/formatters';
-import { CreateEnquiryModal } from '../../components/admin/CreateEnquiryModal';
 
 export const DashboardPage: React.FC = () => {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | EnquiryStatus>('all');
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const loadData = () => {
     setEnquiries(enquiryService.getAll());
@@ -71,23 +68,7 @@ export const DashboardPage: React.FC = () => {
             Overview of inquiries, service requests & active vehicles
           </p>
         </div>
-
-        <div className="flex items-center gap-2.5">
-          <button
-            onClick={() => setIsCreateModalOpen(true)}
-            className="px-4 py-2 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-colors"
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>New Enquiry</span>
-          </button>
-        </div>
       </div>
-
-      <CreateEnquiryModal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        onSuccess={() => loadData()}
-      />
 
       {/* 4 Clickable Metric Cards that Filter the List */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">

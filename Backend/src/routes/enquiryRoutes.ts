@@ -6,6 +6,7 @@ import {
   updateEnquiryStatus,
   addEnquiryNote,
   deleteEnquiry,
+  deleteMultipleEnquiries,
 } from '../controllers/enquiryController.js';
 
 const router = Router();
@@ -16,5 +17,7 @@ router.post('/', createEnquiry);
 router.patch('/:id/status', updateEnquiryStatus);
 router.post('/:id/notes', addEnquiryNote);
 router.delete('/:id', deleteEnquiry);
+router.post('/bulk-delete', deleteMultipleEnquiries);
+router.delete('/', deleteMultipleEnquiries);
 
 export default router;

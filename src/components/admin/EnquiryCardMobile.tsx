@@ -1,15 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, MessageCircle, Eye, Calendar, Bike, Wrench } from 'lucide-react';
+import { Phone, MessageCircle, Eye, Calendar, Bike, Wrench, Trash2 } from 'lucide-react';
 import { Enquiry } from '../../types/enquiry';
 import { StatusBadge } from '../common/StatusBadge';
 import { formatDate, formatPhone } from '../../utils/formatters';
 
 interface EnquiryCardMobileProps {
   enquiry: Enquiry;
+  onDelete?: () => void;
 }
 
-export const EnquiryCardMobile: React.FC<EnquiryCardMobileProps> = ({ enquiry }) => {
+export const EnquiryCardMobile: React.FC<EnquiryCardMobileProps> = ({ enquiry, onDelete }) => {
   return (
     <div className="p-4 rounded-xl bg-white border border-gray-200 space-y-3.5 shadow-xs text-gray-900">
       {/* Top row: Ticket & Status */}
@@ -17,7 +18,18 @@ export const EnquiryCardMobile: React.FC<EnquiryCardMobileProps> = ({ enquiry })
         <span className="text-[11px] font-mono font-bold text-gray-500">
           {enquiry.ticketNumber}
         </span>
-        <StatusBadge status={enquiry.status} size="sm" />
+        <div className="flex items-center gap-2">
+          <StatusBadge status={enquiry.status} size="sm" />
+          {onDelete && (
+            <button
+              onClick={onDelete}
+              className="p-1 rounded text-red-500 hover:bg-red-50"
+              title="Delete Enquiry"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Customer & Mobile */}

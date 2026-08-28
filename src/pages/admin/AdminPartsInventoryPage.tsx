@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Package,
+  Tag,
   Plus,
   Search,
   Edit2,
@@ -42,7 +42,6 @@ export const AdminPartsInventoryPage: React.FC = () => {
     name: '',
     category: 'General',
     price: 150,
-    stockQuantity: 10,
   });
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -64,7 +63,6 @@ export const AdminPartsInventoryPage: React.FC = () => {
       name: '',
       category: 'General',
       price: 150,
-      stockQuantity: 10,
     });
     setFormError(null);
     setIsModalOpen(true);
@@ -76,7 +74,6 @@ export const AdminPartsInventoryPage: React.FC = () => {
       name: part.name,
       category: part.category || 'General',
       price: part.price,
-      stockQuantity: part.stockQuantity,
     });
     setFormError(null);
     setIsModalOpen(true);
@@ -99,23 +96,23 @@ export const AdminPartsInventoryPage: React.FC = () => {
     try {
       if (editingPart) {
         await partService.update(editingPart.id, formData);
-        setSuccessMsg(`Updated part: "${formData.name}"`);
+        setSuccessMsg(`Updated part price: "${formData.name}" (₹${formData.price})`);
       } else {
         await partService.create(formData);
-        setSuccessMsg(`Added new part: "${formData.name}"`);
+        setSuccessMsg(`Added new part to price list: "${formData.name}" (₹${formData.price})`);
       }
       setIsModalOpen(false);
       loadParts();
       setTimeout(() => setSuccessMsg(null), 3000);
     } catch (err: any) {
-      setFormError(err.message || 'Failed to save spare part');
+      setFormError(err.message || 'Failed to save part');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDelete = async (part: SparePart) => {
-    if (window.confirm(`Are you sure you want to delete "${part.name}" from inventory?`)) {
+    if (window.confirm(`Are you sure you want to delete "${part.name}" from price list?`)) {
       setParts((prev) => prev.filter((p) => p.id !== part.id));
       await partService.delete(part.id);
       loadParts();
@@ -135,7 +132,11 @@ export const AdminPartsInventoryPage: React.FC = () => {
     return matchesCategory && matchesSearch;
   });
 
-  const totalValue = parts.reduce((acc, p) => acc + (p.price * p.stockQuantity), 0);
+  const uniqueCategories = Array.from(new Set(parts.map((p) => p.category))).length;
+  const prices = parts.map((p) => p.price);
+  const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
+  const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
+  const avgPrice = prices.length > 0 ? Math.round(prices.reduce((a, b) => a + b, 0) / prices.length) : 0;
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
@@ -143,11 +144,11 @@ export const AdminPartsInventoryPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-black uppercase text-gray-900 tracking-tight font-sans flex items-center gap-2.5">
-            <Package className="w-6 h-6 text-[#DFA500]" />
-            Spare Parts Inventory & Price List
+            <Tag className="w-6 h-6 text-[#DFA500]" />
+            Spare Parts Price List
           </h1>
           <p className="text-xs text-gray-500 mt-0.5">
-            Manage two-wheeler spare parts, selling prices, and stock levels for quick job card billing
+            Standard pricing reference for two-wheeler parts used for fast job card billing
           </p>
         </div>
 
@@ -156,7 +157,7 @@ export const AdminPartsInventoryPage: React.FC = () => {
           className="px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-black uppercase tracking-wider flex items-center gap-2 shadow-sm transition-all self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
-          <span>+ Add New Part</span>
+          <span>+ Add New Part & Price</span>
         </button>
       </div>
 
@@ -172,10 +173,10 @@ export const AdminPartsInventoryPage: React.FC = () => {
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="bg-white border border-gray-200 rounded-2xl p-4 shadow-xs flex items-center gap-3.5">
           <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 border border-amber-100">
-            <Package className="w-5 h-5" />
+            <Tag className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-[11px] font-bold text-gray-500 block">Total Parts Listed</span>
+            <span className="text-[11px] font-bold text-gray-500 block">Total Parts in Price List</span>
             <span className="text-xl font-black text-gray-900 font-mono">{parts.length}</span>
           </div>
         </div>
@@ -185,9 +186,9 @@ export const AdminPartsInventoryPage: React.FC = () => {
             <Layers className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-[11px] font-bold text-gray-500 block">Total Stock Units</span>
+            <span className="text-[11px] font-bold text-gray-500 block">Active Categories</span>
             <span className="text-xl font-black text-blue-950 font-mono">
-              {parts.reduce((sum, p) => sum + (p.stockQuantity || 0), 0)}
+              {uniqueCategories}
             </span>
           </div>
         </div>
@@ -197,9 +198,9 @@ export const AdminPartsInventoryPage: React.FC = () => {
             <IndianRupee className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-[11px] font-bold text-gray-500 block">Total Inventory Value</span>
+            <span className="text-[11px] font-bold text-gray-500 block">Average Part Rate</span>
             <span className="text-xl font-black text-emerald-700 font-mono">
-              ₹{totalValue.toLocaleString('en-IN')}
+              ₹{avgPrice} <span className="text-[11px] font-normal text-gray-400 font-sans">(₹{minPrice} - ₹{maxPrice})</span>
             </span>
           </div>
         </div>
@@ -244,13 +245,13 @@ export const AdminPartsInventoryPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Parts Table */}
+      {/* Parts Price List Table (No Stock Columns) */}
       <div className="bg-white border border-gray-200 rounded-2xl shadow-xs overflow-hidden">
         {loading ? (
-          <div className="py-12 text-center text-xs text-gray-400">Loading spare parts inventory...</div>
+          <div className="py-12 text-center text-xs text-gray-400">Loading spare parts price list...</div>
         ) : filtered.length === 0 ? (
           <div className="py-12 text-center space-y-2">
-            <Package className="w-10 h-10 text-gray-300 mx-auto" />
+            <Tag className="w-10 h-10 text-gray-300 mx-auto" />
             <p className="text-sm font-bold text-gray-700">No parts found</p>
             <p className="text-xs text-gray-400">Try changing your search query or category filter</p>
           </div>
@@ -261,45 +262,33 @@ export const AdminPartsInventoryPage: React.FC = () => {
                 <tr className="bg-gray-50/80 border-b border-gray-200 text-[11px] font-black uppercase text-gray-500 tracking-wider">
                   <th className="py-3.5 px-4">Part Name</th>
                   <th className="py-3.5 px-4">Category</th>
-                  <th className="py-3.5 px-4">Selling Price (₹)</th>
-                  <th className="py-3.5 px-4">Available Stock</th>
+                  <th className="py-3.5 px-4">Standard Selling Price (₹)</th>
                   <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {filtered.map((part) => (
                   <tr key={part.id} className="hover:bg-gray-50/60 transition-colors">
-                    <td className="py-3 px-4 font-bold text-gray-900">
+                    <td className="py-3.5 px-4 font-bold text-gray-900">
                       <div className="flex items-center gap-2">
                         <Wrench className="w-3.5 h-3.5 text-[#DFA500] shrink-0" />
                         <span>{part.name}</span>
                       </div>
                     </td>
-                    <td className="py-3 px-4">
+                    <td className="py-3.5 px-4">
                       <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-700 border border-gray-200">
                         {part.category}
                       </span>
                     </td>
-                    <td className="py-3 px-4 font-mono font-black text-sm text-gray-900">
+                    <td className="py-3.5 px-4 font-mono font-black text-sm text-emerald-800">
                       ₹{part.price}
                     </td>
-                    <td className="py-3 px-4">
-                      <span
-                        className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold font-mono ${
-                          part.stockQuantity <= 3
-                            ? 'bg-red-50 text-red-700 border border-red-200'
-                            : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                        }`}
-                      >
-                        {part.stockQuantity} in stock
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-right">
+                    <td className="py-3.5 px-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">
                         <button
                           onClick={() => handleOpenEdit(part)}
                           className="p-1.5 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-[#F5B900] hover:text-black transition-colors"
-                          title="Edit Part"
+                          title="Edit Price"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                         </button>
@@ -320,15 +309,15 @@ export const AdminPartsInventoryPage: React.FC = () => {
         )}
       </div>
 
-      {/* Add/Edit Modal */}
+      {/* Add/Edit Modal (Pricing Only, No Stock) */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-white rounded-2xl w-full max-w-md border border-gray-200 shadow-2xl overflow-hidden flex flex-col">
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50">
               <div className="flex items-center gap-2">
-                <Package className="w-5 h-5 text-amber-700" />
+                <Tag className="w-5 h-5 text-amber-700" />
                 <h3 className="text-sm font-black uppercase text-gray-900 tracking-tight">
-                  {editingPart ? 'Edit Spare Part' : 'Add New Spare Part'}
+                  {editingPart ? 'Edit Part Price' : 'Add New Part to Price List'}
                 </h3>
               </div>
               <button
@@ -377,33 +366,18 @@ export const AdminPartsInventoryPage: React.FC = () => {
                 </select>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block font-bold text-gray-700 mb-1">
-                    Selling Price (₹) *
-                  </label>
-                  <input
-                    type="number"
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) || 0 })}
-                    min="0"
-                    required
-                    className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white font-mono font-bold"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-bold text-gray-700 mb-1">
-                    Stock Quantity
-                  </label>
-                  <input
-                    type="number"
-                    value={formData.stockQuantity}
-                    onChange={(e) => setFormData({ ...formData, stockQuantity: Number(e.target.value) || 0 })}
-                    min="0"
-                    className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white font-mono"
-                  />
-                </div>
+              <div>
+                <label className="block font-bold text-gray-700 mb-1">
+                  Selling Price (₹) *
+                </label>
+                <input
+                  type="number"
+                  value={formData.price}
+                  onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) || 0 })}
+                  min="0"
+                  required
+                  className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white font-mono font-bold"
+                />
               </div>
 
               <div className="pt-3 border-t border-gray-100 flex items-center justify-end gap-2">
@@ -420,7 +394,7 @@ export const AdminPartsInventoryPage: React.FC = () => {
                   className="px-4 py-2 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-black text-xs uppercase flex items-center gap-1.5 transition-colors shadow-xs"
                 >
                   <Save className="w-3.5 h-3.5" />
-                  <span>{isSubmitting ? 'Saving...' : 'Save Part'}</span>
+                  <span>{isSubmitting ? 'Saving...' : 'Save Price'}</span>
                 </button>
               </div>
             </form>

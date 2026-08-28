@@ -6,6 +6,8 @@ import {
   RefreshCw,
   Inbox,
   PlusCircle,
+  Trash2,
+  CheckSquare,
 } from 'lucide-react';
 import { enquiryService } from '../../services/enquiryService';
 import { Enquiry, EnquiryStatus } from '../../types/enquiry';
@@ -21,6 +23,7 @@ export const EnquiriesListPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | EnquiryStatus>(initialFilter);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const typeFilter = searchParams.get('type') || 'all';
 
   const loadData = () => {
@@ -43,6 +46,7 @@ export const EnquiriesListPage: React.FC = () => {
   const handleResetDefaults = () => {
     if (window.confirm('Reset demo enquiries database to default bike records?')) {
       enquiryService.resetDefaults();
+      setSelectedIds([]);
       loadData();
     }
   };
@@ -64,6 +68,44 @@ export const EnquiriesListPage: React.FC = () => {
 
     return matchesStatus && matchesType && matchesSearch;
   });
+
+  const isAllSelected =
+    filtered.length > 0 && filtered.every((e) => selectedIds.includes(e.id));
+
+  const handleToggleSelectAll = () => {
+    if (isAllSelected) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(filtered.map((e) => e.id));
+    }
+  };
+
+  const handleToggleSelect = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
+  const handleDeleteSingle = async (id: string, name: string) => {
+    if (window.confirm(`Are you sure you want to permanently delete enquiry for "${name}"?`)) {
+      await enquiryService.delete(id);
+      setSelectedIds((prev) => prev.filter((i) => i !== id));
+      loadData();
+    }
+  };
+
+  const handleDeleteMultiple = async () => {
+    if (selectedIds.length === 0) return;
+    if (
+      window.confirm(
+        `Are you sure you want to permanently delete all ${selectedIds.length} selected enquiries?`
+      )
+    ) {
+      await enquiryService.deleteMultiple(selectedIds);
+      setSelectedIds([]);
+      loadData();
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -155,6 +197,32 @@ export const EnquiriesListPage: React.FC = () => {
         </div>
       </div>
 
+      {/* Bulk Delete Bar */}
+      {selectedIds.length > 0 && (
+        <div className="bg-amber-50 border border-amber-300 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs animate-fade-in">
+          <div className="flex items-center gap-2 text-xs font-black text-amber-950 uppercase">
+            <CheckSquare className="w-4 h-4 text-amber-700" />
+            <span>{selectedIds.length} enquiry(s) selected</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setSelectedIds([])}
+              className="px-3 py-1.5 rounded-lg bg-white border border-gray-300 hover:bg-gray-100 text-xs font-bold text-gray-700 transition-colors"
+            >
+              Deselect All
+            </button>
+            <button
+              onClick={handleDeleteMultiple}
+              className="px-4 py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white text-xs font-black uppercase flex items-center gap-1.5 transition-colors shadow-xs"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              <span>Delete Selected ({selectedIds.length})</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Main Table / Mobile Card View */}
       <div className="bg-white border border-gray-200 rounded-2xl p-5 sm:p-6 shadow-xs">
         <div className="flex items-center justify-between pb-4 mb-4 border-b border-gray-100">
@@ -173,6 +241,15 @@ export const EnquiriesListPage: React.FC = () => {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="border-b border-gray-200 text-[11px] font-extrabold uppercase tracking-wider text-gray-500 bg-gray-50/60">
+                    <th className="py-3 px-3 w-10 text-center">
+                      <input
+                        type="checkbox"
+                        checked={isAllSelected}
+                        onChange={handleToggleSelectAll}
+                        className="w-4 h-4 rounded text-[#F5B900] focus:ring-[#F5B900] border-gray-300 cursor-pointer"
+                        title="Select All"
+                      />
+                    </th>
                     <th className="py-3 px-4">Customer</th>
                     <th className="py-3 px-4">Mobile</th>
                     <th className="py-3 px-4">Bike / Model</th>
@@ -180,12 +257,18 @@ export const EnquiriesListPage: React.FC = () => {
                     <th className="py-3 px-4">Preferred Slot</th>
                     <th className="py-3 px-4">Status</th>
                     <th className="py-3 px-4">Created</th>
-                    <th className="py-3 px-4 text-right">Action</th>
+                    <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.map((enq) => (
-                    <EnquiryTableRow key={enq.id} enquiry={enq} />
+                    <EnquiryTableRow
+                      key={enq.id}
+                      enquiry={enq}
+                      isSelected={selectedIds.includes(enq.id)}
+                      onToggleSelect={() => handleToggleSelect(enq.id)}
+                      onDelete={() => handleDeleteSingle(enq.id, enq.customer.name)}
+                    />
                   ))}
                 </tbody>
               </table>
@@ -194,7 +277,11 @@ export const EnquiriesListPage: React.FC = () => {
             {/* Mobile Card List */}
             <div className="md:hidden space-y-3">
               {filtered.map((enq) => (
-                <EnquiryCardMobile key={enq.id} enquiry={enq} />
+                <EnquiryCardMobile
+                  key={enq.id}
+                  enquiry={enq}
+                  onDelete={() => handleDeleteSingle(enq.id, enq.customer.name)}
+                />
               ))}
             </div>
           </>

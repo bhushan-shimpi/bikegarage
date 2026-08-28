@@ -1,17 +1,39 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Phone, MessageCircle, Eye } from 'lucide-react';
+import { Phone, MessageCircle, Eye, Trash2 } from 'lucide-react';
 import { Enquiry } from '../../types/enquiry';
 import { StatusBadge } from '../common/StatusBadge';
 import { formatDate, formatPhone } from '../../utils/formatters';
 
 interface EnquiryTableRowProps {
   enquiry: Enquiry;
+  isSelected?: boolean;
+  onToggleSelect?: () => void;
+  onDelete?: () => void;
 }
 
-export const EnquiryTableRow: React.FC<EnquiryTableRowProps> = ({ enquiry }) => {
+export const EnquiryTableRow: React.FC<EnquiryTableRowProps> = ({
+  enquiry,
+  isSelected = false,
+  onToggleSelect,
+  onDelete,
+}) => {
   return (
-    <tr className="border-b border-gray-200 hover:bg-gray-50/80 transition-colors text-xs">
+    <tr
+      className={`border-b border-gray-200 transition-colors text-xs ${
+        isSelected ? 'bg-amber-50/70' : 'hover:bg-gray-50/80'
+      }`}
+    >
+      {/* Checkbox */}
+      <td className="py-4 px-3 text-center">
+        <input
+          type="checkbox"
+          checked={isSelected}
+          onChange={onToggleSelect}
+          className="w-4 h-4 rounded text-[#F5B900] focus:ring-[#F5B900] border-gray-300 cursor-pointer"
+        />
+      </td>
+
       {/* Customer */}
       <td className="py-4 px-4 font-semibold text-gray-900">
         <div className="flex flex-col">
@@ -99,13 +121,24 @@ export const EnquiryTableRow: React.FC<EnquiryTableRowProps> = ({ enquiry }) => 
 
       {/* Action */}
       <td className="py-4 px-4 text-right">
-        <Link
-          to={`/garage/enquiries/${enquiry.id}`}
-          className="inline-flex items-center gap-1 px-3 py-1.5 rounded bg-gray-100 hover:bg-[#F5B900] text-gray-700 hover:text-black font-bold uppercase tracking-wider text-[11px] border border-gray-200 transition-all shadow-2xs"
-        >
-          <span>Manage</span>
-          <Eye className="w-3.5 h-3.5" />
-        </Link>
+        <div className="flex items-center justify-end gap-1.5">
+          <Link
+            to={`/garage/enquiries/${enquiry.id}`}
+            className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded bg-gray-100 hover:bg-[#F5B900] text-gray-700 hover:text-black font-bold uppercase tracking-wider text-[11px] border border-gray-200 transition-all shadow-2xs"
+          >
+            <span>Manage</span>
+            <Eye className="w-3.5 h-3.5" />
+          </Link>
+          {onDelete && (
+            <button
+              onClick={onDelete}
+              className="p-1.5 rounded bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 transition-colors"
+              title="Delete Enquiry"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
       </td>
     </tr>
   );

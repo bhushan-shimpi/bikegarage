@@ -73,10 +73,10 @@ export const InquiryPage: React.FC = () => {
     setTimeout(() => setCopiedTicket(false), 2000);
   };
 
-  const onSubmit = (data: InquirySchemaType) => {
+  const onSubmit = async (data: InquirySchemaType) => {
     setIsSubmitting(true);
     try {
-      const created = enquiryService.create({
+      const created = await enquiryService.create({
         type: 'quote_request',
         customer: {
           name: data.fullName,

@@ -795,10 +795,10 @@ export const AdminRepairHistoryPage: React.FC = () => {
                   </span>
                 </div>
 
-                {/* Select directly from Parts Inventory */}
+                {/* Select directly from Parts Price List */}
                 <div className="p-2.5 rounded-xl bg-amber-50/70 border border-amber-200 space-y-1.5">
                   <label className="block text-[10px] font-bold uppercase tracking-wider text-amber-900">
-                    📦 Pick from Parts Inventory (Auto-fills price):
+                    🏷️ Pick from Spare Parts Price List (Auto-fills price):
                   </label>
                   <select
                     className="w-full bg-white border border-amber-300 rounded-lg px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] font-medium"
@@ -813,10 +813,10 @@ export const AdminRepairHistoryPage: React.FC = () => {
                     }}
                     value=""
                   >
-                    <option value="">-- Choose Spare Part from List --</option>
+                    <option value="">-- Choose Spare Part from Price List --</option>
                     {allParts.map((p) => (
                       <option key={p.id} value={p.id}>
-                        {p.name} ({p.category}) — ₹{p.price} ({p.stockQuantity} in stock)
+                        {p.name} ({p.category}) — ₹{p.price}
                       </option>
                     ))}
                   </select>

@@ -50,7 +50,7 @@ export const enquiryService = {
     return all.find((e) => e.id === id || e.ticketNumber === id);
   },
 
-  create: (data: {
+  create: async (data: {
     type?: 'general_inquiry' | 'quote_request' | 'breakdown' | 'appointment';
     customer: {
       name: string;
@@ -77,7 +77,7 @@ export const enquiryService = {
       quickIssues?: string[];
     };
     attachments?: string[];
-  }): Enquiry => {
+  }): Promise<Enquiry> => {
     const all = enquiryService.getAll();
     const count = all.length + 1;
     const padded = String(count).padStart(3, '0');
@@ -85,9 +85,26 @@ export const enquiryService = {
     const newTicket = `CAC-2026-${padded}`;
     const nowIso = new Date().toISOString();
 
+    let finalId = newId;
+    let finalTicket = newTicket;
+
+    // Save synchronously to Supabase PostgreSQL
+    try {
+      const res = await apiClient.post<{ success: boolean; data: { id: string; ticketNumber: string } }>(
+        '/api/enquiries',
+        data
+      );
+      if (res.success && res.data) {
+        finalId = res.data.id;
+        finalTicket = res.data.ticketNumber;
+      }
+    } catch (err) {
+      console.warn('Saved enquiry locally, live sync pending:', err);
+    }
+
     const newEnquiry: Enquiry = {
-      id: newId,
-      ticketNumber: newTicket,
+      id: finalId,
+      ticketNumber: finalTicket,
       type: data.type || 'general_inquiry',
       customer: data.customer,
       bike: data.bike,
@@ -98,7 +115,7 @@ export const enquiryService = {
         {
           id: `note-${Date.now()}`,
           author: 'System',
-          text: `Enquiry generated via website portal for ${data.bike.brand || ''} ${data.bike.model} (${data.service.serviceName}).`,
+          text: `Enquiry generated for ${data.bike.brand || ''} ${data.bike.model} (${data.service.serviceName}).`,
           createdAt: nowIso,
         },
       ],
@@ -106,24 +123,39 @@ export const enquiryService = {
       updatedAt: nowIso,
     };
 
-    const updatedList = [newEnquiry, ...all];
+    const updatedList = [newEnquiry, ...all.filter((e) => e.id !== finalId)];
     storage.set(storage.keys.ENQUIRIES, updatedList);
 
-    // Save asynchronously to Supabase PostgreSQL
-    apiClient.post<{ success: boolean; data: { id: string; ticketNumber: string } }>('/api/enquiries', data)
-      .then((res) => {
-        if (res.success && res.data) {
-          const latest = storage.get<Enquiry[]>(storage.keys.ENQUIRIES, []);
-          const idx = latest.findIndex((e) => e.id === newEnquiry.id);
-          if (idx !== -1) {
-            latest[idx].ticketNumber = res.data.ticketNumber;
-            storage.set(storage.keys.ENQUIRIES, latest);
-          }
-        }
-      })
-      .catch((err) => console.warn('Saved enquiry locally, live sync pending:', err));
-
     return newEnquiry;
+  },
+
+  delete: async (id: string): Promise<boolean> => {
+    const all = storage.get<Enquiry[]>(storage.keys.ENQUIRIES, []);
+    const updated = all.filter((e) => e.id !== id && e.ticketNumber !== id);
+    storage.set(storage.keys.ENQUIRIES, updated);
+
+    try {
+      await apiClient.delete(`/api/enquiries/${id}`);
+      return true;
+    } catch (err) {
+      console.warn('Failed to delete enquiry from backend, removed locally:', err);
+      return true;
+    }
+  },
+
+  deleteMultiple: async (ids: string[]): Promise<boolean> => {
+    if (!ids || ids.length === 0) return true;
+    const all = storage.get<Enquiry[]>(storage.keys.ENQUIRIES, []);
+    const updated = all.filter((e) => !ids.includes(e.id) && !ids.includes(e.ticketNumber));
+    storage.set(storage.keys.ENQUIRIES, updated);
+
+    try {
+      await apiClient.post('/api/enquiries/bulk-delete', { ids });
+      return true;
+    } catch (err) {
+      console.warn('Failed to bulk delete enquiries from backend, removed locally:', err);
+      return true;
+    }
   },
 
   updateStatus: (id: string, newStatus: EnquiryStatus): Enquiry | null => {

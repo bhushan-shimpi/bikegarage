@@ -151,6 +151,38 @@ export const createEnquiry = async (req: Request, res: Response): Promise<void> 
     );
 
     const row = result.rows[0];
+
+    // Ensure customer profile is registered in customers table
+    try {
+      const cleanMobile = customer.mobile.trim().replace(/\D/g, '').slice(-10);
+      const custId = `cust-${cleanMobile}`;
+      await query(
+        `INSERT INTO customers (
+          id, name, mobile, email, city, bike_brand, bike_model, registration_number
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        ON CONFLICT (mobile) DO UPDATE SET
+          name = EXCLUDED.name,
+          email = COALESCE(EXCLUDED.email, customers.email),
+          city = COALESCE(EXCLUDED.city, customers.city),
+          bike_brand = COALESCE(EXCLUDED.bike_brand, customers.bike_brand),
+          bike_model = COALESCE(EXCLUDED.bike_model, customers.bike_model),
+          registration_number = COALESCE(EXCLUDED.registration_number, customers.registration_number),
+          updated_at = NOW()`,
+        [
+          custId,
+          customer.name.trim(),
+          cleanMobile,
+          customer.email?.trim() || null,
+          customer.city?.trim() || 'Pahur',
+          bike?.brand?.trim() || null,
+          bike?.model?.trim() || null,
+          bike?.registrationNumber?.trim() || null,
+        ]
+      );
+    } catch (custErr) {
+      console.warn('Could not auto-register customer from enquiry:', custErr);
+    }
+
     res.status(201).json({
       success: true,
       data: {
@@ -239,5 +271,29 @@ export const deleteEnquiry = async (req: Request, res: Response): Promise<void> 
   } catch (error) {
     console.error('Error deleting enquiry:', error);
     res.status(500).json({ success: false, error: 'Failed to delete enquiry' });
+  }
+};
+
+export const deleteMultipleEnquiries = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      res.status(400).json({ success: false, error: 'Array of enquiry ids is required' });
+      return;
+    }
+
+    const result = await query(
+      'DELETE FROM enquiries WHERE id = ANY($1::text[]) RETURNING id',
+      [ids]
+    );
+
+    res.json({
+      success: true,
+      message: `${result.rowCount} enquiries deleted successfully`,
+      deletedCount: result.rowCount,
+    });
+  } catch (error) {
+    console.error('Error bulk deleting enquiries:', error);
+    res.status(500).json({ success: false, error: 'Failed to bulk delete enquiries' });
   }
 };

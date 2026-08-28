@@ -177,7 +177,7 @@ export const RestorationFormPage: React.FC = () => {
   };
 
   // Handle Submit
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) {
       window.scrollTo({ top: 320, behavior: 'smooth' });
@@ -208,7 +208,7 @@ CONFIRMED BY: ${formData.customerSignature || formData.customerName}
 DATE: ${formData.formDate}
     `.trim();
 
-    const created = enquiryService.create({
+    const created = await enquiryService.create({
       type: 'quote_request',
       customer: {
         name: formData.customerName,

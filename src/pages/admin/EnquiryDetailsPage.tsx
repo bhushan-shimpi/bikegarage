@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
   Phone,
@@ -12,6 +12,7 @@ import {
   AlertCircle,
   FileText,
   Send,
+  Trash2,
 } from 'lucide-react';
 import { enquiryService } from '../../services/enquiryService';
 import { Enquiry, EnquiryStatus } from '../../types/enquiry';
@@ -21,6 +22,7 @@ import { Button } from '../../components/common/Button';
 
 export const EnquiryDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
   const [enquiry, setEnquiry] = useState<Enquiry | null>(null);
   const [newNoteText, setNewNoteText] = useState('');
@@ -69,6 +71,18 @@ export const EnquiryDetailsPage: React.FC = () => {
       showFeedback('Internal note added to record timeline.');
     }
     setIsAddingNote(false);
+  };
+
+  const handleDelete = async () => {
+    if (
+      enquiry &&
+      window.confirm(
+        `Are you sure you want to permanently delete enquiry "${enquiry.ticketNumber}" for ${enquiry.customer.name}?`
+      )
+    ) {
+      await enquiryService.delete(enquiry.id);
+      navigate('/garage/enquiries');
+    }
   };
 
   if (!enquiry) {
@@ -137,6 +151,15 @@ export const EnquiryDetailsPage: React.FC = () => {
             <MessageCircle className="w-4 h-4" />
             <span>WhatsApp</span>
           </a>
+
+          <button
+            onClick={handleDelete}
+            className="px-3.5 py-2 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors"
+            title="Delete Enquiry"
+          >
+            <Trash2 className="w-4 h-4" />
+            <span>Delete</span>
+          </button>
         </div>
       </div>
 
