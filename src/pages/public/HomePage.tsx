@@ -6,7 +6,6 @@ import { WhyChooseUs } from '../../components/home/WhyChooseUs';
 import { OwnerAchievementSection } from '../../components/home/OwnerAchievementSection';
 import { GallerySection } from '../../components/home/GallerySection';
 import { HowItWorks } from '../../components/home/HowItWorks';
-import { ProjectsShowcase } from '../../components/home/ProjectsShowcase';
 import { InstagramHighlight } from '../../components/home/InstagramHighlight';
 import { TestimonialsSection } from '../../components/home/TestimonialsSection';
 import { CTASection } from '../../components/home/CTASection';
@@ -37,9 +36,6 @@ export const HomePage: React.FC = () => {
 
       {/* 8. How It Works */}
       <HowItWorks />
-
-      {/* 7. Our Projects */}
-      <ProjectsShowcase />
 
       {/* 8. Customer Reviews */}
       <TestimonialsSection />

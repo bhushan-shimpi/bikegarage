@@ -3,7 +3,6 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { Navbar } from '../components/common/Navbar';
 import { Footer } from '../components/common/Footer';
 import { LiveFloatingHelp } from '../components/common/LiveFloatingHelp';
-import { MobileActionBar } from '../components/common/MobileActionBar';
 
 export const PublicLayout: React.FC = () => {
   const { pathname } = useLocation();
@@ -17,14 +16,12 @@ export const PublicLayout: React.FC = () => {
       <Navbar />
       {/* Spacer to offset fixed navbar height */}
       <div className="h-14 sm:h-16 shrink-0" />
-      <main className="flex-1 pb-16 sm:pb-0">
+      <main className="flex-1">
         <Outlet />
       </main>
       <Footer />
       {/* Live interactive floating help on all pages */}
       <LiveFloatingHelp />
-      {/* Mobile action bar for quick booking and WhatsApp */}
-      <MobileActionBar />
     </div>
   );
 };

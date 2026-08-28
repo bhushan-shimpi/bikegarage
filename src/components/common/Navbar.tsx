@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
-import { Phone, X, MessageCircle, Calendar, ChevronRight } from 'lucide-react';
+import { Phone, X, Calendar, ChevronRight } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -200,71 +200,12 @@ export const Navbar: React.FC = () => {
               ))}
             </nav>
 
-            {/* Bottom CTAs */}
-            <div className="px-4 py-5 border-t border-[#1E1E1E] space-y-2.5 bg-[#0A0A0A]">
-              <div className="flex items-center justify-center gap-2 py-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">Workshop Open • Pahur</span>
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <a
-                  href="tel:+917387448878"
-                  className="py-2.5 px-2 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md transition-all"
-                >
-                  <Phone className="w-3.5 h-3.5 fill-black" />
-                  <span>7387448878</span>
-                </a>
-                <a
-                  href="tel:+919503853143"
-                  className="py-2.5 px-2 rounded-xl bg-[#202020] hover:bg-[#282828] border border-[#333] text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md transition-all"
-                >
-                  <Phone className="w-3.5 h-3.5 text-[#F5B900]" />
-                  <span>9503853143</span>
-                </a>
-              </div>
-              <a
-                href="https://wa.me/917387448878?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3 rounded-xl bg-[#0D2318] hover:bg-emerald-800 text-emerald-400 font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 border border-emerald-900 transition-all"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>WhatsApp Us</span>
-              </a>
-              <a
-                href="https://www.instagram.com/chaudhari_auto_pahur/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#833AB4]/25 via-[#E1306C]/25 to-[#FD1D1D]/25 hover:from-[#833AB4]/40 hover:via-[#E1306C]/40 hover:to-[#FD1D1D]/40 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 border border-[#E1306C]/40 transition-all"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-4 h-4 text-[#E1306C]"
-                >
-                  <rect x="2" y="2" width="20" height="20" rx="5.5" ry="5.5" />
-                  <circle cx="12" cy="12" r="4.2" />
-                  <circle cx="17.6" cy="6.4" r="0.6" fill="currentColor" stroke="none" />
-                </svg>
-                <span>@chaudhari_auto_pahur (Workshop)</span>
-              </a>
-              <a
-                href="https://www.instagram.com/_rcvlogs_/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-2 rounded-xl bg-[#151515] hover:bg-[#1f1f1f] text-neutral-300 hover:text-white font-bold text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 border border-[#2B2B2B] transition-all"
-              >
-                <span className="text-[#F5B900]">★</span>
-                <span>@_rcvlogs_ (Owner's Vlogs)</span>
-              </a>
+            {/* Bottom Staff Link */}
+            <div className="px-4 py-4 border-t border-[#1E1E1E] bg-[#0A0A0A]">
               <Link
                 to="/garage/login"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-center text-[11px] text-neutral-600 hover:text-neutral-400 pt-1 transition-colors"
+                className="block text-center text-xs text-neutral-500 hover:text-neutral-300 py-1 transition-colors"
               >
                 Garage Staff Login →
               </Link>
