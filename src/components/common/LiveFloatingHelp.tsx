@@ -57,13 +57,23 @@ export const LiveFloatingHelp: React.FC = () => {
             </a>
 
             <a
-              href="https://instagram.com/"
+              href="https://www.instagram.com/chaudhari_auto_pahur/"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-gradient-to-r from-[#833ab4]/20 via-[#fd1d1d]/20 to-[#fcb045]/20 hover:from-[#833ab4]/30 hover:via-[#fd1d1d]/30 hover:to-[#fcb045]/30 border border-pink-500/30 text-pink-300 font-bold text-[11px] uppercase tracking-wider transition-all"
+              className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-gradient-to-r from-[#833ab4]/25 via-[#fd1d1d]/25 to-[#fcb045]/25 hover:from-[#833ab4]/35 hover:via-[#fd1d1d]/35 hover:to-[#fcb045]/35 border border-pink-500/30 text-pink-300 font-bold text-[11px] uppercase tracking-wider transition-all"
             >
               <Sparkles className="w-3 h-3 text-pink-400" />
-              <span>Watch Live Reels on Instagram</span>
+              <span>@chaudhari_auto_pahur (Workshop Reels)</span>
+            </a>
+
+            <a
+              href="https://www.instagram.com/_rcvlogs_/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full flex items-center justify-center gap-2 py-1.5 px-4 rounded-xl bg-black/40 hover:bg-black/60 border border-neutral-800 text-neutral-300 font-semibold text-[10px] uppercase tracking-wider transition-all"
+            >
+              <span className="text-[#F5B900]">★</span>
+              <span>@_rcvlogs_ (Owner Moto Vlogs)</span>
             </a>
           </div>
 

@@ -92,11 +92,11 @@ export const Navbar: React.FC = () => {
             <div className="hidden lg:flex items-center gap-2.5">
               {/* Instagram Official link */}
               <a
-                href="https://instagram.com/"
+                href="https://www.instagram.com/chaudhari_auto_pahur/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                title="Follow Chaudhari Auto on Instagram"
+                title="Follow @chaudhari_auto_pahur on Instagram"
                 className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#FD1D1D] via-[#E1306C] to-[#833AB4] hover:scale-110 active:scale-95 text-white flex items-center justify-center transition-all shadow-sm hover:shadow-[0_0_15px_rgba(225,48,108,0.5)]"
               >
                 <svg
@@ -250,7 +250,7 @@ export const Navbar: React.FC = () => {
                 <span>WhatsApp Us</span>
               </a>
               <a
-                href="https://instagram.com/"
+                href="https://www.instagram.com/chaudhari_auto_pahur/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#833AB4]/25 via-[#E1306C]/25 to-[#FD1D1D]/25 hover:from-[#833AB4]/40 hover:via-[#E1306C]/40 hover:to-[#FD1D1D]/40 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 border border-[#E1306C]/40 transition-all"
@@ -268,7 +268,16 @@ export const Navbar: React.FC = () => {
                   <circle cx="12" cy="12" r="4.2" />
                   <circle cx="17.6" cy="6.4" r="0.6" fill="currentColor" stroke="none" />
                 </svg>
-                <span>Follow on Instagram</span>
+                <span>@chaudhari_auto_pahur (Workshop)</span>
+              </a>
+              <a
+                href="https://www.instagram.com/_rcvlogs_/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-2 rounded-xl bg-[#151515] hover:bg-[#1f1f1f] text-neutral-300 hover:text-white font-bold text-[11px] uppercase tracking-wider flex items-center justify-center gap-2 border border-[#2B2B2B] transition-all"
+              >
+                <span className="text-[#F5B900]">★</span>
+                <span>@_rcvlogs_ (Owner's Vlogs)</span>
               </a>
               <Link
                 to="/garage/login"

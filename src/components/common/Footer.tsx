@@ -89,44 +89,64 @@ export const Footer: React.FC = () => {
             </div>
 
             {/* Social Icons row */}
-            <div className="pt-2 flex items-center gap-2.5">
-              <a
-                href="https://wa.me/919822000000"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="WhatsApp"
-                className="w-8 h-8 rounded-lg bg-[#1C1C1C] hover:bg-[#25D366] hover:text-white flex items-center justify-center text-neutral-300 transition-all hover:scale-110"
-              >
-                <MessageCircle className="w-4 h-4" />
-              </a>
-
-              {/* Instagram Official Icon with gradient */}
-              <a
-                href="https://instagram.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Follow on Instagram"
-                title="Follow Chaudhari Auto on Instagram"
-                className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#FD1D1D] via-[#E1306C] to-[#833AB4] text-white flex items-center justify-center transition-all hover:scale-110 shadow-md shadow-pink-900/30"
-              >
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-4 h-4 text-white"
+            <div className="pt-2 space-y-2">
+              <div className="flex items-center gap-2.5">
+                <a
+                  href="https://wa.me/919822000000"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp"
+                  className="w-8 h-8 rounded-lg bg-[#1C1C1C] hover:bg-[#25D366] hover:text-white flex items-center justify-center text-neutral-300 transition-all hover:scale-110"
                 >
-                  <rect x="2" y="2" width="20" height="20" rx="5.5" ry="5.5" />
-                  <circle cx="12" cy="12" r="4.2" />
-                  <circle cx="17.6" cy="6.4" r="0.6" fill="currentColor" stroke="none" />
-                </svg>
-              </a>
+                  <MessageCircle className="w-4 h-4" />
+                </a>
 
-              <span className="text-[11px] text-neutral-400 font-medium ml-1">
-                @chaudhariautocentre
-              </span>
+                {/* Workshop Instagram */}
+                <a
+                  href="https://www.instagram.com/chaudhari_auto_pahur/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Workshop Instagram"
+                  title="Follow @chaudhari_auto_pahur on Instagram"
+                  className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#FD1D1D] via-[#E1306C] to-[#833AB4] text-white flex items-center justify-center transition-all hover:scale-110 shadow-md shadow-pink-900/30"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="w-4 h-4 text-white"
+                  >
+                    <rect x="2" y="2" width="20" height="20" rx="5.5" ry="5.5" />
+                    <circle cx="12" cy="12" r="4.2" />
+                    <circle cx="17.6" cy="6.4" r="0.6" fill="currentColor" stroke="none" />
+                  </svg>
+                </a>
+
+                <a
+                  href="https://www.instagram.com/chaudhari_auto_pahur/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] text-neutral-300 hover:text-[#F5B900] font-bold transition-colors"
+                >
+                  @chaudhari_auto_pahur
+                </a>
+              </div>
+
+              {/* Owner's Instagram */}
+              <div className="flex items-center gap-2 pl-0.5">
+                <span className="text-[10px] uppercase font-bold text-[#F5B900] tracking-wider">Owner:</span>
+                <a
+                  href="https://www.instagram.com/_rcvlogs_/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] text-neutral-400 hover:text-pink-400 font-semibold transition-colors flex items-center gap-1"
+                >
+                  <span>@_rcvlogs_ (Moto Vlogs)</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>

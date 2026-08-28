@@ -88,32 +88,66 @@ export const InstagramHighlight: React.FC = () => {
               </div>
             </ScrollReveal>
 
-            {/* CTA Button */}
+            {/* CTA Buttons for Workshop & Owner */}
             <ScrollReveal direction="up" delay={400}>
-              <div className="pt-2">
+              <div className="pt-2 flex flex-wrap items-center gap-3">
                 <a
-                  href="https://instagram.com/"
+                  href="https://www.instagram.com/chaudhari_auto_pahur/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-gradient-to-r from-[#833AB4] via-[#E1306C] to-[#FD1D1D] hover:opacity-95 active:scale-95 text-white font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-[#E1306C]/25 transition-all"
+                  className="inline-flex items-center gap-2.5 px-5 py-3 rounded-xl bg-gradient-to-r from-[#833AB4] via-[#E1306C] to-[#FD1D1D] hover:opacity-95 active:scale-95 text-white font-extrabold text-xs uppercase tracking-wider shadow-lg shadow-[#E1306C]/25 transition-all"
                 >
-                  <span>Connect With Us on Instagram</span>
+                  <span>@chaudhari_auto_pahur (Workshop)</span>
                   <ExternalLink className="w-4 h-4" />
+                </a>
+
+                <a
+                  href="https://www.instagram.com/_rcvlogs_/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-[#181818] hover:bg-[#222222] border border-neutral-700 hover:border-neutral-500 text-neutral-200 hover:text-white font-bold text-xs uppercase tracking-wider transition-all"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#F5B900]" />
+                  <span>@_rcvlogs_ (Owner)</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-neutral-400" />
                 </a>
               </div>
             </ScrollReveal>
           </div>
 
-          {/* Right Column: The Instagram Card from User Upload */}
-          <div className="lg:col-span-5 flex justify-center lg:justify-end">
+          {/* Right Column: The Instagram Card & Owner's Channel */}
+          <div className="lg:col-span-5 flex flex-col items-center lg:items-end">
             <ScrollReveal direction="up" delay={200}>
               <div className="animate-insta-card">
                 <InstagramCard
                   followersCount={1400000}
-                  handle="@chaudhariautocentre"
-                  linkUrl="https://instagram.com/"
+                  handle="@chaudhari_auto_pahur"
+                  linkUrl="https://www.instagram.com/chaudhari_auto_pahur/"
                 />
               </div>
+
+              {/* Owner's Instagram Channel Pill */}
+              <a
+                href="https://www.instagram.com/_rcvlogs_/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 w-full max-w-[280px] xs:max-w-[300px] p-3 rounded-2xl bg-[#141414] border border-[#2A2A2A] hover:border-[#E1306C]/60 transition-all flex items-center justify-between group shadow-lg text-white"
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#FD1D1D] via-[#E1306C] to-[#833AB4] flex items-center justify-center text-white shrink-0 group-hover:scale-110 transition-transform">
+                    <Sparkles className="w-4 h-4 text-white" />
+                  </div>
+                  <div className="text-left">
+                    <span className="text-[10px] uppercase font-bold text-neutral-400 block tracking-wider leading-none">
+                      Owner's Moto Vlogs
+                    </span>
+                    <span className="text-xs font-black text-white group-hover:text-[#F5B900] transition-colors">
+                      @_rcvlogs_
+                    </span>
+                  </div>
+                </div>
+                <ExternalLink className="w-3.5 h-3.5 text-neutral-400 group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </a>
             </ScrollReveal>
           </div>
 

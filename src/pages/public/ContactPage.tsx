@@ -60,7 +60,7 @@ export const ContactPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Instagram Official */}
+                  {/* Instagram Profiles */}
                   <div className="flex items-start gap-3 p-3.5 rounded-xl bg-gradient-to-r from-purple-50 via-pink-50 to-amber-50 border border-pink-200 hover:border-pink-300 transition-colors">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#FD1D1D] via-[#E1306C] to-[#833AB4] flex items-center justify-center text-white shrink-0 mt-0.5 shadow-sm">
                       <svg
@@ -77,16 +77,26 @@ export const ContactPage: React.FC = () => {
                         <circle cx="17.6" cy="6.4" r="0.6" fill="currentColor" stroke="none" />
                       </svg>
                     </div>
-                    <div>
-                      <span className="font-bold text-gray-900 block">Instagram Reels & DM</span>
-                      <a
-                        href="https://instagram.com/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#E1306C] hover:underline mt-0.5 block font-bold"
-                      >
-                        Follow @chaudhariautocentre →
-                      </a>
+                    <div className="space-y-1">
+                      <span className="font-bold text-gray-900 block">Instagram (Reels & DMs)</span>
+                      <div>
+                        <a
+                          href="https://www.instagram.com/chaudhari_auto_pahur/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#E1306C] hover:underline block font-bold"
+                        >
+                          @chaudhari_auto_pahur (Workshop) →
+                        </a>
+                        <a
+                          href="https://www.instagram.com/_rcvlogs_/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-neutral-600 hover:text-pink-600 block text-[11px] font-semibold mt-0.5"
+                        >
+                          @_rcvlogs_ (Owner Moto Vlogs) →
+                        </a>
+                      </div>
                     </div>
                   </div>
 

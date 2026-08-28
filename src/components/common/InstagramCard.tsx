@@ -11,8 +11,8 @@ interface InstagramCardProps {
 
 export const InstagramCard: React.FC<InstagramCardProps> = ({
   followersCount = 1400000,
-  handle = '@chaudhariautocentre',
-  linkUrl = 'https://instagram.com/',
+  handle = '@chaudhari_auto_pahur',
+  linkUrl = 'https://www.instagram.com/chaudhari_auto_pahur/',
   className = '',
 }) => {
   return (
@@ -27,7 +27,7 @@ export const InstagramCard: React.FC<InstagramCardProps> = ({
         boxShadow:
           '0 20px 45px -10px rgba(216, 41, 115, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.18)',
       }}
-      aria-label="Follow Chaudhari Auto on Instagram"
+      aria-label="Follow @chaudhari_auto_pahur on Instagram"
     >
       {/* Glossy top reflective glare */}
       <div className="absolute -top-24 -left-24 w-56 h-56 bg-white/20 rounded-full blur-2xl pointer-events-none group-hover:scale-125 transition-transform duration-700" />
