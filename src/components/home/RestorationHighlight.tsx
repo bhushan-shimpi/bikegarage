@@ -187,26 +187,26 @@ export const RestorationHighlight: React.FC = () => {
         </ScrollReveal>
 
         {/* ─── CTAs ─── */}
-        <div className="flex flex-row items-center justify-center gap-3 sm:gap-4">
-          <Link to="/services/bike-restoration" className="flex-1 sm:flex-initial">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+          <Link to="/restoration-form" className="w-full sm:w-auto">
             <Button
-              variant="secondary"
-              size="md"
-              leftIcon={<Wrench className="w-4 h-4 text-[#F5B900] shrink-0" />}
-              className="w-full sm:w-auto text-xs sm:text-sm py-3 px-5 sm:px-6"
+              variant="primary"
+              size="lg"
+              rightIcon={<ArrowRight className="w-4 h-4 shrink-0" />}
+              className="w-full sm:w-auto font-black text-xs sm:text-sm py-3.5 px-7 shadow-xl shadow-[#F5B900]/25 bg-[#F5B900] text-black hover:bg-[#ffc71c]"
             >
-              <span>View Restoration Details</span>
+              <span>Fill Restoration Form • फॉर्म भरा</span>
             </Button>
           </Link>
 
-          <Link to="/inquiry?service=Bike%20Restoration" className="flex-1 sm:flex-initial">
+          <Link to="/services/bike-restoration" className="w-full sm:w-auto">
             <Button
-              variant="primary"
-              size="md"
-              rightIcon={<ArrowRight className="w-4 h-4 shrink-0" />}
-              className="w-full sm:w-auto font-black text-xs sm:text-sm py-3 px-5 sm:px-6 shadow-lg shadow-[#F5B900]/20"
+              variant="secondary"
+              size="lg"
+              leftIcon={<Wrench className="w-4 h-4 text-[#F5B900] shrink-0" />}
+              className="w-full sm:w-auto text-xs sm:text-sm py-3.5 px-6"
             >
-              <span>Get Restoration Estimate</span>
+              <span>View Restoration Details</span>
             </Button>
           </Link>
         </div>

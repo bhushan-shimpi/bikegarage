@@ -26,6 +26,7 @@ export const Navbar: React.FC = () => {
   const navLinks = [
     { name: 'Home', path: '/', emoji: '🏠' },
     { name: 'Services', path: '/services', emoji: '🔧' },
+    { name: 'Restoration Form', path: '/restoration-form', emoji: '🏍️', badge: 'New' },
     { name: 'About Us', path: '/about', emoji: '🏆' },
     { name: 'Book / Enquire', path: '/book-appointment', emoji: '📅' },
     { name: 'Contact Us', path: '/contact', emoji: '📍' },
@@ -69,7 +70,7 @@ export const Navbar: React.FC = () => {
                   to={link.path}
                   end={link.path === '/'}
                   className={({ isActive }) =>
-                    `text-sm font-semibold transition-colors relative py-1.5 tracking-wide group ${
+                    `text-sm font-semibold transition-colors relative py-1.5 tracking-wide group flex items-center gap-1.5 ${
                       isActive ? 'text-[#F5B900]' : 'text-neutral-300 hover:text-white'
                     }`
                   }
@@ -77,6 +78,11 @@ export const Navbar: React.FC = () => {
                   {({ isActive }) => (
                     <>
                       <span>{link.name}</span>
+                      {link.badge && (
+                        <span className="px-1.5 py-0.5 rounded bg-[#F5B900]/15 text-[#F5B900] text-[9px] font-black uppercase tracking-wider border border-[#F5B900]/30 leading-none">
+                          {link.badge}
+                        </span>
+                      )}
                       <span
                         className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-[#F5B900] transition-all duration-200 ${
                           isActive ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0 group-hover:opacity-40 group-hover:scale-x-100'

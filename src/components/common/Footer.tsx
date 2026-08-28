@@ -49,6 +49,12 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link to="/restoration-form" className="hover:text-[#F5B900] transition-colors flex items-center gap-1.5 text-white font-semibold">
+                  <span>🏍️ Bike Restoration Form</span>
+                  <span className="px-1.5 py-0.5 text-[9px] bg-[#F5B900]/20 text-[#F5B900] rounded font-bold">New</span>
+                </Link>
+              </li>
+              <li>
                 <Link to="/about" className="hover:text-[#F5B900] transition-colors">
                   About Us (Since 1994)
                 </Link>

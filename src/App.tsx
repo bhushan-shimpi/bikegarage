@@ -11,6 +11,7 @@ import { ServicesPage } from './pages/public/ServicesPage';
 import { AboutPage } from './pages/public/AboutPage';
 import { InquiryPage } from './pages/public/InquiryPage';
 import { ContactPage } from './pages/public/ContactPage';
+import { RestorationFormPage } from './pages/public/RestorationFormPage';
 import { NotFoundPage } from './pages/public/NotFoundPage';
 
 // Admin Pages
@@ -34,6 +35,8 @@ export const App: React.FC = () => {
           {/* Single unified page for Book Appointment & Inquiry */}
           <Route path="inquiry" element={<InquiryPage />} />
           <Route path="book-appointment" element={<InquiryPage />} />
+          <Route path="restoration-form" element={<RestorationFormPage />} />
+          <Route path="bike-restoration-form" element={<RestorationFormPage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
