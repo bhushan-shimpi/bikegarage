@@ -10,16 +10,17 @@ import {
   ThumbsUp,
 } from 'lucide-react';
 import { OptimizedImage } from '../common/OptimizedImage';
+import { ScrollReveal } from '../common/ScrollReveal';
 
 export const WhyChooseUs: React.FC = () => {
   const points = [
-    { title: '30+ Years of Experience', icon: Award },
+    { title: '30+ Years Experience', icon: Award },
     { title: 'Trusted Since 1994', icon: Calendar },
-    { title: 'Experienced Mechanics', icon: Wrench },
-    { title: 'Quality Spare Parts', icon: ShieldCheck },
+    { title: 'Master Mechanics', icon: Wrench },
+    { title: '100% Genuine Spares', icon: ShieldCheck },
     { title: 'Transparent Pricing', icon: Tag },
     { title: 'Complete Bike Care', icon: Bike },
-    { title: 'Restoration Expertise', icon: Sparkles },
+    { title: 'Restoration Mastery', icon: Sparkles },
     { title: 'Customer Satisfaction', icon: ThumbsUp },
   ];
 
@@ -28,9 +29,10 @@ export const WhyChooseUs: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
           {/* Left Column: Heading & 8 Points Grid */}
-          <div className="lg:col-span-6 space-y-6">
+          <ScrollReveal direction="left" className="lg:col-span-6 space-y-6">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-neutral-400">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#F5B900] flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#F5B900] animate-ping" />
                 Pahur's Premier Two-Wheeler Hub
               </span>
               <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-wide text-white font-sans mt-1">
@@ -49,31 +51,32 @@ export const WhyChooseUs: React.FC = () => {
                 return (
                   <div
                     key={index}
-                    className="flex items-center gap-3 p-3 rounded-xl bg-[#141414] border border-[#222222] hover:border-[#F5B900]/40 transition-colors"
+                    className="flex items-center gap-3 p-3 rounded-xl bg-[#141414] border border-[#222222] hover:border-[#F5B900]/50 hover:bg-[#181818] hover:translate-x-1 transition-all duration-300 group cursor-default"
                   >
-                    <div className="w-8 h-8 rounded-lg bg-[#F5B900]/10 text-[#F5B900] flex items-center justify-center shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-[#F5B900]/10 text-[#F5B900] flex items-center justify-center shrink-0 group-hover:bg-[#F5B900] group-hover:text-black transition-colors">
                       <Icon className="w-4 h-4" />
                     </div>
-                    <span className="text-xs sm:text-sm font-bold text-neutral-200">
+                    <span className="text-xs sm:text-sm font-bold text-neutral-200 group-hover:text-white transition-colors">
                       {point.title}
                     </span>
                   </div>
                 );
               })}
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right Column: Motorcycle technician working on bike */}
-          <div className="lg:col-span-6">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-[#222222]">
+          <ScrollReveal direction="right" className="lg:col-span-6">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-[#222222] group">
               <OptimizedImage
                 src="/images/why-choose-us.jpg"
                 alt="Motorcycle repair and engine assembly at Chaudhari Auto"
-                className="w-full h-80 sm:h-[420px] object-cover object-center"
+                className="w-full h-80 sm:h-[420px] object-cover object-center group-hover:scale-105 transition-transform duration-700"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-              <div className="absolute bottom-4 left-4 right-4 p-3 bg-black/80 backdrop-blur rounded-lg border border-white/10 text-xs">
-                <span className="text-[#F5B900] font-bold block uppercase">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute bottom-4 left-4 right-4 p-3 bg-black/85 backdrop-blur-md rounded-xl border border-white/10 text-xs">
+                <span className="text-[#F5B900] font-bold block uppercase flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
                   Pahur Workshop Service Bay
                 </span>
                 <span className="text-neutral-300">
@@ -81,7 +84,7 @@ export const WhyChooseUs: React.FC = () => {
                 </span>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

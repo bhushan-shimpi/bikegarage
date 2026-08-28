@@ -90,6 +90,30 @@ export const Navbar: React.FC = () => {
 
             {/* Desktop CTAs */}
             <div className="hidden lg:flex items-center gap-2.5">
+              {/* Instagram Official link */}
+              <a
+                href="https://instagram.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                title="Follow Chaudhari Auto on Instagram"
+                className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#FD1D1D] via-[#E1306C] to-[#833AB4] hover:scale-110 active:scale-95 text-white flex items-center justify-center transition-all shadow-sm hover:shadow-[0_0_15px_rgba(225,48,108,0.5)]"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-4 h-4 text-white"
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="5.5" ry="5.5" />
+                  <circle cx="12" cy="12" r="4.2" />
+                  <circle cx="17.6" cy="6.4" r="0.6" fill="currentColor" stroke="none" />
+                </svg>
+              </a>
+
               <a
                 href="https://wa.me/919822000000"
                 target="_blank"
@@ -224,6 +248,27 @@ export const Navbar: React.FC = () => {
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>WhatsApp Us</span>
+              </a>
+              <a
+                href="https://instagram.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#833AB4]/25 via-[#E1306C]/25 to-[#FD1D1D]/25 hover:from-[#833AB4]/40 hover:via-[#E1306C]/40 hover:to-[#FD1D1D]/40 text-white font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 border border-[#E1306C]/40 transition-all"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-4 h-4 text-[#E1306C]"
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="5.5" ry="5.5" />
+                  <circle cx="12" cy="12" r="4.2" />
+                  <circle cx="17.6" cy="6.4" r="0.6" fill="currentColor" stroke="none" />
+                </svg>
+                <span>Follow on Instagram</span>
               </a>
               <Link
                 to="/garage/login"

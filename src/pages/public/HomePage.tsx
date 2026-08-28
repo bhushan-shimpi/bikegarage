@@ -6,6 +6,7 @@ import { RestorationHighlight } from '../../components/home/RestorationHighlight
 import { WhyChooseUs } from '../../components/home/WhyChooseUs';
 import { HowItWorks } from '../../components/home/HowItWorks';
 import { ProjectsShowcase } from '../../components/home/ProjectsShowcase';
+import { InstagramHighlight } from '../../components/home/InstagramHighlight';
 import { TestimonialsSection } from '../../components/home/TestimonialsSection';
 import { CTASection } from '../../components/home/CTASection';
 
@@ -33,10 +34,13 @@ export const HomePage: React.FC = () => {
       {/* 7. Our Projects */}
       <ProjectsShowcase />
 
-      {/* 8. Customer Reviews */}
+      {/* 8. Live Instagram Community Highlight */}
+      <InstagramHighlight />
+
+      {/* 9. Customer Reviews */}
       <TestimonialsSection />
 
-      {/* 9. Final CTA Banner */}
+      {/* 10. Final CTA Banner */}
       <CTASection />
     </div>
   );

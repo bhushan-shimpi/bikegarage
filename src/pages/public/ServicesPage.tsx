@@ -4,6 +4,7 @@ import { PageBanner } from '../../components/common/PageBanner';
 import { ServiceCard } from '../../components/services/ServiceCard';
 import { bikeServicesService } from '../../services/bikeServicesService';
 import { HelpCircle } from 'lucide-react';
+import { ScrollReveal } from '../../components/common/ScrollReveal';
 
 export const ServicesPage: React.FC = () => {
   const [services, setServices] = useState(bikeServicesService.getAll());
@@ -29,8 +30,10 @@ export const ServicesPage: React.FC = () => {
         {/* 12 Services Grid — 2 columns on mobile */}
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-10 sm:py-14">
           <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
-            {services.map((service) => (
-              <ServiceCard key={service.id} service={service} />
+            {services.map((service, idx) => (
+              <ScrollReveal key={service.id} direction="up" delay={(idx % 4) * 80}>
+                <ServiceCard service={service} />
+              </ScrollReveal>
             ))}
           </div>
         </div>

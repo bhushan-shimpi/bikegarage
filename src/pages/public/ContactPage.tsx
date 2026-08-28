@@ -1,6 +1,7 @@
 import React from 'react';
 import { Phone, Mail, MapPin, Clock, MessageCircle, Navigation } from 'lucide-react';
 import { PageBanner } from '../../components/common/PageBanner';
+import { ScrollReveal } from '../../components/common/ScrollReveal';
 
 export const ContactPage: React.FC = () => {
   return (
@@ -13,9 +14,10 @@ export const ContactPage: React.FC = () => {
           <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
               {/* Left Column: Contact Information */}
-              <div className="lg:col-span-5 space-y-6">
+              <ScrollReveal direction="left" className="lg:col-span-5 space-y-6">
                 <div>
-                  <span className="text-xs font-bold uppercase tracking-wider text-[#DFA500]">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#DFA500] flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
                     Pahur Two-Wheeler Workshop
                   </span>
                   <h2 className="text-xl sm:text-2xl font-black uppercase text-gray-900 font-sans tracking-tight mt-1">
@@ -28,32 +30,62 @@ export const ContactPage: React.FC = () => {
 
                 <div className="space-y-4 text-xs text-gray-700">
                   {/* Phone */}
-                  <div className="flex items-start gap-3 p-3.5 rounded-xl bg-gray-50 border border-gray-100">
+                  <div className="flex items-start gap-3 p-3.5 rounded-xl bg-gray-50 border border-gray-100 hover:border-gray-300 transition-colors">
                     <div className="w-8 h-8 rounded-full bg-[#FFF9E6] border border-[#F5B900] flex items-center justify-center text-[#DFA500] shrink-0 mt-0.5">
                       <Phone className="w-4 h-4" />
                     </div>
                     <div>
                       <span className="font-bold text-gray-900 block">Phone Helpline</span>
-                      <a href="tel:+919822000000" className="text-gray-600 hover:text-black font-mono mt-0.5 block">
+                      <a href="tel:+919822000000" className="text-gray-600 hover:text-black font-mono mt-0.5 block font-bold">
                         +91 98220 00000
                       </a>
                     </div>
                   </div>
 
                   {/* WhatsApp */}
-                  <div className="flex items-start gap-3 p-3.5 rounded-xl bg-gray-50 border border-gray-100">
-                    <div className="w-8 h-8 rounded-full bg-emerald-50 border border-emerald-400 flex items-center justify-center text-emerald-600 shrink-0 mt-0.5">
+                  <div className="flex items-start gap-3 p-3.5 rounded-xl bg-emerald-50/50 border border-emerald-100 hover:border-emerald-300 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-emerald-100 border border-emerald-400 flex items-center justify-center text-emerald-600 shrink-0 mt-0.5">
                       <MessageCircle className="w-4 h-4" />
                     </div>
                     <div>
-                      <span className="font-bold text-gray-900 block">WhatsApp Support</span>
+                      <span className="font-bold text-gray-900 block">WhatsApp Support (Live)</span>
                       <a
                         href="https://wa.me/919822000000?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-emerald-700 hover:underline mt-0.5 block font-medium"
+                        className="text-emerald-700 hover:underline mt-0.5 block font-bold"
                       >
-                        Chat Directly On WhatsApp
+                        Chat Directly On WhatsApp →
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Instagram Official */}
+                  <div className="flex items-start gap-3 p-3.5 rounded-xl bg-gradient-to-r from-purple-50 via-pink-50 to-amber-50 border border-pink-200 hover:border-pink-300 transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#FD1D1D] via-[#E1306C] to-[#833AB4] flex items-center justify-center text-white shrink-0 mt-0.5 shadow-sm">
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.3"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="w-4 h-4 text-white"
+                      >
+                        <rect x="2" y="2" width="20" height="20" rx="5.5" ry="5.5" />
+                        <circle cx="12" cy="12" r="4.2" />
+                        <circle cx="17.6" cy="6.4" r="0.6" fill="currentColor" stroke="none" />
+                      </svg>
+                    </div>
+                    <div>
+                      <span className="font-bold text-gray-900 block">Instagram Reels & DM</span>
+                      <a
+                        href="https://instagram.com/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#E1306C] hover:underline mt-0.5 block font-bold"
+                      >
+                        Follow @chaudhariautocentre →
                       </a>
                     </div>
                   </div>
@@ -129,11 +161,11 @@ export const ContactPage: React.FC = () => {
                     <span>Get Directions</span>
                   </a>
                 </div>
-              </div>
+              </ScrollReveal>
 
               {/* Right Column: Google Maps Embed */}
-              <div className="lg:col-span-7">
-                <div className="relative w-full h-80 sm:h-full min-h-[380px] rounded-xl overflow-hidden border border-gray-300 shadow-inner bg-gray-100">
+              <ScrollReveal direction="right" className="lg:col-span-7">
+                <div className="relative w-full h-80 sm:h-full min-h-[380px] rounded-xl overflow-hidden border border-gray-300 shadow-inner bg-gray-100 group">
                   <iframe
                     title="Chaudhari Auto Centre Pahur Location Map"
                     src="https://maps.google.com/maps?q=Pahur,%20Jalgaon,%20Maharashtra&t=&z=14&ie=UTF8&iwloc=&output=embed"
@@ -142,11 +174,14 @@ export const ContactPage: React.FC = () => {
                   />
                   {/* Pin overlay card */}
                   <div className="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-2 rounded-lg shadow-md border border-gray-200 text-xs">
-                    <span className="font-bold text-gray-900 block">Chaudhari Auto Centre</span>
+                    <span className="font-bold text-gray-900 block flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                      Chaudhari Auto Centre
+                    </span>
                     <span className="text-[11px] text-[#DFA500] font-semibold">Pahur, Maharashtra (Est. 1994)</span>
                   </div>
                 </div>
-              </div>
+              </ScrollReveal>
             </div>
           </div>
         </div>

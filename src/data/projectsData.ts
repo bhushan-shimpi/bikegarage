@@ -18,8 +18,8 @@ export const projectsData: ProjectItem[] = [
     ],
     result: 'Complete bike makeover! Engine purrs like day one with 48+ kmpl mileage and pristine mirror gloss body finish.',
     completionTime: '12 Days',
-    beforeImage: '/images/services/bike-restoration.jpg',
-    afterImage: '/images/hero-bike.jpg',
+    beforeImage: '/images/about/bay3-restoration.jpg',
+    afterImage: '/images/services/bike-painting.jpg',
     isFeatured: true
   },
   {
@@ -39,7 +39,7 @@ export const projectsData: ProjectItem[] = [
     result: 'Iconic 2-stroke exhaust ring-a-ding note restored with instant front wheel lift acceleration and head-turning retro shine.',
     completionTime: '18 Days',
     beforeImage: '/images/about/bay3-restoration.jpg',
-    afterImage: '/images/why-choose-us.jpg',
+    afterImage: '/images/services/bike-restoration.jpg',
     isFeatured: true
   },
   {
@@ -59,7 +59,7 @@ export const projectsData: ProjectItem[] = [
     result: 'Trademark Royal Enfield deep rhythmic thump back without any oil drops, feather-soft clutch lever, and silky ride quality.',
     completionTime: '3 Days',
     beforeImage: '/images/services/engine-repair.jpg',
-    afterImage: '/images/about/bay2-engine.jpg',
+    afterImage: '/images/why-choose-us.jpg',
     isFeatured: true
   }
 ];

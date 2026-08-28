@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Sparkles, CheckCircle2, ArrowRight, Wrench } from 'lucide-react';
 import { BeforeAfterSlider } from '../common/BeforeAfterSlider';
 import { Button } from '../common/Button';
+import { ScrollReveal } from '../common/ScrollReveal';
 
 export const RestorationHighlight: React.FC = () => {
   const restorationPhases = [
@@ -24,35 +25,39 @@ export const RestorationHighlight: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 rounded-full border border-[#F5B900]/40 bg-[#F5B900]/10 text-[#F5B900] text-xs font-extrabold uppercase tracking-widest">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>Signature Garage Specialty</span>
+        <ScrollReveal direction="up">
+          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
+            <div className="inline-flex items-center gap-2 px-3 py-1 mb-4 rounded-full border border-[#F5B900]/40 bg-[#F5B900]/10 text-[#F5B900] text-xs font-extrabold uppercase tracking-widest">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Signature Garage Specialty</span>
+            </div>
+
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white mb-3 font-sans">
+              BIKE RESTORATION
+            </h2>
+
+            {/* Main Statement */}
+            <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#F5B900] mb-4 tracking-wide font-sans">
+              जुनी Bike पुन्हा नवीन करून देतो!
+            </div>
+
+            {/* Description */}
+            <p className="text-sm sm:text-base text-neutral-300 max-w-2xl mx-auto leading-relaxed">
+              Complete inspection, engine work, body work, paint work, electrical work, parts replacement आणि final detailing. We breathe new life into classic two-wheelers with master level craftsmanship.
+            </p>
           </div>
-
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white mb-3 font-sans">
-            BIKE RESTORATION
-          </h2>
-
-          {/* Main Statement */}
-          <div className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#F5B900] mb-4 tracking-wide font-sans">
-            जुनी Bike पुन्हा नवीन करून देतो!
-          </div>
-
-          {/* Description */}
-          <p className="text-sm sm:text-base text-neutral-300 max-w-2xl mx-auto leading-relaxed">
-            Complete inspection, engine work, body work, paint work, electrical work, parts replacement आणि final detailing. We breathe new life into classic two-wheelers with master level craftsmanship.
-          </p>
-        </div>
+        </ScrollReveal>
 
         {/* Before & After Interactive Showcase */}
-        <div className="mb-12 sm:mb-14">
-          <BeforeAfterSlider
-            bikeName="1996 Yamaha RX100 Retro Master Restoration"
-            beforeImage="/images/services/bike-restoration.jpg"
-            afterImage="/images/hero-bike.jpg"
-          />
-        </div>
+        <ScrollReveal direction="up" delay={150}>
+          <div className="mb-12 sm:mb-14">
+            <BeforeAfterSlider
+              bikeName="1996 Yamaha RX100 Retro Master Restoration"
+              beforeImage="/images/about/bay3-restoration.jpg"
+              afterImage="/images/services/bike-restoration.jpg"
+            />
+          </div>
+        </ScrollReveal>
 
         {/* Restoration Process Highlights Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 mb-12">

@@ -89,16 +89,44 @@ export const Footer: React.FC = () => {
             </div>
 
             {/* Social Icons row */}
-            <div className="pt-2 flex items-center gap-2">
+            <div className="pt-2 flex items-center gap-2.5">
               <a
                 href="https://wa.me/919822000000"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
-                className="w-7 h-7 rounded bg-[#1C1C1C] hover:bg-[#F5B900] hover:text-black flex items-center justify-center text-neutral-300 transition-colors"
+                className="w-8 h-8 rounded-lg bg-[#1C1C1C] hover:bg-[#25D366] hover:text-white flex items-center justify-center text-neutral-300 transition-all hover:scale-110"
               >
-                <MessageCircle className="w-3.5 h-3.5" />
+                <MessageCircle className="w-4 h-4" />
               </a>
+
+              {/* Instagram Official Icon with gradient */}
+              <a
+                href="https://instagram.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Follow on Instagram"
+                title="Follow Chaudhari Auto on Instagram"
+                className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#FD1D1D] via-[#E1306C] to-[#833AB4] text-white flex items-center justify-center transition-all hover:scale-110 shadow-md shadow-pink-900/30"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-4 h-4 text-white"
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="5.5" ry="5.5" />
+                  <circle cx="12" cy="12" r="4.2" />
+                  <circle cx="17.6" cy="6.4" r="0.6" fill="currentColor" stroke="none" />
+                </svg>
+              </a>
+
+              <span className="text-[11px] text-neutral-400 font-medium ml-1">
+                @chaudhariautocentre
+              </span>
             </div>
           </div>
         </div>

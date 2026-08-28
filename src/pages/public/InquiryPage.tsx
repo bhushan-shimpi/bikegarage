@@ -15,6 +15,7 @@ import {
   Check,
 } from 'lucide-react';
 import { PageBanner } from '../../components/common/PageBanner';
+import { ScrollReveal } from '../../components/common/ScrollReveal';
 import { inquirySchema, InquirySchemaType } from '../../utils/validators';
 import { enquiryService } from '../../services/enquiryService';
 import { bikeServicesService } from '../../services/bikeServicesService';
@@ -192,11 +193,12 @@ export const InquiryPage: React.FC = () => {
           </div>
         ) : (
           /* Simplified Clean Form Card */
-          <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8">
-            <div className="text-center pb-6 mb-6 border-b border-gray-100">
-              <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-gray-900 font-sans">
-                Book Service or Send Enquiry
-              </h2>
+          <ScrollReveal direction="up">
+            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8">
+              <div className="text-center pb-6 mb-6 border-b border-gray-100">
+                <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-gray-900 font-sans">
+                  Book Service or Send Enquiry
+                </h2>
               <p className="text-xs text-gray-500 mt-1">
                 Fill the quick form below. Our Pahur workshop team will get back to you promptly.
               </p>
@@ -359,7 +361,8 @@ export const InquiryPage: React.FC = () => {
               </div>
             </form>
           </div>
-        )}
+        </ScrollReveal>
+      )}
       </div>
     </div>
   );

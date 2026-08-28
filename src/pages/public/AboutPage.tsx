@@ -2,6 +2,8 @@ import React from 'react';
 import { Check, Bike, Award, Users, Wrench } from 'lucide-react';
 import { PageBanner } from '../../components/common/PageBanner';
 import { OptimizedImage } from '../../components/common/OptimizedImage';
+import { AnimatedNumber } from '../../components/common/AnimatedNumber';
+import { ScrollReveal } from '../../components/common/ScrollReveal';
 
 export const AboutPage: React.FC = () => {
   const checkmarks = [
@@ -31,10 +33,10 @@ export const AboutPage: React.FC = () => {
   ];
 
   const stats = [
-    { number: '30+', label: 'Years Legacy (Est. 1994)', icon: Award },
-    { number: '10,000+', label: 'Happy Riders in Pahur', icon: Users },
-    { number: '15,000+', label: 'Bikes & Scooters Serviced', icon: Bike },
-    { number: '100%', label: 'Genuine Two-Wheeler Parts', icon: Wrench },
+    { value: 30, suffix: '+', label: 'Years Legacy (Est. 1994)', icon: Award },
+    { value: 10000, suffix: '+', formatWithCommas: true, label: 'Happy Riders in Pahur', icon: Users },
+    { value: 15000, suffix: '+', formatWithCommas: true, label: 'Bikes & Scooters Serviced', icon: Bike },
+    { value: 100, suffix: '%', label: 'Genuine Two-Wheeler Parts', icon: Wrench },
   ];
 
   return (
@@ -47,7 +49,7 @@ export const AboutPage: React.FC = () => {
           {/* Top Section: Story & Workshop Facade */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
             {/* Left: Text Story */}
-            <div className="lg:col-span-6 space-y-4">
+            <ScrollReveal direction="left" className="lg:col-span-6 space-y-4">
               <span className="text-xs font-bold uppercase tracking-wider text-gray-500">
                 Our Two-Wheeler Heritage
               </span>
@@ -79,15 +81,15 @@ export const AboutPage: React.FC = () => {
                   </div>
                 ))}
               </div>
-            </div>
+            </ScrollReveal>
 
             {/* Right: Workshop Photo */}
-            <div className="lg:col-span-6">
-              <div className="relative rounded-2xl overflow-hidden shadow-xl border border-gray-200">
+            <ScrollReveal direction="right" className="lg:col-span-6">
+              <div className="relative rounded-2xl overflow-hidden shadow-xl border border-gray-200 group">
                 <OptimizedImage
                   src="/images/about/workshop-facade.jpg"
                   alt="Chaudhari Auto Bike Workshop Pahur"
-                  className="w-full h-80 sm:h-96 object-cover"
+                  className="w-full h-80 sm:h-96 object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
                 <div className="absolute bottom-4 left-4 right-4 p-3 bg-black/80 backdrop-blur rounded-lg border border-white/10 text-xs text-white">
@@ -99,35 +101,39 @@ export const AboutPage: React.FC = () => {
                   </span>
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
 
           {/* Workshop Service Bays Gallery */}
           <div className="space-y-6">
-            <div className="text-center max-w-xl mx-auto">
-              <span className="text-xs font-bold uppercase tracking-wider text-gray-500">
-                Our Facilities
-              </span>
-              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-gray-900 font-sans mt-1">
-                Inside Pahur Two-Wheeler Workshop
-              </h3>
-              <div className="w-10 h-1 bg-[#F5B900] mx-auto mt-2 rounded-full" />
-            </div>
+            <ScrollReveal direction="up">
+              <div className="text-center max-w-xl mx-auto">
+                <span className="text-xs font-bold uppercase tracking-wider text-gray-500">
+                  Our Facilities
+                </span>
+                <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-gray-900 font-sans mt-1">
+                  Inside Pahur Two-Wheeler Workshop
+                </h3>
+                <div className="w-10 h-1 bg-[#F5B900] mx-auto mt-2 rounded-full" />
+              </div>
+            </ScrollReveal>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {workshopGallery.map((item, idx) => (
-                <div key={idx} className="group relative rounded-xl overflow-hidden shadow-sm border border-gray-200 h-52">
-                  <OptimizedImage
-                    src={item.img}
-                    alt={item.alt}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3 pointer-events-none">
-                    <span className="text-xs font-bold text-white leading-tight">
-                      {item.alt}
-                    </span>
+                <ScrollReveal key={idx} direction="up" delay={idx * 100}>
+                  <div className="group relative rounded-xl overflow-hidden shadow-sm border border-gray-200 h-52">
+                    <OptimizedImage
+                      src={item.img}
+                      alt={item.alt}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3 pointer-events-none">
+                      <span className="text-xs font-bold text-white leading-tight">
+                        {item.alt}
+                      </span>
+                    </div>
                   </div>
-                </div>
+                </ScrollReveal>
               ))}
             </div>
           </div>
@@ -141,17 +147,24 @@ export const AboutPage: React.FC = () => {
             {stats.map((st, i) => {
               const Icon = st.icon;
               return (
-                <div key={i} className="space-y-1.5 flex flex-col items-center">
-                  <div className="w-10 h-10 rounded-full bg-[#181818] border border-[#303030] flex items-center justify-center text-[#F5B900] mb-2">
-                    <Icon className="w-5 h-5" />
+                <ScrollReveal key={i} direction="up" delay={i * 120}>
+                  <div className="space-y-1.5 flex flex-col items-center group">
+                    <div className="w-10 h-10 rounded-full bg-[#181818] border border-[#303030] flex items-center justify-center text-[#F5B900] mb-2 group-hover:border-[#F5B900] group-hover:scale-110 transition-all">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#F5B900] font-sans tracking-tight block">
+                      <AnimatedNumber
+                        value={st.value}
+                        suffix={st.suffix}
+                        formatWithCommas={st.formatWithCommas}
+                        duration={2000}
+                      />
+                    </span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-neutral-300 block">
+                      {st.label}
+                    </span>
                   </div>
-                  <span className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#F5B900] font-sans tracking-tight block">
-                    {st.number}
-                  </span>
-                  <span className="text-xs font-bold uppercase tracking-wider text-neutral-300 block">
-                    {st.label}
-                  </span>
-                </div>
+                </ScrollReveal>
               );
             })}
           </div>

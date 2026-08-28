@@ -5,6 +5,7 @@ import { projectsData } from '../../data/projectsData';
 import { ProjectItem } from '../../types/project';
 import { Modal } from '../common/Modal';
 import { Button } from '../common/Button';
+import { ScrollReveal } from '../common/ScrollReveal';
 
 export const ProjectsShowcase: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
@@ -12,21 +13,23 @@ export const ProjectsShowcase: React.FC = () => {
   return (
     <section className="py-20 bg-[#0E0E0E] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <SectionHeading
-          badge="Proven Craftsmanship"
-          title="OUR WORK / PROJECTS"
-          subtitle="Real projects completed at our workshop — engineered to perfection"
-          marathiSubtitle="आम्ही केलेल्या काही खास कामांची झलक"
-          align="center"
-        />
+        <ScrollReveal direction="up">
+          <SectionHeading
+            badge="Proven Craftsmanship"
+            title="OUR WORK / PROJECTS"
+            subtitle="Real projects completed at our workshop — engineered to perfection"
+            marathiSubtitle="आम्ही केलेल्या काही खास कामांची झलक"
+            align="center"
+          />
+        </ScrollReveal>
 
         {/* Project Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projectsData.slice(0, 3).map((project) => (
-            <div
-              key={project.id}
-              className="bg-[#151515] rounded-xl border border-[#262626] overflow-hidden flex flex-col justify-between hover:border-[#F5B900]/50 transition-all duration-300 group shadow-lg"
-            >
+          {projectsData.slice(0, 3).map((project, idx) => (
+            <ScrollReveal key={project.id} direction="up" delay={idx * 120}>
+              <div
+                className="bg-[#151515] rounded-xl border border-[#262626] overflow-hidden flex flex-col justify-between hover:border-[#F5B900]/50 transition-all duration-300 group shadow-lg h-full"
+              >
               {/* Image with Tag */}
               <div className="relative h-56 w-full overflow-hidden bg-neutral-900">
                 <img
@@ -98,6 +101,7 @@ export const ProjectsShowcase: React.FC = () => {
                 </div>
               </div>
             </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>
