@@ -9,6 +9,7 @@ import {
   LogOut,
   ExternalLink,
   ChevronRight,
+  FileText,
 } from 'lucide-react';
 import { authService } from '../../services/authService';
 
@@ -31,6 +32,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
     { name: 'Enquiries & Bookings', path: '/garage/enquiries', icon: Inbox },
     { name: 'Services & Pricing', path: '/garage/services', icon: Tag },
     { name: 'Customer Directory', path: '/garage/customers', icon: Users },
+    { name: 'Bike Repair History', path: '/garage/repair-history', icon: FileText },
     { name: 'Garage Settings', path: '/garage/settings', icon: Settings },
   ];
 

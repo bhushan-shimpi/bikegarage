@@ -660,15 +660,47 @@ export const AdminServicesPricingPage: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                 <div>
                   <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">
-                    Image Path or URL
+                    Image Path, URL or Upload File
                   </label>
-                  <input
-                    type="text"
-                    value={formData.imageUrl}
-                    onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                    placeholder="/images/services/general-service.jpg"
-                    className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900]"
-                  />
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={formData.imageUrl}
+                      onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
+                      placeholder="/images/services/general-service.jpg"
+                      className="flex-1 bg-gray-50 border border-gray-300 rounded-lg px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900]"
+                    />
+                    <label className="px-2.5 py-1.5 rounded-lg bg-gray-100 border border-gray-300 hover:bg-gray-200 text-gray-700 font-bold text-[11px] cursor-pointer shrink-0">
+                      Upload
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const reader = new FileReader();
+                            reader.onload = (loadEvt) => {
+                              if (loadEvt.target?.result) {
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  imageUrl: loadEvt.target!.result as string,
+                                }));
+                              }
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  {formData.imageUrl && (
+                    <img
+                      src={formData.imageUrl}
+                      alt="Service Preview"
+                      className="w-12 h-12 rounded-lg object-cover border border-gray-200 mt-1.5"
+                    />
+                  )}
                 </div>
 
                 <div className="flex items-center gap-3 pt-4">

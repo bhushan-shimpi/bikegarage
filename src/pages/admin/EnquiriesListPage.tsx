@@ -11,6 +11,7 @@ import { enquiryService } from '../../services/enquiryService';
 import { Enquiry, EnquiryStatus } from '../../types/enquiry';
 import { EnquiryTableRow } from '../../components/admin/EnquiryTableRow';
 import { EnquiryCardMobile } from '../../components/admin/EnquiryCardMobile';
+import { CreateEnquiryModal } from '../../components/admin/CreateEnquiryModal';
 
 export const EnquiriesListPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -19,6 +20,7 @@ export const EnquiriesListPage: React.FC = () => {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | EnquiryStatus>(initialFilter);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const typeFilter = searchParams.get('type') || 'all';
 
   const loadData = () => {
@@ -99,17 +101,21 @@ export const EnquiriesListPage: React.FC = () => {
               <span className="hidden sm:inline">Reset Demo DB</span>
             </button>
 
-            <a
-              href="/inquiry"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-4 py-2 rounded-lg bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-colors"
+            <button
+              onClick={() => setIsCreateModalOpen(true)}
+              className="px-4 py-2 rounded-lg bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-black uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-colors"
             >
               <PlusCircle className="w-3.5 h-3.5" />
-              <span>Simulate Bike Inquiry</span>
-            </a>
+              <span>Create New Enquiry</span>
+            </button>
           </div>
         </div>
+
+        <CreateEnquiryModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          onSuccess={() => loadData()}
+        />
 
         {/* Status Filters Bar */}
         <div className="flex flex-wrap items-center gap-2 pt-3 border-t border-gray-100">

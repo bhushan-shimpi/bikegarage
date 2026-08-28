@@ -389,7 +389,52 @@ export async function initDb() {
       );
     `);
 
-    // 6. Seed default admin users if none exist
+    // 6. Create Customers Table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS customers (
+        id VARCHAR(64) PRIMARY KEY,
+        name VARCHAR(128) NOT NULL,
+        mobile VARCHAR(32) UNIQUE NOT NULL,
+        email VARCHAR(128),
+        city VARCHAR(128),
+        bike_brand VARCHAR(64),
+        bike_model VARCHAR(128),
+        registration_number VARCHAR(32),
+        current_km VARCHAR(32),
+        notes TEXT,
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+
+    // 7. Create Repair Records Table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS repair_records (
+        id VARCHAR(64) PRIMARY KEY,
+        job_number VARCHAR(32) UNIQUE NOT NULL,
+        customer_id VARCHAR(64),
+        customer_name VARCHAR(128) NOT NULL,
+        customer_mobile VARCHAR(32) NOT NULL,
+        bike_brand VARCHAR(64),
+        bike_model VARCHAR(128),
+        registration_number VARCHAR(32),
+        current_km VARCHAR(32),
+        service_type VARCHAR(128),
+        problem_details TEXT,
+        parts_replaced JSONB DEFAULT '[]'::jsonb,
+        labor_charge NUMERIC(10,2) DEFAULT 0,
+        parts_total NUMERIC(10,2) DEFAULT 0,
+        total_amount NUMERIC(10,2) DEFAULT 0,
+        payment_status VARCHAR(32) DEFAULT 'Paid',
+        status VARCHAR(32) DEFAULT 'Completed',
+        photos JSONB DEFAULT '[]'::jsonb,
+        repair_date VARCHAR(32),
+        created_at TIMESTAMPTZ DEFAULT NOW(),
+        updated_at TIMESTAMPTZ DEFAULT NOW()
+      );
+    `);
+
+    // 8. Seed default admin users if none exist
     const adminCheck = await client.query('SELECT COUNT(*) FROM staff_users');
     if (parseInt(adminCheck.rows[0].count, 10) === 0) {
       console.log('Seeding default staff/admin user...');

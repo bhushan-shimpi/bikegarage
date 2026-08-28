@@ -16,11 +16,13 @@ import { StatCard } from '../../components/admin/StatCard';
 import { enquiryService } from '../../services/enquiryService';
 import { Enquiry, EnquiryStatus } from '../../types/enquiry';
 import { formatDate, formatPhone } from '../../utils/formatters';
+import { CreateEnquiryModal } from '../../components/admin/CreateEnquiryModal';
 
 export const DashboardPage: React.FC = () => {
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | EnquiryStatus>('all');
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const loadData = () => {
     setEnquiries(enquiryService.getAll());
@@ -71,16 +73,21 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2.5">
-          <Link
-            to="/book-appointment"
-            target="_blank"
-            className="px-3.5 py-2 rounded-lg bg-[#F5B900] hover:bg-[#DFA500] text-black font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-colors"
+          <button
+            onClick={() => setIsCreateModalOpen(true)}
+            className="px-3.5 py-2 rounded-lg bg-[#F5B900] hover:bg-[#DFA500] text-black font-black text-xs uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-colors"
           >
             <PlusCircle className="w-3.5 h-3.5" />
-            <span>New Booking</span>
-          </Link>
+            <span>New Enquiry</span>
+          </button>
         </div>
       </div>
+
+      <CreateEnquiryModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSuccess={() => loadData()}
+      />
 
       {/* 4 Clickable Metric Cards that Filter the List */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
