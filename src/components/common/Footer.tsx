@@ -88,6 +88,14 @@ export const Footer: React.FC = () => {
                   Contact &amp; Location
                 </Link>
               </li>
+              <li className="pt-1.5 border-t border-[#1C1C1C]">
+                <Link
+                  to="/garage/login"
+                  className="text-neutral-500 hover:text-[#F5B900] transition-colors flex items-center gap-1.5 font-medium"
+                >
+                  <span>🔐 Garage Staff Login</span>
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -186,10 +194,17 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom copyright */}
-        <div className="pt-6 text-center text-neutral-500 text-[11px]">
-          © 2026 Chaudhari Auto Centre, Pahur. All Rights Reserved. Trusted Bike
-          Service Since 1994.
+        {/* Bottom copyright and staff login */}
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-neutral-500 text-[11px]">
+          <span>
+            © 2026 Chaudhari Auto Centre, Pahur. All Rights Reserved. Trusted Bike Service Since 1994.
+          </span>
+          <Link
+            to="/garage/login"
+            className="text-neutral-500 hover:text-[#F5B900] transition-colors font-medium flex items-center gap-1 hover:underline"
+          >
+            <span>Garage Staff Portal →</span>
+          </Link>
         </div>
       </div>
     </footer>
