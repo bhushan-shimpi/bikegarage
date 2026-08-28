@@ -83,7 +83,7 @@ export const HeroSection: React.FC = () => {
             alt="Bajaj Pulsar 125 Red and Black at Chaudhari Auto Centre"
             fetchPriority="high"
             decoding="async"
-            className="w-full h-full object-cover object-right scale-105 lg:scale-110 origin-right brightness-105 contrast-105"
+            className="w-full h-full object-cover object-right brightness-105 contrast-105"
           />
 
           {/* Left-to-right directional gradient: dark on left for text readability, open on right for bike */}
