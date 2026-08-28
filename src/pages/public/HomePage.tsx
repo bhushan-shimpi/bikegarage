@@ -15,7 +15,10 @@ export const HomePage: React.FC = () => {
       {/* 1. Hero */}
       <HeroSection />
 
-      {/* 2. Services */}
+      {/* 2. Stats & Social Cards Showcase */}
+      <InstagramHighlight />
+
+      {/* 3. Services */}
       <ServicesOverview />
 
       {/* 4. Bike Restoration */}
@@ -30,13 +33,10 @@ export const HomePage: React.FC = () => {
       {/* 7. Our Projects */}
       <ProjectsShowcase />
 
-      {/* 8. Live Instagram Community Highlight */}
-      <InstagramHighlight />
-
-      {/* 9. Customer Reviews */}
+      {/* 8. Customer Reviews */}
       <TestimonialsSection />
 
-      {/* 10. Final CTA Banner */}
+      {/* 9. Final CTA Banner */}
       <CTASection />
     </div>
   );

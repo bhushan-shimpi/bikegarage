@@ -183,15 +183,15 @@ export const servicesData: ServiceItem[] = [
     slug: 'bike-restoration',
     name: 'Bike Restoration',
     iconName: 'PackageCheck',
-    shortDescription: 'Complete vintage revival (RX100, Bullet 350, Chetak & Rajdoot)',
-    fullDescription: 'Signature service since 1994! Complete frame-up restoration for classic motorcycles like Yamaha RX100, RX135, Royal Enfield Bullet 350 Standard, Rajdoot, Bajaj Chetak, and Yezdi. Sandblasting, tank painting, nickel-chrome plating, and full engine rebuilds.',
+    shortDescription: 'Bringing classic motorcycles back to life with premium craftsmanship',
+    fullDescription: 'At Chaudhari Auto Centre, bike restoration is not just about repairing an old motorcycle. Our goal is to bring back its original beauty, performance, and finish while giving every detail the attention it deserves. Our restoration process begins with a complete inspection of the bike, followed by detailed work on each component according to its condition and requirement.',
     included: [
-      'Complete strip-down to bare chassis frame',
-      'Full engine & gearbox overhaul with OEM parts',
-      'Tank & side panel dent removal and 2K paint finish',
-      'Chromium & nickel plating on exhaust, rims, and handlebars',
-      'Complete new wiring harness, switches & cables',
-      'Final dyno tuning & road testing'
+      'Complete Inspection — Thorough inspection of every single part before restoration begins',
+      '100% Original Spare Parts — Using genuine OEM parts to maintain quality & reliability',
+      'Oven / Furnace Paint — Professional oven/bhatti paint process for smooth factory finish',
+      'Ceramic Coating — High-grade protective layer to preserve paint & enhance shine',
+      'Detailed Finishing — Obsessive attention to even the smallest nuts, bolts and chrome details',
+      'Quality First — Rigorous multi-point testing to meet our highest quality standards'
     ],
     estimatedTime: '1 - 3 Weeks',
     priceStartingAt: 'Custom Quote',

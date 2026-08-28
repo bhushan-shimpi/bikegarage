@@ -24,7 +24,7 @@ export const InstagramHighlight: React.FC = () => {
       label: 'Projects Handled',
     },
     {
-      value: 30,
+      value: 8,
       formatWithCommas: false,
       suffix: '+',
       label: 'Years of Experience',
