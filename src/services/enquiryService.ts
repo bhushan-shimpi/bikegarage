@@ -1,5 +1,4 @@
 import { Enquiry, EnquiryStatus, InternalNote } from '../types/enquiry';
-import { initialEnquiriesData } from '../data/enquiriesData';
 import { storage } from './storageService';
 import { apiClient } from './apiClient';
 
@@ -8,9 +7,10 @@ export const enquiryService = {
   syncWithBackend: async (): Promise<Enquiry[]> => {
     try {
       const res = await apiClient.get<{ success: boolean; data: Enquiry[] }>('/api/enquiries');
-      if (res.success && Array.isArray(res.data) && res.data.length > 0) {
-        storage.set(storage.keys.ENQUIRIES, res.data);
-        return res.data;
+      if (res.success && Array.isArray(res.data)) {
+        const realData = res.data.filter((e) => !['enq-001', 'enq-002', 'enq-003', 'enq-004', 'enq-005'].includes(e.id));
+        storage.set(storage.keys.ENQUIRIES, realData);
+        return realData;
       }
     } catch {
       // Graceful offline fallback to local cache
@@ -20,13 +20,19 @@ export const enquiryService = {
 
   initialize: (): void => {
     const existing = storage.get<Enquiry[] | null>(storage.keys.ENQUIRIES, null);
-    if (!existing || !Array.isArray(existing) || existing.length === 0) {
-      storage.set(storage.keys.ENQUIRIES, initialEnquiriesData);
+    if (!existing || !Array.isArray(existing)) {
+      storage.set(storage.keys.ENQUIRIES, []);
+      return;
+    }
+    // Clean out legacy mock records from existing local cache
+    const clean = existing.filter((e) => !['enq-001', 'enq-002', 'enq-003', 'enq-004', 'enq-005'].includes(e.id));
+    if (clean.length !== existing.length) {
+      storage.set(storage.keys.ENQUIRIES, clean);
     }
   },
 
   resetDefaults: (): void => {
-    storage.set(storage.keys.ENQUIRIES, initialEnquiriesData);
+    storage.set(storage.keys.ENQUIRIES, []);
   },
 
   getAll: (): Enquiry[] => {
@@ -35,7 +41,8 @@ export const enquiryService = {
     // Trigger background sync with live Supabase PostgreSQL
     enquiryService.syncWithBackend().catch(() => {});
 
-    return storage.get<Enquiry[]>(storage.keys.ENQUIRIES, initialEnquiriesData);
+    const cached = storage.get<Enquiry[]>(storage.keys.ENQUIRIES, []);
+    return (cached || []).filter((e) => !['enq-001', 'enq-002', 'enq-003', 'enq-004', 'enq-005'].includes(e.id));
   },
 
   getById: (id: string): Enquiry | undefined => {

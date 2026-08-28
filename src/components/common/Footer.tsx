@@ -1,6 +1,6 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Phone, Mail, MapPin, MessageCircle } from 'lucide-react';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 
 export const Footer: React.FC = () => {
   return (
@@ -25,10 +25,12 @@ export const Footer: React.FC = () => {
               </div>
             </Link>
             <p className="text-neutral-400 leading-relaxed text-xs pr-4">
-              Trusted two-wheeler bike service, repair and complete bike restoration centre in Pahur, Maharashtra since 1994.
+              Trusted two-wheeler bike service, repair and complete bike
+              restoration centre in Pahur, Maharashtra since 1994.
             </p>
             <p className="text-[11px] text-[#F5B900] font-medium">
-              ३० वर्षांची अखंड परंपरा — प्रामाणिक सेवा, दर्जेदार काम आणि अमूल्य विश्वास!
+              ३० वर्षांची अखंड परंपरा — प्रामाणिक सेवा, दर्जेदार काम आणि अमूल्य
+              विश्वास!
             </p>
           </div>
 
@@ -44,28 +46,45 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/services" className="hover:text-[#F5B900] transition-colors">
+                <Link
+                  to="/services"
+                  className="hover:text-[#F5B900] transition-colors"
+                >
                   Bike Services
                 </Link>
               </li>
               <li>
-                <Link to="/restoration-form" className="hover:text-[#F5B900] transition-colors flex items-center gap-1.5 text-white font-semibold">
+                <Link
+                  to="/restoration-form"
+                  className="hover:text-[#F5B900] transition-colors flex items-center gap-1.5 text-white font-semibold"
+                >
                   <span>🏍️ Bike Restoration Form</span>
-                  <span className="px-1.5 py-0.5 text-[9px] bg-[#F5B900]/20 text-[#F5B900] rounded font-bold">New</span>
+                  <span className="px-1.5 py-0.5 text-[9px] bg-[#F5B900]/20 text-[#F5B900] rounded font-bold">
+                    New
+                  </span>
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="hover:text-[#F5B900] transition-colors">
+                <Link
+                  to="/about"
+                  className="hover:text-[#F5B900] transition-colors"
+                >
                   About Us (Since 1994)
                 </Link>
               </li>
               <li>
-                <Link to="/book-appointment" className="hover:text-[#F5B900] transition-colors">
+                <Link
+                  to="/book-appointment"
+                  className="hover:text-[#F5B900] transition-colors"
+                >
                   Book / Enquire
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:text-[#F5B900] transition-colors">
+                <Link
+                  to="/contact"
+                  className="hover:text-[#F5B900] transition-colors"
+                >
                   Contact &amp; Location
                 </Link>
               </li>
@@ -89,13 +108,19 @@ export const Footer: React.FC = () => {
             </div>
             <div className="flex items-center gap-2.5 text-neutral-300">
               <Mail className="w-3.5 h-3.5 text-[#F5B900] shrink-0" />
-              <a href="mailto:chaudhariautopahur@gmail.com" className="hover:text-white">
+              <a
+                href="mailto:chaudhariautopahur@gmail.com"
+                className="hover:text-white"
+              >
                 chaudhariautopahur@gmail.com
               </a>
             </div>
             <div className="flex items-start gap-2.5 text-neutral-300">
               <MapPin className="w-3.5 h-3.5 text-[#F5B900] shrink-0 mt-0.5" />
-              <span>Main Road, Near Bus Stand, Pahur, Dist. Jalgaon, Maharashtra 424205</span>
+              <span>
+                Main Road, Near Bus Stand, Pahur, Dist. Jalgaon, Maharashtra
+                424205
+              </span>
             </div>
 
             {/* Social Icons row */}
@@ -129,9 +154,22 @@ export const Footer: React.FC = () => {
                     strokeLinejoin="round"
                     className="w-4 h-4 text-white"
                   >
-                    <rect x="2" y="2" width="20" height="20" rx="5.5" ry="5.5" />
+                    <rect
+                      x="2"
+                      y="2"
+                      width="20"
+                      height="20"
+                      rx="5.5"
+                      ry="5.5"
+                    />
                     <circle cx="12" cy="12" r="4.2" />
-                    <circle cx="17.6" cy="6.4" r="0.6" fill="currentColor" stroke="none" />
+                    <circle
+                      cx="17.6"
+                      cy="6.4"
+                      r="0.6"
+                      fill="currentColor"
+                      stroke="none"
+                    />
                   </svg>
                 </a>
 
@@ -144,26 +182,14 @@ export const Footer: React.FC = () => {
                   @chaudhari_auto_pahur
                 </a>
               </div>
-
-              {/* Owner's Instagram */}
-              <div className="flex items-center gap-2 pl-0.5">
-                <span className="text-[10px] uppercase font-bold text-[#F5B900] tracking-wider">Owner:</span>
-                <a
-                  href="https://www.instagram.com/_rcvlogs_/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[11px] text-neutral-400 hover:text-pink-400 font-semibold transition-colors flex items-center gap-1"
-                >
-                  <span>@_rcvlogs_ (Moto Vlogs)</span>
-                </a>
-              </div>
             </div>
           </div>
         </div>
 
         {/* Bottom copyright */}
         <div className="pt-6 text-center text-neutral-500 text-[11px]">
-          © 2026 Chaudhari Auto Centre, Pahur. All Rights Reserved. Trusted Bike Service Since 1994.
+          © 2026 Chaudhari Auto Centre, Pahur. All Rights Reserved. Trusted Bike
+          Service Since 1994.
         </div>
       </div>
     </footer>

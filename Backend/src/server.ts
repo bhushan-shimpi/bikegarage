@@ -10,6 +10,7 @@ import enquiryRoutes from './routes/enquiryRoutes.js';
 import restorationRoutes from './routes/restorationRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
+import serviceRoutes from './routes/serviceRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 dotenv.config();
@@ -40,6 +41,7 @@ app.get('/', (req, res) => {
 
 // API Routes
 app.use('/api/health', healthRoutes);
+app.use('/api/services', serviceRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/enquiries', enquiryRoutes);
 app.use('/api/restorations', restorationRoutes);

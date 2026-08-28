@@ -44,6 +44,21 @@ class ApiClient {
     return res.json();
   }
 
+  async put<T>(endpoint: string, body: any): Promise<T> {
+    const res = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'PUT',
+      headers: this.getHeaders(),
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `HTTP error! status: ${res.status}`);
+    }
+
+    return res.json();
+  }
+
   async patch<T>(endpoint: string, body: any): Promise<T> {
     const res = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'PATCH',

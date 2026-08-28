@@ -4,49 +4,16 @@ import { apiClient } from './apiClient';
 
 const STORAGE_KEY = 'chaudhari_auto_appointments';
 
-const defaultAppointments: Appointment[] = [
-  {
-    id: 'APT-101',
-    fullName: 'Sunil Mahajan',
-    mobile: '9822456781',
-    email: 'sunil.mahajan@gmail.com',
-    bikeBrand: 'Honda',
-    bikeModel: 'Shine 125',
-    registrationNumber: 'MH 19 BJ 4421',
-    currentKm: '24,500 km',
-    serviceRequired: 'General Bike Service',
-    preferredDate: '2026-08-28',
-    preferredTime: 'Morning (09:00 AM - 12:00 PM)',
-    additionalProblem: 'Cold start issue, engine missing at 40 km/h, and front brake lever loose.',
-    status: 'new',
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 'APT-102',
-    fullName: 'Ganesh Shimpi',
-    mobile: '9423187654',
-    email: 'ganesh.s@yahoo.com',
-    bikeBrand: 'Honda',
-    bikeModel: 'CB Shine 125 SP',
-    registrationNumber: 'MH 19 CK 1994',
-    currentKm: '42,000 km',
-    serviceRequired: 'Premium Bike Service',
-    preferredDate: '2026-08-29',
-    preferredTime: 'Afternoon (12:00 PM - 03:00 PM)',
-    additionalProblem: 'Engine oil replacement, brake overhaul, chain lubrication, and complete foam wash.',
-    status: 'confirmed',
-    createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-  },
-];
-
 export const appointmentService = {
   // Syncs from Supabase PostgreSQL API, updates local cache
   syncWithBackend: async (): Promise<Appointment[]> => {
     try {
       const res = await apiClient.get<{ success: boolean; data: Appointment[] }>('/api/appointments');
-      if (res.success && Array.isArray(res.data) && res.data.length > 0) {
-        storageService.set(STORAGE_KEY, res.data);
-        return res.data;
+      if (res.success && Array.isArray(res.data)) {
+        // Filter out any legacy dummy records
+        const realData = res.data.filter((a) => !['APT-101', 'APT-102'].includes(a.id));
+        storageService.set(STORAGE_KEY, realData);
+        return realData;
       }
     } catch {
       // Graceful offline fallback to local cache
@@ -58,12 +25,12 @@ export const appointmentService = {
     // Fire background sync with live Supabase PostgreSQL
     appointmentService.syncWithBackend().catch(() => {});
 
-    const saved = storageService.get<Appointment[]>(STORAGE_KEY, defaultAppointments);
-    if (!saved || saved.length === 0) {
-      storageService.set(STORAGE_KEY, defaultAppointments);
-      return defaultAppointments;
+    const saved = storageService.get<Appointment[]>(STORAGE_KEY, []);
+    const cleanReal = (saved || []).filter((a) => !['APT-101', 'APT-102'].includes(a.id));
+    if (saved && saved.length !== cleanReal.length) {
+      storageService.set(STORAGE_KEY, cleanReal);
     }
-    return saved;
+    return cleanReal;
   },
 
   getById: (id: string): Appointment | undefined => {
