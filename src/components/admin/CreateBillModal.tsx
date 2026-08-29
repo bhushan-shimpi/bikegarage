@@ -293,7 +293,7 @@ Helpline: +91 7387448878 / 9503853143`;
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-gray-900">
-                    Create Repair Bill / Job Card
+                    Create Repair Bill
                   </h3>
                   <p className="text-xs text-gray-500">
                     Calculate spare parts, labor, discount & generate customer invoice

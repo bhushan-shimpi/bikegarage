@@ -268,9 +268,9 @@ export const AdminCustomersPage: React.FC = () => {
                       setIsBillModalOpen(true);
                     }}
                     className="px-3 py-1.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-bold transition-colors shadow-2xs whitespace-nowrap cursor-pointer flex items-center gap-1 active:scale-95"
-                    title={`Create Job Card for ${item.name}`}
+                    title={`Create Bill for ${item.name}`}
                   >
-                    <span>+ Job Card</span>
+                    <span>+ Create Bill</span>
                   </button>
 
                   <button

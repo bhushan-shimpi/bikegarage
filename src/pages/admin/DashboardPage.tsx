@@ -120,7 +120,7 @@ export const DashboardPage: React.FC = () => {
             className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-95"
           >
             <Receipt className="w-4 h-4" />
-            <span>Create Bill / Job Card</span>
+            <span>Create Bill</span>
           </button>
 
           <button

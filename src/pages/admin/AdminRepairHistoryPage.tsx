@@ -163,7 +163,7 @@ export const AdminRepairHistoryPage: React.FC = () => {
           className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-sm transition-all shrink-0 active:scale-95 cursor-pointer"
         >
           <Receipt className="w-4 h-4" />
-          <span>Create Bill / Job Card</span>
+          <span>Create Bill</span>
         </button>
       </div>
 
@@ -359,8 +359,8 @@ export const AdminRepairHistoryPage: React.FC = () => {
           <h3 className="text-sm font-bold text-gray-700">
             No Repair Records Found
           </h3>
-          <p className="text-xs text-gray-500 mt-1">
-            Click "+ Create Bill / Job Card" above to create a job card for a serviced motorcycle.
+          <p className="text-xs text-gray-500 max-w-sm mt-1 mb-4">
+            Click "+ Create Bill" above to create a job card for a serviced motorcycle.
           </p>
         </div>
       ) : (
