@@ -222,53 +222,88 @@ export const AdminSettingsPage: React.FC = () => {
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50 text-gray-600 uppercase font-bold text-[10px]">
-                    <th className="py-3 px-4">Mechanic Name</th>
-                    <th className="py-3 px-4">Login Username / Mobile</th>
-                    <th className="py-3 px-4">Role & Access</th>
-                    <th className="py-3 px-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {mechanics.map((mech) => (
-                    <tr key={mech.id} className="hover:bg-gray-50/80 transition-colors">
-                      <td className="py-3 px-4 font-bold text-gray-900 flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-black text-xs flex items-center justify-center shrink-0">
-                          {mech.name.slice(0, 2).toUpperCase()}
-                        </div>
-                        <div>
-                          <span>{mech.name}</span>
-                          <span className="block text-[10px] text-gray-400 font-normal">
-                            Workshop Staff
-                          </span>
-                        </div>
-                      </td>
-                      <td className="py-3 px-4 text-gray-700 font-mono">
-                        {mech.mobile || mech.username}
-                      </td>
-                      <td className="py-3 px-4">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-900 border border-amber-200">
-                          <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                          Billing Only
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-right">
-                        <button
-                          onClick={() => handleDeleteMechanic(mech.id, mech.name)}
-                          className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-                          title="Delete account"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </td>
+            <>
+              {/* Desktop Table */}
+              <div className="hidden sm:block overflow-x-auto">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead>
+                    <tr className="border-b border-gray-200 bg-gray-50 text-gray-600 uppercase font-bold text-[10px]">
+                      <th className="py-3 px-4">Mechanic Name</th>
+                      <th className="py-3 px-4">Login Username / Mobile</th>
+                      <th className="py-3 px-4">Role & Access</th>
+                      <th className="py-3 px-4 text-right">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {mechanics.map((mech) => (
+                      <tr key={mech.id} className="hover:bg-gray-50/80 transition-colors">
+                        <td className="py-3 px-4 font-bold text-gray-900 flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-black text-xs flex items-center justify-center shrink-0">
+                            {mech.name.slice(0, 2).toUpperCase()}
+                          </div>
+                          <div>
+                            <span>{mech.name}</span>
+                            <span className="block text-[10px] text-gray-400 font-normal">
+                              Workshop Staff
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4 text-gray-700 font-mono">
+                          {mech.mobile || mech.username}
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-900 border border-amber-200">
+                            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                            Billing Only
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 text-right">
+                          <button
+                            onClick={() => handleDeleteMechanic(mech.id, mech.name)}
+                            className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Delete account"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Staff Cards View */}
+              <div className="sm:hidden divide-y divide-gray-100">
+                {mechanics.map((mech) => (
+                  <div key={mech.id} className="p-3.5 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-9 h-9 rounded-full bg-blue-100 text-blue-700 font-black text-xs flex items-center justify-center shrink-0">
+                        {mech.name.slice(0, 2).toUpperCase()}
+                      </div>
+                      <div className="min-w-0">
+                        <span className="font-bold text-gray-900 text-xs sm:text-sm block truncate">
+                          {mech.name}
+                        </span>
+                        <span className="text-[11px] text-gray-500 font-mono block">
+                          {mech.mobile || mech.username}
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-[9px] font-bold text-amber-800 bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200 mt-0.5">
+                          Billing Access Only
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => handleDeleteMechanic(mech.id, mech.name)}
+                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors shrink-0"
+                      title="Delete account"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </div>

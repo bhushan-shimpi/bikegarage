@@ -178,7 +178,8 @@ export const AdminCustomersPage: React.FC = () => {
         </div>
       ) : (
         <div className="bg-white border border-gray-200 rounded-2xl shadow-xs overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Desktop Table View */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="bg-gray-50/80 border-b border-gray-200 text-xs font-semibold text-gray-600">
@@ -291,6 +292,102 @@ export const AdminCustomersPage: React.FC = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile Touch Cards View (320px - 430px) */}
+          <div className="md:hidden divide-y divide-gray-100">
+            {filtered.map((item) => (
+              <div key={item.id || item.mobile} className="p-4 space-y-3">
+                {/* Top: Avatar, Name, Location & Delete */}
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-full bg-amber-100 text-amber-800 font-bold text-xs flex items-center justify-center shrink-0 border border-amber-200">
+                      {item.name.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <span className="font-bold text-gray-900 text-sm block">
+                        {item.name}
+                      </span>
+                      {item.city && (
+                        <span className="text-[11px] text-gray-500 font-medium">
+                          📍 {item.city}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => handleDelete(item.id || item.mobile, item.name)}
+                    className="p-1.5 rounded-lg text-gray-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                    title="Delete Customer"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+
+                {/* Bike & Number Plate Pill */}
+                <div className="p-2.5 rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-1.5 text-gray-800">
+                    <Bike className="w-4 h-4 text-[#DFA500] shrink-0" />
+                    <span className="font-bold">
+                      {item.bikeBrand} {item.bikeModel || 'Motorcycle'}
+                    </span>
+                  </div>
+                  {item.registrationNumber ? (
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-white text-gray-800 border border-gray-200 font-mono">
+                      {item.registrationNumber}
+                    </span>
+                  ) : (
+                    item.currentKm && (
+                      <span className="text-[11px] text-gray-500 font-mono">
+                        {item.currentKm} KM
+                      </span>
+                    )
+                  )}
+                </div>
+
+                {/* Mobile Actions: Call, WhatsApp, History, + Job Card */}
+                <div className="flex items-center justify-between gap-2 pt-1">
+                  <div className="flex items-center gap-1.5">
+                    <a
+                      href={`tel:+91${item.mobile}`}
+                      className="px-2.5 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold flex items-center gap-1 border border-gray-200"
+                      title="Call"
+                    >
+                      <Phone className="w-3.5 h-3.5 text-amber-700" />
+                      <span className="font-mono text-[11px]">{formatPhone(item.mobile)}</span>
+                    </a>
+
+                    <a
+                      href={`https://wa.me/91${item.mobile}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1.5 rounded-lg bg-[#25D366] text-white hover:bg-[#1EBE5D] transition-colors shadow-2xs"
+                      title="WhatsApp"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => handleViewHistory(item)}
+                      className="px-2.5 py-1.5 rounded-lg bg-amber-50 text-amber-950 border border-amber-300 text-xs font-bold flex items-center gap-1"
+                    >
+                      <History className="w-3.5 h-3.5 text-[#DFA500]" />
+                      <span>History</span>
+                    </button>
+
+                    <Link
+                      to="/garage/billing"
+                      className="px-2.5 py-1.5 rounded-lg bg-[#F5B900] text-black text-xs font-bold transition-colors whitespace-nowrap"
+                    >
+                      + Bill
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}

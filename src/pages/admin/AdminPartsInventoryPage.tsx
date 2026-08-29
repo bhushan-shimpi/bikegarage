@@ -256,56 +256,101 @@ export const AdminPartsInventoryPage: React.FC = () => {
             <p className="text-xs text-gray-400">Try changing your search query or category filter</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr className="bg-gray-50/80 border-b border-gray-200 text-xs font-semibold text-gray-600">
-                  <th className="py-3.5 px-4">Part Name</th>
-                  <th className="py-3.5 px-4">Category</th>
-                  <th className="py-3.5 px-4">Standard Selling Price (₹)</th>
-                  <th className="py-3.5 px-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {filtered.map((part) => (
-                  <tr key={part.id} className="hover:bg-gray-50/60 transition-colors">
-                    <td className="py-3.5 px-4 font-bold text-gray-900">
-                      <div className="flex items-center gap-2">
-                        <Wrench className="w-3.5 h-3.5 text-[#DFA500] shrink-0" />
-                        <span>{part.name}</span>
-                      </div>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-700 border border-gray-200">
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="bg-gray-50/80 border-b border-gray-200 text-xs font-semibold text-gray-600">
+                    <th className="py-3.5 px-4">Part Name</th>
+                    <th className="py-3.5 px-4">Category</th>
+                    <th className="py-3.5 px-4">Standard Selling Price (₹)</th>
+                    <th className="py-3.5 px-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {filtered.map((part) => (
+                    <tr key={part.id} className="hover:bg-gray-50/60 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-gray-900">
+                        <div className="flex items-center gap-2">
+                          <Wrench className="w-3.5 h-3.5 text-[#DFA500] shrink-0" />
+                          <span>{part.name}</span>
+                        </div>
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-700 border border-gray-200">
+                          {part.category}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-4 font-mono font-black text-sm text-emerald-800">
+                        ₹{part.price}
+                      </td>
+                      <td className="py-3.5 px-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            onClick={() => handleOpenEdit(part)}
+                            className="p-1.5 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-[#F5B900] hover:text-black transition-colors"
+                            title="Edit Price"
+                          >
+                            <Edit2 className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(part)}
+                            className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                            title="Delete Part"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Touch Cards View (320px - 430px) */}
+            <div className="md:hidden divide-y divide-gray-100">
+              {filtered.map((part) => (
+                <div key={part.id} className="p-3.5 flex items-center justify-between gap-3">
+                  <div className="min-w-0 flex-1 space-y-1">
+                    <div className="flex items-center gap-1.5">
+                      <Wrench className="w-3.5 h-3.5 text-[#DFA500] shrink-0" />
+                      <span className="font-bold text-gray-900 text-xs sm:text-sm truncate block">
+                        {part.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.2 rounded text-[9px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">
                         {part.category}
                       </span>
-                    </td>
-                    <td className="py-3.5 px-4 font-mono font-black text-sm text-emerald-800">
-                      ₹{part.price}
-                    </td>
-                    <td className="py-3.5 px-4 text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          onClick={() => handleOpenEdit(part)}
-                          className="p-1.5 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-[#F5B900] hover:text-black transition-colors"
-                          title="Edit Price"
-                        >
-                          <Edit2 className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(part)}
-                          className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
-                          title="Delete Part"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                      <span className="font-mono font-black text-xs text-emerald-800">
+                        ₹{part.price}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      onClick={() => handleOpenEdit(part)}
+                      className="px-2.5 py-1.5 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-[#F5B900] hover:text-black font-bold text-xs flex items-center gap-1 transition-colors"
+                      title="Edit Price"
+                    >
+                      <Edit2 className="w-3 h-3" />
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      onClick={() => handleDelete(part)}
+                      className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                      title="Delete Part"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
 
