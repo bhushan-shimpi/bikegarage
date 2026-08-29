@@ -5,6 +5,9 @@ import {
   Inbox,
   Wrench,
   Sparkles,
+  Tag,
+  Users,
+  ClipboardList,
   Settings,
   LogOut,
   ExternalLink,
@@ -31,6 +34,9 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
     { name: 'Enquiries', path: '/garage/enquiries', icon: Inbox },
     { name: 'Bike History', path: '/garage/repair-history', icon: Wrench },
     { name: 'Restorations', path: '/garage/restorations', icon: Sparkles },
+    { name: 'Spare Part Pricing', path: '/garage/parts', icon: Tag },
+    { name: 'Customers List', path: '/garage/customers', icon: Users },
+    { name: 'Services Table', path: '/garage/services', icon: ClipboardList },
     { name: 'Settings', path: '/garage/settings', icon: Settings },
   ];
 

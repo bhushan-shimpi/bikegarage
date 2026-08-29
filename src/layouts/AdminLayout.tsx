@@ -15,6 +15,9 @@ export const AdminLayout: React.FC = () => {
     if (pathname.includes('/garage/enquiries')) return { title: 'Garage Enquiries', subtitle: 'Manage customer service inquiries & vehicle leads' };
     if (pathname.includes('/garage/repair-history')) return { title: 'Bike History', subtitle: 'Repair logs, job cards & customer bills' };
     if (pathname.includes('/garage/restorations')) return { title: 'Bike Restorations', subtitle: 'Vintage & classic bike restoration requests' };
+    if (pathname.includes('/garage/parts')) return { title: 'Spare Part Pricing', subtitle: 'Standard spare parts price list & rates' };
+    if (pathname.includes('/garage/customers')) return { title: 'Customers List', subtitle: 'Registered vehicle owners & service history' };
+    if (pathname.includes('/garage/services')) return { title: 'Services Table', subtitle: 'Two-wheeler service menu, pricing & packages' };
     if (pathname.includes('/garage/settings')) return { title: 'Garage Settings', subtitle: 'Workshop timings, helpline alerts & profile' };
     return { title: 'Workshop Dashboard', subtitle: 'Overview of inquiries, service requests & active vehicles' };
   };
