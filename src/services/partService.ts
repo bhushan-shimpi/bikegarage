@@ -23,6 +23,10 @@ const defaultParts: SparePart[] = [
 ];
 
 export const partService = {
+  getCached: (): SparePart[] => {
+    return storageService.get<SparePart[]>(STORAGE_KEY, defaultParts);
+  },
+
   getAll: async (): Promise<SparePart[]> => {
     try {
       const res = await apiClient.get<{ success: boolean; data: any[] }>('/api/parts');

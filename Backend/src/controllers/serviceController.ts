@@ -1,8 +1,15 @@
 import { Request, Response } from 'express';
 import { query } from '../config/database.js';
+import { memoryCache } from '../utils/cache.js';
 
 export const getActiveServices = async (req: Request, res: Response): Promise<void> => {
   try {
+    const cached = memoryCache.get<any[]>('services_active');
+    if (cached) {
+      res.json({ success: true, data: cached });
+      return;
+    }
+
     const result = await query(
       'SELECT * FROM bike_services WHERE is_active = true ORDER BY sort_order ASC, created_at ASC'
     );
@@ -25,6 +32,7 @@ export const getActiveServices = async (req: Request, res: Response): Promise<vo
       sortOrder: row.sort_order,
     }));
 
+    memoryCache.set('services_active', formatted, 120); // 2 minutes TTL
     res.json({ success: true, data: formatted });
   } catch (error) {
     console.error('Error fetching active services:', error);
@@ -34,6 +42,12 @@ export const getActiveServices = async (req: Request, res: Response): Promise<vo
 
 export const getAllServices = async (req: Request, res: Response): Promise<void> => {
   try {
+    const cached = memoryCache.get<any[]>('services_all');
+    if (cached) {
+      res.json({ success: true, data: cached });
+      return;
+    }
+
     const result = await query(
       'SELECT * FROM bike_services ORDER BY sort_order ASC, created_at ASC'
     );
@@ -56,6 +70,7 @@ export const getAllServices = async (req: Request, res: Response): Promise<void>
       sortOrder: row.sort_order,
     }));
 
+    memoryCache.set('services_all', formatted, 120);
     res.json({ success: true, data: formatted });
   } catch (error) {
     console.error('Error fetching all services for admin:', error);
@@ -179,6 +194,7 @@ export const createService = async (req: Request, res: Response): Promise<void> 
         isActive: row.is_active,
       },
     });
+    memoryCache.del('services');
   } catch (error) {
     console.error('Error creating service:', error);
     res.status(500).json({ success: false, error: 'Failed to create service' });
@@ -268,6 +284,7 @@ export const updateService = async (req: Request, res: Response): Promise<void> 
         isActive: row.is_active,
       },
     });
+    memoryCache.del('services');
   } catch (error) {
     console.error('Error updating service:', error);
     res.status(500).json({ success: false, error: 'Failed to update service' });
@@ -285,6 +302,7 @@ export const deleteService = async (req: Request, res: Response): Promise<void> 
       return;
     }
 
+    memoryCache.del('services');
     res.json({ success: true, message: 'Service deleted successfully' });
   } catch (error) {
     console.error('Error deleting service:', error);

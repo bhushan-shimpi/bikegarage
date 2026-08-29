@@ -3,9 +3,21 @@ import { storage } from './storageService';
 import { apiClient } from './apiClient';
 import { customerService } from './customerService';
 
+let isSyncingEnquiries = false;
+let lastEnquiriesSync = 0;
+const SYNC_COOLDOWN = 60 * 1000;
+
 export const enquiryService = {
   // Syncs with Supabase PostgreSQL API, updates local cache
   syncWithBackend: async (): Promise<Enquiry[]> => {
+    const now = Date.now();
+    if (isSyncingEnquiries || now - lastEnquiriesSync < SYNC_COOLDOWN) {
+      return enquiryService.getCached();
+    }
+
+    isSyncingEnquiries = true;
+    lastEnquiriesSync = now;
+
     try {
       const res = await apiClient.get<{ success: boolean; data: Enquiry[] }>('/api/enquiries');
       if (res.success && Array.isArray(res.data)) {
@@ -15,8 +27,15 @@ export const enquiryService = {
       }
     } catch {
       // Graceful offline fallback to local cache
+    } finally {
+      isSyncingEnquiries = false;
     }
-    return enquiryService.getAll();
+    return enquiryService.getCached();
+  },
+
+  getCached: (): Enquiry[] => {
+    const cached = storage.get<Enquiry[]>(storage.keys.ENQUIRIES, []);
+    return (cached || []).filter((e) => !['enq-001', 'enq-002', 'enq-003', 'enq-004', 'enq-005'].includes(e.id));
   },
 
   initialize: (): void => {

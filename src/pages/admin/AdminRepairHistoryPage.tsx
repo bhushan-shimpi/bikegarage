@@ -76,15 +76,8 @@ ${partsList}
 };
 
 export const AdminRepairHistoryPage: React.FC = () => {
-  const [repairs, setRepairs] = useState<RepairRecord[]>([]);
-  const [stats, setStats] = useState<DailyRepairStats>({
-    todayCompletedCount: 0,
-    todayRevenue: 0,
-    inWorkshopCount: 0,
-    lifetimeRepairsCount: 0,
-    lifetimeRevenue: 0,
-    todayDate: new Date().toISOString().split('T')[0],
-  });
+  const [repairs, setRepairs] = useState<RepairRecord[]>(() => repairService.getCached());
+  const [stats, setStats] = useState<DailyRepairStats>(() => repairService.getCachedStats());
 
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -103,13 +96,14 @@ export const AdminRepairHistoryPage: React.FC = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
   const loadData = async () => {
-    const list = await repairService.getAll({
-      status: statusFilter !== 'all' ? statusFilter : undefined,
-      search: search || undefined,
-    });
+    const [list, s] = await Promise.all([
+      repairService.getAll({
+        status: statusFilter !== 'all' ? statusFilter : undefined,
+        search: search || undefined,
+      }),
+      repairService.getDailyStats(),
+    ]);
     setRepairs(list);
-
-    const s = await repairService.getDailyStats();
     setStats(s);
   };
 

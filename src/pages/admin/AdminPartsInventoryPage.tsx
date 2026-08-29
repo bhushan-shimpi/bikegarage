@@ -30,8 +30,8 @@ const CATEGORIES = [
 ];
 
 export const AdminPartsInventoryPage: React.FC = () => {
-  const [parts, setParts] = useState<SparePart[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [parts, setParts] = useState<SparePart[]>(() => partService.getCached());
+  const [loading, setLoading] = useState(() => partService.getCached().length === 0);
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -77,7 +77,7 @@ export const AdminPartsInventoryPage: React.FC = () => {
   };
 
   const loadParts = async () => {
-    setLoading(true);
+    if (parts.length === 0) setLoading(true);
     const data = await partService.getAll();
     setParts(data);
     setLoading(false);

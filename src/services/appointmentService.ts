@@ -4,9 +4,21 @@ import { apiClient } from './apiClient';
 
 const STORAGE_KEY = 'chaudhari_auto_appointments';
 
+let isSyncingAppointments = false;
+let lastAppointmentsSync = 0;
+const SYNC_COOLDOWN = 60 * 1000;
+
 export const appointmentService = {
   // Syncs from Supabase PostgreSQL API, updates local cache
   syncWithBackend: async (): Promise<Appointment[]> => {
+    const now = Date.now();
+    if (isSyncingAppointments || now - lastAppointmentsSync < SYNC_COOLDOWN) {
+      return appointmentService.getCached();
+    }
+
+    isSyncingAppointments = true;
+    lastAppointmentsSync = now;
+
     try {
       const res = await apiClient.get<{ success: boolean; data: Appointment[] }>('/api/appointments');
       if (res.success && Array.isArray(res.data)) {
@@ -17,8 +29,15 @@ export const appointmentService = {
       }
     } catch {
       // Graceful offline fallback to local cache
+    } finally {
+      isSyncingAppointments = false;
     }
-    return appointmentService.getAll();
+    return appointmentService.getCached();
+  },
+
+  getCached: (): Appointment[] => {
+    const saved = storageService.get<Appointment[]>(STORAGE_KEY, []);
+    return (saved || []).filter((a) => !['APT-101', 'APT-102'].includes(a.id));
   },
 
   getAll: (): Appointment[] => {

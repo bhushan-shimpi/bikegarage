@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import compression from 'compression';
 import { initDb } from './config/initDb.js';
 import healthRoutes from './routes/healthRoutes.js';
 import appointmentRoutes from './routes/appointmentRoutes.js';
@@ -21,8 +22,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Security & Utility Middleware
+// Security & Performance Utility Middleware
 app.use(helmet());
+app.use(compression()); // Gzip/Brotli compression: cuts JSON payloads by ~80%
 app.use(
   cors({
     origin: true,
@@ -32,6 +34,16 @@ app.use(
 app.use(morgan('dev'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Intelligent Edge CDN & Browser Caching Header for GET requests
+app.use((req, res, next) => {
+  if (req.method === 'GET') {
+    res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  } else {
+    res.setHeader('Cache-Control', 'no-store');
+  }
+  next();
+});
 
 // Root Welcome Route
 app.get('/', (req, res) => {

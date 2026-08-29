@@ -5,6 +5,10 @@ import { apiClient } from './apiClient';
 const STORAGE_KEY = 'chaudhari_auto_customers';
 
 export const customerService = {
+  getCached: (): Customer[] => {
+    return storageService.get<Customer[]>(STORAGE_KEY, []);
+  },
+
   getAll: async (): Promise<Customer[]> => {
     try {
       const res = await apiClient.get<{ success: boolean; data: Customer[] }>('/api/customers');

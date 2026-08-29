@@ -1,8 +1,15 @@
 import { Request, Response } from 'express';
 import { query } from '../config/database.js';
+import { memoryCache } from '../utils/cache.js';
 
 export const getAllParts = async (req: Request, res: Response) => {
   try {
+    const cached = memoryCache.get<any[]>('parts_all');
+    if (cached) {
+      res.json({ success: true, data: cached });
+      return;
+    }
+
     const result = await query(`
       SELECT 
         id, 
@@ -15,6 +22,8 @@ export const getAllParts = async (req: Request, res: Response) => {
       FROM parts_inventory 
       ORDER BY category ASC, name ASC
     `);
+
+    memoryCache.set('parts_all', result.rows, 60); // 1 minute TTL
     res.json({ success: true, data: result.rows });
   } catch (error: any) {
     console.error('Error fetching parts:', error);
@@ -43,6 +52,7 @@ export const createPart = async (req: Request, res: Response) => {
       [id, name.trim(), category?.trim() || 'General', Number(price) || 0, Number(stockQuantity) || 0]
     );
 
+    memoryCache.del('parts_all');
     res.status(201).json({ success: true, data: result.rows[0] });
   } catch (error: any) {
     console.error('Error creating part:', error);
@@ -84,6 +94,7 @@ export const updatePart = async (req: Request, res: Response) => {
       return res.status(404).json({ success: false, message: 'Part not found' });
     }
 
+    memoryCache.del('parts_all');
     res.json({ success: true, data: result.rows[0] });
   } catch (error: any) {
     console.error('Error updating part:', error);
@@ -100,6 +111,7 @@ export const deletePart = async (req: Request, res: Response) => {
       return res.status(404).json({ success: false, message: 'Part not found' });
     }
 
+    memoryCache.del('parts_all');
     res.json({ success: true, message: 'Part deleted from inventory' });
   } catch (error: any) {
     console.error('Error deleting part:', error);

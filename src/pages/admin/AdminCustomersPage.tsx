@@ -20,7 +20,7 @@ import { Customer, RepairRecord } from '../../types/customer';
 import { formatPhone } from '../../utils/formatters';
 
 export const AdminCustomersPage: React.FC = () => {
-  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>(() => customerService.getCached());
   const [search, setSearch] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);

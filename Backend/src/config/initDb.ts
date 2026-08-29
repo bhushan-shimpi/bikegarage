@@ -570,6 +570,24 @@ export async function initDb() {
     }
     console.log('✅ Row Level Security (RLS) successfully enabled for all tables with access policies!');
 
+    // 11. Create Performance Indexes for ultra-fast query execution on Supabase
+    console.log('Creating database performance indexes for fast query execution...');
+    await client.query(`
+      CREATE INDEX IF NOT EXISTS idx_repair_records_created_at ON repair_records (created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_repair_records_status ON repair_records (status);
+      CREATE INDEX IF NOT EXISTS idx_repair_records_repair_date ON repair_records (repair_date);
+      CREATE INDEX IF NOT EXISTS idx_repair_records_mobile ON repair_records (customer_mobile);
+      CREATE INDEX IF NOT EXISTS idx_customers_mobile ON customers (mobile);
+      CREATE INDEX IF NOT EXISTS idx_customers_created_at ON customers (created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_enquiries_status ON enquiries (status);
+      CREATE INDEX IF NOT EXISTS idx_enquiries_created_at ON enquiries (created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_appointments_status ON appointments (status);
+      CREATE INDEX IF NOT EXISTS idx_appointments_created_at ON appointments (created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_parts_category ON parts_inventory (category);
+      CREATE INDEX IF NOT EXISTS idx_bike_services_sort ON bike_services (sort_order ASC, is_active);
+    `);
+    console.log('✅ Performance indexes created successfully!');
+
     await client.query('COMMIT');
     console.log('✅ Supabase PostgreSQL Schema successfully initialized!');
   } catch (error) {

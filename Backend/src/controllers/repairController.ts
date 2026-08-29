@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { query } from '../config/database.js';
+import { memoryCache } from '../utils/cache.js';
 
 export const getAllRepairs = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -237,6 +238,8 @@ export const createRepair = async (req: Request, res: Response): Promise<void> =
         createdAt: row.created_at,
       },
     });
+    memoryCache.del('repair_daily_stats');
+    memoryCache.del('dashboard_stats');
   } catch (error) {
     console.error('Error logging repair record:', error);
     res.status(500).json({ success: false, error: 'Failed to create repair record' });
@@ -291,6 +294,8 @@ export const updateRepair = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
+    memoryCache.del('repair_daily_stats');
+    memoryCache.del('dashboard_stats');
     res.json({ success: true, data: result.rows[0] });
   } catch (error) {
     console.error('Error updating repair record:', error);
@@ -312,6 +317,8 @@ export const deleteRepair = async (req: Request, res: Response): Promise<void> =
       return;
     }
 
+    memoryCache.del('repair_daily_stats');
+    memoryCache.del('dashboard_stats');
     res.json({ success: true, message: 'Repair record deleted successfully' });
   } catch (error) {
     console.error('Error deleting repair record:', error);
@@ -322,25 +329,37 @@ export const deleteRepair = async (req: Request, res: Response): Promise<void> =
 export const getDailyStats = async (req: Request, res: Response): Promise<void> => {
   try {
     const todayStr = new Date().toISOString().split('T')[0];
+    const cacheKey = `repair_daily_stats_${todayStr}`;
+    const cached = memoryCache.get<any>(cacheKey);
+    if (cached) {
+      res.json({ success: true, stats: cached });
+      return;
+    }
 
-    const [todayCompleted, todayRevenue, inWorkshop, allTime] = await Promise.all([
-      query("SELECT COUNT(*) FROM repair_records WHERE status = 'Completed' AND repair_date = $1", [todayStr]),
-      query("SELECT COALESCE(SUM(total_amount), 0) as revenue FROM repair_records WHERE repair_date = $1", [todayStr]),
-      query("SELECT COUNT(*) FROM repair_records WHERE status = 'In Progress'"),
-      query("SELECT COUNT(*) as total_count, COALESCE(SUM(total_amount), 0) as total_revenue FROM repair_records"),
-    ]);
+    // High-performance single-pass aggregation query
+    const result = await query(
+      `SELECT
+        COUNT(*) FILTER (WHERE status = 'Completed' AND repair_date = $1) as today_completed,
+        COALESCE(SUM(total_amount) FILTER (WHERE repair_date = $1), 0) as today_revenue,
+        COUNT(*) FILTER (WHERE status = 'In Progress') as in_workshop,
+        COUNT(*) as lifetime_count,
+        COALESCE(SUM(total_amount), 0) as lifetime_revenue
+      FROM repair_records`,
+      [todayStr]
+    );
 
-    res.json({
-      success: true,
-      stats: {
-        todayCompletedCount: parseInt(todayCompleted.rows[0].count, 10),
-        todayRevenue: parseFloat(todayRevenue.rows[0].revenue),
-        inWorkshopCount: parseInt(inWorkshop.rows[0].count, 10),
-        lifetimeRepairsCount: parseInt(allTime.rows[0].total_count, 10),
-        lifetimeRevenue: parseFloat(allTime.rows[0].total_revenue),
-        todayDate: todayStr,
-      },
-    });
+    const row = result.rows[0] || {};
+    const stats = {
+      todayCompletedCount: parseInt(row.today_completed || '0', 10),
+      todayRevenue: parseFloat(row.today_revenue || '0'),
+      inWorkshopCount: parseInt(row.in_workshop || '0', 10),
+      lifetimeRepairsCount: parseInt(row.lifetime_count || '0', 10),
+      lifetimeRevenue: parseFloat(row.lifetime_revenue || '0'),
+      todayDate: todayStr,
+    };
+
+    memoryCache.set(cacheKey, stats, 15); // 15s TTL
+    res.json({ success: true, stats });
   } catch (error) {
     console.error('Error calculating repair stats:', error);
     res.status(500).json({ success: false, error: 'Failed to calculate daily stats' });

@@ -5,6 +5,28 @@ import { apiClient } from './apiClient';
 const STORAGE_KEY = 'chaudhari_auto_repairs';
 
 export const repairService = {
+  getCached: (): RepairRecord[] => {
+    return storageService.get<RepairRecord[]>(STORAGE_KEY, []);
+  },
+
+  getCachedStats: (): DailyRepairStats => {
+    const all = storageService.get<RepairRecord[]>(STORAGE_KEY, []);
+    const todayStr = new Date().toISOString().split('T')[0];
+    const todayCompleted = all.filter((r) => r.status === 'Completed' && r.repairDate === todayStr);
+    const todayRev = todayCompleted.reduce((sum, r) => sum + (r.totalAmount || 0), 0);
+    const inWork = all.filter((r) => r.status === 'In Progress').length;
+    const lifeRev = all.reduce((sum, r) => sum + (r.totalAmount || 0), 0);
+
+    return {
+      todayCompletedCount: todayCompleted.length,
+      todayRevenue: todayRev,
+      inWorkshopCount: inWork,
+      lifetimeRepairsCount: all.length,
+      lifetimeRevenue: lifeRev,
+      todayDate: todayStr,
+    };
+  },
+
   getAll: async (params?: { status?: string; search?: string; date?: string }): Promise<RepairRecord[]> => {
     try {
       const queryParams = new URLSearchParams();

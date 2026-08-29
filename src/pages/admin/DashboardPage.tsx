@@ -25,7 +25,7 @@ import { filterRecordByDate, DateFilterType } from '../../utils/dateFilters';
 import { printInvoice } from '../../utils/printInvoice';
 
 export const DashboardPage: React.FC = () => {
-  const [repairs, setRepairs] = useState<RepairRecord[]>([]);
+  const [repairs, setRepairs] = useState<RepairRecord[]>(() => repairService.getCached());
   const [searchQuery, setSearchQuery] = useState('');
   const [paymentFilter, setPaymentFilter] = useState<'all' | 'Paid' | 'Pending'>('all');
   const [dateFilter, setDateFilter] = useState<DateFilterType>('all');

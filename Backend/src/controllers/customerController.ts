@@ -1,8 +1,15 @@
 import { Request, Response } from 'express';
 import { query } from '../config/database.js';
+import { memoryCache } from '../utils/cache.js';
 
 export const getAllCustomers = async (req: Request, res: Response): Promise<void> => {
   try {
+    const cached = memoryCache.get<any[]>('customers_all');
+    if (cached) {
+      res.json({ success: true, data: cached });
+      return;
+    }
+
     const result = await query('SELECT * FROM customers ORDER BY created_at DESC');
 
     const formatted = result.rows.map((row) => ({
@@ -19,6 +26,7 @@ export const getAllCustomers = async (req: Request, res: Response): Promise<void
       createdAt: row.created_at,
     }));
 
+    memoryCache.set('customers_all', formatted, 30); // 30s TTL
     res.json({ success: true, data: formatted });
   } catch (error) {
     console.error('Error fetching customers:', error);
@@ -78,6 +86,7 @@ export const createCustomer = async (req: Request, res: Response): Promise<void>
     );
 
     const row = result.rows[0];
+    memoryCache.del('customers_all');
     res.status(201).json({
       success: true,
       data: {
@@ -111,6 +120,7 @@ export const deleteCustomer = async (req: Request, res: Response): Promise<void>
       return;
     }
 
+    memoryCache.del('customers_all');
     res.json({ success: true, message: 'Customer deleted successfully' });
   } catch (error) {
     console.error('Error deleting customer:', error);
