@@ -24,6 +24,13 @@ export const pingServerHealth = async (): Promise<boolean> => {
 if (typeof window !== 'undefined') {
   pingServerHealth();
   setInterval(pingServerHealth, KEEP_ALIVE_INTERVAL_MS);
+
+  // Instant wakeup ping when user switches back to the tab
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      pingServerHealth();
+    }
+  });
 }
 
 class ApiClient {
