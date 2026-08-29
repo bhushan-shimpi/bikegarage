@@ -50,7 +50,7 @@ export const AdminLayout: React.FC = () => {
   }, [navigate, location.pathname]);
 
   return (
-    <div className="min-h-screen bg-[#F4F5F7] text-gray-900 flex">
+    <div className="min-h-screen bg-[#F4F5F7] text-gray-900 flex font-sans antialiased">
       {/* White Sidebar */}
       <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 

@@ -332,23 +332,23 @@ export const AdminRepairHistoryPage: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
+      <div className="flex items-start sm:items-center justify-between gap-3">
+        <div className="min-w-0 flex-1">
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2.5">
-            <Receipt className="w-6 h-6 text-[#DFA500]" />
-            <span>Billing & Invoices</span>
+            <Receipt className="w-6 h-6 text-[#DFA500] shrink-0" />
+            <span className="truncate">Billing & Invoices</span>
           </h1>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs text-gray-500 mt-0.5 hidden sm:block">
             Workshop repair log, customer invoices, parts billing, and daily revenue tracker
           </p>
         </div>
 
         <button
           onClick={() => setIsCreateModalOpen(true)}
-          className="px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-bold flex items-center gap-2 shadow-sm transition-all self-start sm:self-auto"
+          className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-sm transition-all shrink-0 active:scale-95"
         >
           <Plus className="w-4 h-4" />
-          <span>+ Create New Bill</span>
+          <span>Create Bill</span>
         </button>
       </div>
 
@@ -549,252 +549,179 @@ export const AdminRepairHistoryPage: React.FC = () => {
           </p>
         </div>
       ) : (
-        <div className="bg-white border border-gray-200 rounded-2xl shadow-xs overflow-hidden">
-          {/* Desktop Table Rows */}
-          <div className="hidden lg:block overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
-              <thead>
-                <tr className="bg-gray-50/80 border-b border-gray-200 text-xs font-semibold text-gray-600">
-                  <th className="py-3.5 px-4">Job No. & Date</th>
-                  <th className="py-3.5 px-4">Customer</th>
-                  <th className="py-3.5 px-4">Motorcycle Details</th>
-                  <th className="py-3.5 px-4">Service & Parts</th>
-                  <th className="py-3.5 px-4">Bill Amount</th>
-                  <th className="py-3.5 px-4">Status</th>
-                  <th className="py-3.5 px-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {filtered.map((rep) => (
-                  <tr key={rep.id || rep.jobNumber} className="hover:bg-amber-50/30 transition-colors">
-                    {/* Job No. & Date */}
-                    <td className="py-3.5 px-4">
-                      <button
-                        onClick={() => {
-                          setSelectedRecord(rep);
-                          setIsViewModalOpen(true);
-                        }}
-                        className="font-bold text-gray-900 hover:text-[#DFA500] text-sm block text-left"
-                      >
-                        {rep.jobNumber}
-                      </button>
-                      <span className="text-[11px] text-gray-500 flex items-center gap-1 mt-0.5">
-                        <Calendar className="w-3 h-3" />
-                        {rep.repairDate}
-                      </span>
-                    </td>
+        <div className="space-y-3">
+          {filtered.map((rep) => (
+            <div
+              key={rep.id || rep.jobNumber}
+              className="bg-white rounded-2xl border border-gray-200 hover:border-amber-300 p-4 sm:p-5 shadow-xs transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+            >
+              {/* Left Column: Job Number, Date, Customer & Motorcycle info */}
+              <div className="flex-1 min-w-0 space-y-2.5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedRecord(rep);
+                      setIsViewModalOpen(true);
+                    }}
+                    className="font-bold text-gray-900 hover:text-amber-700 text-sm sm:text-base flex items-center gap-1.5 transition-colors"
+                  >
+                    <Receipt className="w-4 h-4 text-[#DFA500]" />
+                    <span>{rep.jobNumber}</span>
+                  </button>
 
-                    {/* Customer */}
-                    <td className="py-3.5 px-4">
-                      <span className="font-semibold text-gray-900 block text-xs sm:text-sm">
+                  <span className="text-xs text-gray-500 flex items-center gap-1">
+                    <Calendar className="w-3.5 h-3.5 text-gray-400" />
+                    <span>{rep.repairDate}</span>
+                  </span>
+
+                  {/* Payment Status Badge */}
+                  <span
+                    className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                      rep.paymentStatus === 'Paid'
+                        ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                        : 'bg-red-50 text-red-800 border border-red-200'
+                    }`}
+                  >
+                    {rep.paymentStatus === 'Paid' ? 'PAID' : 'PENDING'}
+                  </span>
+
+                  {rep.paymentMode && (
+                    <span className="text-[10px] font-bold bg-gray-100 text-gray-700 px-2 py-0.5 rounded-md border border-gray-200">
+                      {rep.paymentMode}
+                    </span>
+                  )}
+
+                  <span
+                    className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                      rep.status === 'Completed'
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : rep.status === 'In Progress'
+                        ? 'bg-blue-100 text-blue-800'
+                        : 'bg-gray-100 text-gray-800'
+                    }`}
+                  >
+                    {rep.status}
+                  </span>
+                </div>
+
+                {/* Customer & Vehicle specs row */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-blue-50 text-blue-800 font-bold text-xs flex items-center justify-center shrink-0 border border-blue-200">
+                      {rep.customerName.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="min-w-0">
+                      <span className="font-bold text-gray-900 block truncate">
                         {rep.customerName}
                       </span>
-                      <span className="text-xs text-gray-500 font-medium">
+                      <span className="text-[11px] text-gray-500 font-mono">
                         {formatPhone(rep.customerMobile)}
                       </span>
-                    </td>
+                    </div>
+                  </div>
 
-                    {/* Motorcycle */}
-                    <td className="py-3.5 px-4">
-                      <span className="font-semibold text-gray-900 block">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-amber-50 text-amber-800 font-bold text-xs flex items-center justify-center shrink-0 border border-amber-200">
+                      <Bike className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="font-bold text-gray-900 block truncate">
                         {rep.bikeBrand} {rep.bikeModel}
                       </span>
-                      <div className="flex items-center gap-2 text-[11px] text-gray-500">
+                      <div className="flex items-center gap-1.5 text-[11px] text-gray-500 font-mono">
                         {rep.registrationNumber && (
-                          <span className="uppercase font-mono font-medium">
+                          <span className="uppercase font-semibold text-gray-700">
                             {rep.registrationNumber}
                           </span>
                         )}
-                        {rep.currentKm && (
-                          <span>• {rep.currentKm} KM</span>
-                        )}
+                        {rep.currentKm && <span>• {rep.currentKm} KM</span>}
                       </div>
-                    </td>
-
-                    {/* Service & Parts */}
-                    <td className="py-3.5 px-4">
-                      <span className="font-medium text-amber-900 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded text-[11px] inline-block mb-1">
-                        {rep.serviceType}
-                      </span>
-                      {rep.partsReplaced && rep.partsReplaced.length > 0 ? (
-                        <div className="text-[11px] text-gray-500">
-                          {rep.partsReplaced.length} part(s) fitted (₹{rep.partsTotal || rep.partsReplaced.reduce((s, p) => s + p.cost, 0)})
-                        </div>
-                      ) : (
-                        <div className="text-[11px] text-gray-400">Labor only</div>
-                      )}
-                    </td>
-
-                    {/* Bill Amount */}
-                    <td className="py-3.5 px-4">
-                      <div className="font-bold text-gray-900 text-sm">
-                        ₹{rep.totalAmount}
-                      </div>
-                      <span
-                        className={`inline-block text-[10px] font-semibold px-2 py-0.2 rounded mt-0.5 ${
-                          rep.paymentStatus === 'Paid'
-                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                            : 'bg-amber-50 text-amber-700 border border-amber-200'
-                        }`}
-                      >
-                        {rep.paymentMode ? `${rep.paymentMode} • ` : ''}{rep.paymentStatus}
-                      </span>
-                    </td>
-
-                    {/* Status */}
-                    <td className="py-3.5 px-4">
-                      <span
-                        className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
-                          rep.status === 'Completed'
-                            ? 'bg-emerald-100 text-emerald-800'
-                            : rep.status === 'In Progress'
-                            ? 'bg-blue-100 text-blue-800'
-                            : 'bg-gray-100 text-gray-800'
-                        }`}
-                      >
-                        {rep.status}
-                      </span>
-                    </td>
-
-                    {/* Actions */}
-                    <td className="py-3.5 px-4 text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          onClick={() => printInvoice(rep)}
-                          className="p-1.5 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-amber-50 hover:border-amber-300 transition-colors"
-                          title="Print Bill / Invoice"
-                        >
-                          <Printer className="w-3.5 h-3.5 text-amber-700" />
-                        </button>
-                        <button
-                          onClick={() => {
-                            setSelectedRecord(rep);
-                            setIsViewModalOpen(true);
-                          }}
-                          className="p-1.5 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-[#F5B900] hover:text-black transition-colors"
-                          title="View Job Sheet"
-                        >
-                          <Eye className="w-3.5 h-3.5" />
-                        </button>
-                        <a
-                          href={getWhatsAppBillUrl(rep)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="p-1.5 rounded-lg bg-[#25D366] hover:bg-[#1EBE5D] text-white transition-colors shadow-2xs"
-                          title="Send Bill on WhatsApp"
-                        >
-                          <MessageCircle className="w-3.5 h-3.5" />
-                        </a>
-                        <a
-                          href={`tel:+91${rep.customerMobile}`}
-                          className="p-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
-                          title="Call Customer"
-                        >
-                          <Phone className="w-3.5 h-3.5" />
-                        </a>
-                        <button
-                          onClick={() => handleDelete(rep.id || rep.jobNumber, rep.jobNumber)}
-                          className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
-                          title="Delete Record"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          {/* Mobile Card List (no horizontal scroll at 320-430px) */}
-          <div className="lg:hidden divide-y divide-gray-100">
-            {filtered.map((rep) => (
-              <div key={rep.id || rep.jobNumber} className="p-4 space-y-3">
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <span className="font-bold text-gray-900 text-sm block">
-                      {rep.jobNumber}
-                    </span>
-                    <span className="text-xs text-gray-500">
-                      {rep.repairDate}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-1.5">
-                    <span
-                      className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                        rep.status === 'Completed'
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : rep.status === 'In Progress'
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'bg-gray-100 text-gray-800'
-                      }`}
-                    >
-                      {rep.status}
-                    </span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="p-2.5 rounded-xl bg-gray-50 border border-gray-100 text-xs space-y-1">
-                  <div className="font-semibold text-gray-900">
-                    👤 {rep.customerName} • {formatPhone(rep.customerMobile)}
-                  </div>
-                  <div className="text-gray-700">
-                    🛵 {rep.bikeBrand} {rep.bikeModel} {rep.registrationNumber && `(${rep.registrationNumber})`}
-                  </div>
-                  <div className="text-amber-900 font-medium">
-                    🔧 {rep.serviceType}
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between pt-1 border-t border-gray-100">
-                  <div>
-                    <span className="text-xs font-bold text-gray-900 block">
-                      ₹{rep.totalAmount}
+                {/* Service Tag & Parts summary */}
+                <div className="flex flex-wrap items-center gap-2 pt-0.5 text-xs">
+                  <span className="bg-amber-50 text-amber-900 border border-amber-200 px-2 py-0.5 rounded text-[11px] font-medium">
+                    {rep.serviceType}
+                  </span>
+                  {rep.partsReplaced && rep.partsReplaced.length > 0 && (
+                    <span className="text-gray-500 text-[11px]">
+                      {rep.partsReplaced.length} part(s) replaced
                     </span>
-                    <span className="text-[10px] text-gray-500">
-                      {rep.paymentStatus}
+                  )}
+                  {rep.problemDetails && (
+                    <span className="text-gray-400 text-[11px] truncate max-w-xs">
+                      • {rep.problemDetails}
                     </span>
-                  </div>
-
-                  <div className="flex items-center gap-1.5">
-                    <a
-                      href={getWhatsAppBillUrl(rep)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-2.5 py-1 rounded-lg bg-[#25D366] text-white text-xs font-semibold flex items-center gap-1 shadow-2xs"
-                    >
-                      <MessageCircle className="w-3.5 h-3.5" />
-                      <span>WhatsApp Bill</span>
-                    </a>
-                    <button
-                      onClick={() => printInvoice(rep)}
-                      className="p-1.5 rounded-lg bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100 transition-colors"
-                      title="Print Bill / Invoice"
-                    >
-                      <Printer className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSelectedRecord(rep);
-                        setIsViewModalOpen(true);
-                      }}
-                      className="p-1.5 rounded-lg bg-gray-100 text-gray-700 border border-gray-200"
-                    >
-                      <Eye className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(rep.id || rep.jobNumber, rep.jobNumber)}
-                      className="p-1.5 rounded-lg bg-red-50 text-red-600 border border-red-200"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
+                  )}
                 </div>
               </div>
-            ))}
-          </div>
+
+              {/* Right Column: Grand Total & Action Buttons */}
+              <div className="flex sm:flex-row lg:flex-col items-center lg:items-end justify-between gap-3 pt-3 lg:pt-0 border-t lg:border-t-0 border-gray-100 shrink-0">
+                <div className="text-left lg:text-right">
+                  <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold block">
+                    Invoice Total
+                  </span>
+                  <span className="text-xl sm:text-2xl font-black text-gray-900 font-mono">
+                    ₹{rep.totalAmount}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => printInvoice(rep)}
+                    className="p-2 rounded-xl border border-gray-200 bg-gray-50 hover:bg-[#FFF9E6] hover:border-amber-300 text-gray-700 transition-colors shadow-2xs"
+                    title="Print Invoice Job Sheet"
+                  >
+                    <Printer className="w-4 h-4 text-amber-700" />
+                  </button>
+
+                  <a
+                    href={getWhatsAppBillUrl(rep)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white transition-colors shadow-2xs"
+                    title="Send Bill via WhatsApp"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedRecord(rep);
+                      setIsViewModalOpen(true);
+                    }}
+                    className="p-2 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 transition-colors shadow-2xs"
+                    title="View Job Sheet Details"
+                  >
+                    <Eye className="w-4 h-4" />
+                  </button>
+
+                  <a
+                    href={`tel:+91${rep.customerMobile}`}
+                    className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
+                    title="Call Customer"
+                  >
+                    <Phone className="w-4 h-4" />
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(rep.id || rep.jobNumber, rep.jobNumber)}
+                    className="p-2 rounded-xl border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                    title="Delete Record"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

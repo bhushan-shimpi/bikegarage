@@ -96,39 +96,39 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <div className="space-y-5 max-w-7xl mx-auto pb-10 overflow-x-hidden">
-      {/* Clean Top Action Bar (Billing Records -> shortcut removed) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-xs">
-        <div>
+      {/* Clean Top Action Bar */}
+      <div className="flex items-start sm:items-center justify-between gap-3 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-xs">
+        <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-sm sm:text-base font-bold text-gray-900">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+            <span className="text-sm sm:text-base font-bold text-gray-900 truncate">
               Chaudhari Auto Centre
             </span>
-            <span className="text-xs bg-amber-100 text-amber-900 font-semibold px-2 py-0.5 rounded">
-              Pahur Workshop
+            <span className="text-xs bg-amber-100 text-amber-900 font-semibold px-2 py-0.5 rounded shrink-0">
+              Pahur
             </span>
           </div>
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs text-gray-500 mt-0.5 hidden sm:block">
             Workshop Billing & Revenue Dashboard • Quick Customer Job Sheet Management
           </p>
         </div>
 
         {/* Action Buttons: Create Bill & New Enquiry */}
-        <div className="flex items-center gap-2.5 self-stretch sm:self-auto">
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={() => setIsCreateBillModalOpen(true)}
-            className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all active:scale-98"
+            className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs sm:text-sm flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-95"
           >
             <Receipt className="w-4 h-4" />
-            <span>+ Create Bill</span>
+            <span>Create Bill</span>
           </button>
 
           <button
             onClick={() => setIsCreateEnquiryModalOpen(true)}
-            className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-gray-900 hover:bg-black text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all active:scale-98"
+            className="px-3 sm:px-3.5 py-2.5 rounded-xl bg-gray-900 hover:bg-black text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-95"
           >
-            <PlusCircle className="w-4 h-4 text-[#F5B900] text-xs" />
-            <span>+ New Enquiry</span>
+            <PlusCircle className="w-4 h-4 text-[#F5B900]" />
+            <span className="hidden sm:inline">New Enquiry</span>
           </button>
         </div>
       </div>
@@ -353,231 +353,109 @@ export const DashboardPage: React.FC = () => {
             </button>
           </div>
         ) : (
-          <>
-            {/* Desktop Table View */}
-            <div className="hidden md:block overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
-                <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50/80 text-gray-600 font-bold uppercase text-[10px]">
-                    <th className="py-3 px-4">Bill # & Date</th>
-                    <th className="py-3 px-4">Customer & Phone</th>
-                    <th className="py-3 px-4">Motorcycle</th>
-                    <th className="py-3 px-4">Amount & Status</th>
-                    <th className="py-3 px-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {filtered.map((rep) => (
-                    <tr key={rep.id || rep.jobNumber} className="hover:bg-amber-50/20 transition-colors">
-                      {/* Bill # & Date */}
-                      <td className="py-3 px-4">
-                        <button
-                          onClick={() => {
-                            setSelectedRecord(rep);
-                            setIsViewModalOpen(true);
-                          }}
-                          className="font-bold text-gray-900 hover:text-[#DFA500] text-sm block text-left font-mono"
-                        >
-                          {rep.jobNumber}
-                        </button>
-                        <span className="text-[11px] text-gray-400 flex items-center gap-1 mt-0.5">
-                          <Calendar className="w-3 h-3 text-gray-400" />
-                          {rep.repairDate}
-                        </span>
-                      </td>
+          <div className="space-y-3">
+            {filtered.map((rep) => (
+              <div
+                key={rep.id || rep.jobNumber}
+                className="p-4 rounded-2xl bg-white border border-gray-200 hover:border-amber-300 shadow-xs transition-all flex flex-col md:flex-row md:items-center justify-between gap-4"
+              >
+                <div className="flex-1 min-w-0 space-y-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedRecord(rep);
+                        setIsViewModalOpen(true);
+                      }}
+                      className="font-bold text-gray-900 hover:text-amber-700 text-sm flex items-center gap-1.5"
+                    >
+                      <Receipt className="w-4 h-4 text-[#DFA500]" />
+                      <span>{rep.jobNumber}</span>
+                    </button>
 
-                      {/* Customer */}
-                      <td className="py-3 px-4">
-                        <span className="font-bold text-gray-900 block text-xs">
-                          {rep.customerName}
-                        </span>
-                        <div className="flex items-center gap-2 text-[11px] text-gray-500 font-mono mt-0.5">
-                          <span>{formatPhone(rep.customerMobile)}</span>
-                          <a
-                            href={`tel:+91${rep.customerMobile}`}
-                            className="text-amber-600 hover:text-amber-700"
-                            title="Call"
-                          >
-                            <Phone className="w-3 h-3" />
-                          </a>
-                          <a
-                            href={getWhatsAppBillUrl(rep)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-emerald-600 hover:text-emerald-700"
-                            title="WhatsApp Invoice"
-                          >
-                            <MessageCircle className="w-3 h-3" />
-                          </a>
-                        </div>
-                      </td>
-
-                      {/* Motorcycle */}
-                      <td className="py-3 px-4">
-                        <span className="font-semibold text-gray-900 block">
-                          {rep.bikeBrand} {rep.bikeModel}
-                        </span>
-                        <div className="flex items-center gap-2 text-[11px] text-gray-500 font-mono">
-                          {rep.registrationNumber && (
-                            <span className="uppercase text-amber-800 font-semibold">
-                              {rep.registrationNumber}
-                            </span>
-                          )}
-                          {rep.currentKm && <span>• {rep.currentKm} KM</span>}
-                        </div>
-                      </td>
-
-                      {/* Amount & Status */}
-                      <td className="py-3 px-4">
-                        <div className="font-bold text-gray-900 text-sm font-mono">
-                          ₹{rep.totalAmount}
-                        </div>
-                        <span
-                          className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mt-0.5 ${
-                            rep.paymentStatus === 'Paid'
-                              ? 'bg-emerald-100 text-emerald-800'
-                              : 'bg-amber-100 text-amber-900'
-                          }`}
-                        >
-                          {rep.paymentMode ? `${rep.paymentMode} • ` : ''}{rep.paymentStatus}
-                        </span>
-                      </td>
-
-                      {/* Actions */}
-                      <td className="py-3 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <button
-                            onClick={() => printInvoice(rep)}
-                            className="p-1.5 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-amber-50 hover:border-amber-300 transition-colors"
-                            title="Print Bill / Invoice"
-                          >
-                            <Printer className="w-3.5 h-3.5 text-amber-700" />
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              setSelectedRecord(rep);
-                              setIsViewModalOpen(true);
-                            }}
-                            className="p-1.5 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-[#F5B900] hover:text-black transition-colors"
-                            title="View Job Sheet"
-                          >
-                            <Eye className="w-3.5 h-3.5" />
-                          </button>
-
-                          <a
-                            href={getWhatsAppBillUrl(rep)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="px-2 py-1.5 rounded-lg bg-[#25D366] hover:bg-[#1EBE5D] text-white font-semibold text-[11px] flex items-center gap-1 shadow-2xs transition-colors"
-                            title="Send WhatsApp Bill"
-                          >
-                            <MessageCircle className="w-3.5 h-3.5" />
-                            <span className="hidden lg:inline">WhatsApp</span>
-                          </a>
-
-                          <a
-                            href={`tel:+91${rep.customerMobile}`}
-                            className="p-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
-                            title="Call Customer"
-                          >
-                            <Phone className="w-3.5 h-3.5" />
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Mobile Cards View */}
-            <div className="md:hidden space-y-2.5">
-              {filtered.map((rep) => (
-                <div
-                  key={rep.id || rep.jobNumber}
-                  className="p-3.5 rounded-2xl bg-white border border-gray-200 shadow-2xs space-y-2.5"
-                >
-                  <div className="flex items-center justify-between border-b border-gray-100 pb-2">
-                    <div>
-                      <button
-                        onClick={() => {
-                          setSelectedRecord(rep);
-                          setIsViewModalOpen(true);
-                        }}
-                        className="font-bold text-gray-900 text-sm font-mono text-left block"
-                      >
-                        {rep.jobNumber}
-                      </button>
-                      <span className="text-[10px] text-gray-400">{rep.repairDate}</span>
-                    </div>
+                    <span className="text-xs text-gray-500 flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5 text-gray-400" />
+                      <span>{rep.repairDate}</span>
+                    </span>
 
                     <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
                         rep.paymentStatus === 'Paid'
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : 'bg-amber-100 text-amber-900'
+                          ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                          : 'bg-red-50 text-red-800 border border-red-200'
                       }`}
                     >
-                      {rep.paymentStatus}
+                      {rep.paymentStatus === 'Paid' ? 'PAID' : 'PENDING'}
                     </span>
+
+                    {rep.paymentMode && (
+                      <span className="text-[10px] font-bold bg-gray-100 text-gray-700 px-2 py-0.5 rounded-md border border-gray-200">
+                        {rep.paymentMode}
+                      </span>
+                    )}
                   </div>
 
-                  <div className="text-xs space-y-1">
-                    <div className="font-bold text-gray-900">{rep.customerName}</div>
-                    <div className="text-gray-600">
-                      {rep.bikeBrand} {rep.bikeModel} {rep.registrationNumber && `(${rep.registrationNumber})`}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                    <div>
+                      <span className="font-bold text-gray-900 block truncate">{rep.customerName}</span>
+                      <span className="text-[11px] text-gray-500 font-mono">{formatPhone(rep.customerMobile)}</span>
                     </div>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-                    <div className="font-bold text-base text-gray-900 font-mono">
-                      ₹{rep.totalAmount}
-                    </div>
-
-                    <div className="flex items-center gap-1.5">
-                      <a
-                        href={getWhatsAppBillUrl(rep)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-3 py-1.5 rounded-xl bg-[#25D366] text-white text-xs font-bold flex items-center gap-1 shadow-2xs"
-                      >
-                        <MessageCircle className="w-3.5 h-3.5" />
-                        <span>WhatsApp Bill</span>
-                      </a>
-
-                      <button
-                        onClick={() => printInvoice(rep)}
-                        className="p-1.5 rounded-xl bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100 transition-colors"
-                        title="Print Bill"
-                      >
-                        <Printer className="w-4 h-4" />
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          setSelectedRecord(rep);
-                          setIsViewModalOpen(true);
-                        }}
-                        className="p-1.5 rounded-xl bg-gray-100 text-gray-700 border border-gray-200"
-                        title="View Bill"
-                      >
-                        <Eye className="w-4 h-4" />
-                      </button>
-
-                      <a
-                        href={`tel:+91${rep.customerMobile}`}
-                        className="p-1.5 rounded-xl bg-gray-100 text-gray-700 border border-gray-200"
-                        title="Call"
-                      >
-                        <Phone className="w-4 h-4" />
-                      </a>
+                    <div>
+                      <span className="font-bold text-gray-900 block truncate">{rep.bikeBrand} {rep.bikeModel}</span>
+                      {rep.registrationNumber && (
+                        <span className="text-[11px] font-mono uppercase text-gray-500 font-semibold">{rep.registrationNumber}</span>
+                      )}
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-          </>
+
+                <div className="flex items-center justify-between md:justify-end gap-3 pt-3 md:pt-0 border-t md:border-t-0 border-gray-100 shrink-0">
+                  <div className="text-left md:text-right">
+                    <span className="text-[10px] uppercase tracking-wider text-gray-400 font-bold block">Bill Total</span>
+                    <span className="text-lg font-black text-gray-900 font-mono">₹{rep.totalAmount}</span>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => printInvoice(rep)}
+                      className="p-2 rounded-xl border border-gray-200 bg-gray-50 hover:bg-[#FFF9E6] hover:border-amber-300 text-gray-700 transition-colors"
+                      title="Print Invoice"
+                    >
+                      <Printer className="w-4 h-4 text-amber-700" />
+                    </button>
+                    <a
+                      href={getWhatsAppBillUrl(rep)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white transition-colors shadow-2xs"
+                      title="WhatsApp Bill"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedRecord(rep);
+                        setIsViewModalOpen(true);
+                      }}
+                      className="p-2 rounded-xl border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-700 transition-colors"
+                      title="View Details"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+                    <a
+                      href={`tel:+91${rep.customerMobile}`}
+                      className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
+                      title="Call Customer"
+                    >
+                      <Phone className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
 

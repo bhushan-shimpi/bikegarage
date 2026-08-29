@@ -235,10 +235,10 @@ export const AdminSettingsPage: React.FC = () => {
               setMechError(null);
               setIsAddModalOpen(true);
             }}
-            className="px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs flex items-center gap-2 shadow-xs transition-all self-start sm:self-auto"
+            className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs sm:text-sm flex items-center gap-1.5 shadow-sm transition-all shrink-0 active:scale-95"
           >
             <Plus className="w-4 h-4" />
-            <span>+ Add Mechanic</span>
+            <span>Add Mechanic</span>
           </button>
         </div>
 
@@ -250,7 +250,7 @@ export const AdminSettingsPage: React.FC = () => {
           </div>
         )}
 
-        {/* Mechanic Accounts List */}
+        {/* Mechanic Accounts List: Separate Card for Each Row */}
         <div className="space-y-3">
           {mechanics.length === 0 ? (
             <div className="py-10 text-center border-2 border-dashed border-gray-200 rounded-xl">
@@ -261,260 +261,118 @@ export const AdminSettingsPage: React.FC = () => {
               </p>
             </div>
           ) : (
-            <>
-              {/* Desktop Table */}
-              <div className="hidden sm:block overflow-x-auto">
-                <table className="w-full text-left text-xs border-collapse">
-                  <thead>
-                    <tr className="border-b border-gray-200 bg-gray-50 text-gray-600 uppercase font-bold text-[10px]">
-                      <th className="py-3 px-4">Mechanic Name</th>
-                      <th className="py-3 px-4">Login Username / Mobile</th>
-                      <th className="py-3 px-4">Password</th>
-                      <th className="py-3 px-4">Allowed Functionalities</th>
-                      <th className="py-3 px-4 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    {mechanics.map((mech) => (
-                      <tr key={mech.id} className="hover:bg-gray-50/80 transition-colors">
-                        <td className="py-3 px-4 font-bold text-gray-900 flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-black text-xs flex items-center justify-center shrink-0">
-                            {mech.name.slice(0, 2).toUpperCase()}
-                          </div>
-                          <div>
-                            <span>{mech.name}</span>
-                            <span className="block text-[10px] text-gray-400 font-normal">
-                              Workshop Staff
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-gray-700 font-mono">
-                          {mech.mobile || mech.username}
-                        </td>
-                        <td className="py-3 px-4 text-gray-700 font-mono">
-                          <div className="flex items-center gap-1.5">
-                            <span className="font-semibold text-gray-900">
-                              {revealedPasswords[mech.id]
-                                ? mech.passwordPreview || '••••••'
-                                : '••••••••'}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setRevealedPasswords((prev) => ({
-                                  ...prev,
-                                  [mech.id]: !prev[mech.id],
-                                }))
-                              }
-                              className="p-1 text-gray-400 hover:text-gray-700 rounded transition-colors"
-                              title={
-                                revealedPasswords[mech.id]
-                                  ? 'Hide password'
-                                  : 'Show password'
-                              }
-                            >
-                              {revealedPasswords[mech.id] ? (
-                                <EyeOff className="w-3.5 h-3.5" />
-                              ) : (
-                                <Eye className="w-3.5 h-3.5" />
-                              )}
-                            </button>
-                          </div>
-                        </td>
-                        <td className="py-3 px-4">
-                          <div className="flex flex-wrap items-center gap-1">
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                              <Receipt className="w-2.5 h-2.5" />
-                              Billing
-                            </span>
-                            {mech.permissions?.includes('parts') && (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-900 border border-amber-200">
-                                <Tag className="w-2.5 h-2.5" />
-                                Parts
-                              </span>
-                            )}
-                            {mech.permissions?.includes('customers') && (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-50 text-blue-900 border border-blue-200">
-                                <Users className="w-2.5 h-2.5" />
-                                Customers
-                              </span>
-                            )}
-                            {mech.permissions?.includes('enquiries') && (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-50 text-purple-900 border border-purple-200">
-                                <Inbox className="w-2.5 h-2.5" />
-                                Enquiries
-                              </span>
-                            )}
-                          </div>
-                        </td>
-                        <td className="py-3 px-4 text-right">
-                          <div className="flex items-center justify-end gap-1.5">
-                            <button
-                              type="button"
-                              onClick={() => handleCopyCredentials(mech)}
-                              className={`p-1.5 rounded-lg border transition-all ${
-                                copiedId === mech.id
-                                  ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
-                                  : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
-                              }`}
-                              title="Copy Login Credentials"
-                            >
-                              {copiedId === mech.id ? (
-                                <Check className="w-3.5 h-3.5 text-emerald-600" />
-                              ) : (
-                                <Copy className="w-3.5 h-3.5" />
-                              )}
-                            </button>
-
-                            <button
-                              type="button"
-                              onClick={() => handleShareWhatsApp(mech)}
-                              className="p-1.5 text-emerald-700 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-colors"
-                              title="Send Login via WhatsApp"
-                            >
-                              <MessageCircle className="w-3.5 h-3.5" />
-                            </button>
-
-                            <button
-                              type="button"
-                              onClick={() => handleDeleteMechanic(mech.id, mech.name)}
-                              className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-                              title="Delete account"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Mobile Staff Cards View */}
-              <div className="sm:hidden divide-y divide-gray-100">
-                {mechanics.map((mech) => (
-                  <div key={mech.id} className="p-3.5 space-y-2.5">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-9 h-9 rounded-full bg-blue-100 text-blue-700 font-black text-xs flex items-center justify-center shrink-0">
-                          {mech.name.slice(0, 2).toUpperCase()}
-                        </div>
-                        <div className="min-w-0">
-                          <span className="font-bold text-gray-900 text-sm block truncate">
-                            {mech.name}
-                          </span>
-                          <span className="text-[11px] text-gray-500 font-mono block">
-                            {mech.mobile || mech.username}
-                          </span>
-                        </div>
-                      </div>
-
-                      <button
-                        onClick={() => handleDeleteMechanic(mech.id, mech.name)}
-                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors shrink-0"
-                        title="Delete account"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+            <div className="space-y-3">
+              {mechanics.map((mech) => (
+                <div
+                  key={mech.id}
+                  className="bg-white rounded-2xl border border-gray-200 hover:border-amber-300 p-4 shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                >
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 font-bold text-sm flex items-center justify-center shrink-0">
+                      {mech.name.slice(0, 2).toUpperCase()}
                     </div>
-
-                    {/* Password Row */}
-                    <div className="flex items-center justify-between text-xs font-mono bg-gray-50 px-2.5 py-1.5 rounded-lg border border-gray-200">
-                      <span className="text-gray-500 text-[11px]">Password:</span>
-                      <div className="flex items-center gap-1.5 font-bold text-gray-900">
+                    <div className="min-w-0 space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-gray-900 text-sm truncate">{mech.name}</span>
+                        <span className="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.2 rounded font-medium">
+                          Workshop Staff
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 font-mono">
                         <span>
-                          {revealedPasswords[mech.id]
-                            ? mech.passwordPreview || '••••••'
-                            : '••••••••'}
+                          Login: <strong className="text-gray-900">{mech.mobile || mech.username}</strong>
                         </span>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setRevealedPasswords((prev) => ({
-                              ...prev,
-                              [mech.id]: !prev[mech.id],
-                            }))
-                          }
-                          className="p-1 text-gray-500 hover:text-gray-800"
-                          title={
-                            revealedPasswords[mech.id]
-                              ? 'Hide password'
-                              : 'Show password'
-                          }
-                        >
-                          {revealedPasswords[mech.id] ? (
-                            <EyeOff className="w-3.5 h-3.5" />
-                          ) : (
-                            <Eye className="w-3.5 h-3.5" />
-                          )}
-                        </button>
+                        <span>•</span>
+                        <span className="flex items-center gap-1">
+                          Password:
+                          <strong className="text-gray-900">
+                            {revealedPasswords[mech.id] ? mech.passwordPreview || '••••••' : '••••••••'}
+                          </strong>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setRevealedPasswords((prev) => ({
+                                ...prev,
+                                [mech.id]: !prev[mech.id],
+                              }))
+                            }
+                            className="p-0.5 text-gray-400 hover:text-gray-700"
+                            title={revealedPasswords[mech.id] ? 'Hide password' : 'Show password'}
+                          >
+                            {revealedPasswords[mech.id] ? (
+                              <EyeOff className="w-3.5 h-3.5" />
+                            ) : (
+                              <Eye className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        </span>
                       </div>
-                    </div>
-
-                    {/* Functionalities Badges */}
-                    <div className="flex flex-wrap items-center gap-1 pt-1">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                        <Receipt className="w-2.5 h-2.5" />
-                        Billing
-                      </span>
-                      {mech.permissions?.includes('parts') && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-900 border border-amber-200">
-                          <Tag className="w-2.5 h-2.5" />
-                          Parts Pricing
+                      <div className="flex flex-wrap items-center gap-1 pt-1">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                          <Receipt className="w-2.5 h-2.5" />
+                          Billing
                         </span>
-                      )}
-                      {mech.permissions?.includes('customers') && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-50 text-blue-900 border border-blue-200">
-                          <Users className="w-2.5 h-2.5" />
-                          Customers
-                        </span>
-                      )}
-                      {mech.permissions?.includes('enquiries') && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-50 text-purple-900 border border-purple-200">
-                          <Inbox className="w-2.5 h-2.5" />
-                          Enquiries
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Share Credentials Action Buttons */}
-                    <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
-                      <button
-                        type="button"
-                        onClick={() => handleCopyCredentials(mech)}
-                        className={`flex-1 py-2 px-2.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
-                          copiedId === mech.id
-                            ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                            : 'bg-gray-50 text-gray-700 border-gray-200'
-                        }`}
-                      >
-                        {copiedId === mech.id ? (
-                          <>
-                            <Check className="w-3.5 h-3.5 text-emerald-600" />
-                            <span>Copied!</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-3.5 h-3.5" />
-                            <span>Copy Login</span>
-                          </>
+                        {mech.permissions?.includes('parts') && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-900 border border-amber-200">
+                            <Tag className="w-2.5 h-2.5" />
+                            Parts Pricing
+                          </span>
                         )}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => handleShareWhatsApp(mech)}
-                        className="flex-1 py-2 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs transition-colors"
-                      >
-                        <MessageCircle className="w-3.5 h-3.5" />
-                        <span>WhatsApp</span>
-                      </button>
+                        {mech.permissions?.includes('customers') && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-50 text-blue-900 border border-blue-200">
+                            <Users className="w-2.5 h-2.5" />
+                            Customers
+                          </span>
+                        )}
+                        {mech.permissions?.includes('enquiries') && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-50 text-purple-900 border border-purple-200">
+                            <Inbox className="w-2.5 h-2.5" />
+                            Enquiries
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            </>
+
+                  <div className="flex items-center justify-end gap-1.5 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
+                    <button
+                      type="button"
+                      onClick={() => handleCopyCredentials(mech)}
+                      className={`p-2 rounded-xl border transition-all ${
+                        copiedId === mech.id
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                          : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                      }`}
+                      title="Copy Login Credentials"
+                    >
+                      {copiedId === mech.id ? (
+                        <Check className="w-4 h-4 text-emerald-600" />
+                      ) : (
+                        <Copy className="w-4 h-4" />
+                      )}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleShareWhatsApp(mech)}
+                      className="p-2 text-emerald-700 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl transition-colors shadow-2xs"
+                      title="Send Login via WhatsApp"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteMechanic(mech.id, mech.name)}
+                      className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xl border border-red-200 transition-colors"
+                      title="Delete account"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </div>
