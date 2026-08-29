@@ -18,4 +18,11 @@ export interface ServiceItem {
   category: ServiceCategory;
   imageUrl: string;
   isPopular?: boolean;
+  packageBreakdown?: {
+    item: string;
+    price: string;
+  }[];
+  totalPackagePrice?: string;
+  benefits?: string[];
+  importantNote?: string;
 }

@@ -30,6 +30,9 @@ export const getActiveServices = async (req: Request, res: Response): Promise<vo
       isPopular: row.is_popular || false,
       isActive: row.is_active,
       sortOrder: row.sort_order,
+      packageBreakdown: row.package_breakdown || [],
+      benefits: row.benefits || [],
+      importantNote: row.important_note || '',
     }));
 
     memoryCache.set('services_active', formatted, 120); // 2 minutes TTL
@@ -68,6 +71,9 @@ export const getAllServices = async (req: Request, res: Response): Promise<void>
       isPopular: row.is_popular || false,
       isActive: row.is_active,
       sortOrder: row.sort_order,
+      packageBreakdown: row.package_breakdown || [],
+      benefits: row.benefits || [],
+      importantNote: row.important_note || '',
     }));
 
     memoryCache.set('services_all', formatted, 120);

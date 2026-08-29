@@ -51,6 +51,18 @@ export const bikeServicesService = {
       storageService.set(STORAGE_KEY, servicesData);
       return servicesData;
     }
+
+    // Ensure cached s2 has latest package breakdown and pricing
+    const s2Cached = saved.find((s) => s.id === 's2');
+    if (s2Cached && (!s2Cached.packageBreakdown || s2Cached.priceStartingAt === '₹799')) {
+      const s2Fresh = servicesData.find((d) => d.id === 's2');
+      if (s2Fresh) {
+        const merged = saved.map((s) => (s.id === 's2' ? { ...s, ...s2Fresh } : s));
+        storageService.set(STORAGE_KEY, merged);
+        return merged;
+      }
+    }
+
     return saved;
   },
 

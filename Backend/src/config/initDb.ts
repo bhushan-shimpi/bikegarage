@@ -30,21 +30,46 @@ export const all12Services = [
   {
     id: 's2',
     slug: 'premium-bike-service',
-    name: 'Premium Bike Service',
-    marathi_name: 'प्रीमियम बाईक सर्व्हिसिंग',
+    name: 'Premium Bike Servicing Package',
+    marathi_name: 'प्रीमियम बाईक सर्व्हिसिंग पॅकेज',
     icon_name: 'Sparkles',
-    short_description: 'Master 35-point complete motorcycle overhaul & health certification',
-    full_description: 'Our top-tier care package for touring bikes, superbikes, and daily riders. Full disassembly of wear items, synthetic fluid flush, caliper greasing, chassis torque check, and 30-day service warranty.',
+    short_description: 'To improve your bike’s performance, mileage, and engine life with deep engine flush, additive & full tune-up',
+    full_description: 'To improve your bike’s performance, mileage, and engine life, we offer our Premium Bike Servicing Package at Chaudhari Auto, Pahur (Tal. Jamner, Dist. Jalgaon). Complete general inspection, engine oil replacement, engine flush to clean carbon deposits, engine oil additive for maximum smoothness, chain cleaning & lubing, and full 12-point road testing.',
     included: [
-      'Complete 35-point safety inspection',
-      'Fully synthetic engine oil & OEM filter',
-      'Front & rear brake caliper complete overhaul',
-      'Drive chain ultrasonic wash & high-temperature lube',
-      'Steering cone set & wheel bearing check',
-      'Full 3M showroom wax polish & detailing',
+      'Complete Bike Inspection (General Inspection)',
+      'Engine Oil Replacement',
+      'Air Filter, Oil Filter & Petrol Filter Inspection',
+      'Chain Cleaning & Chain Lubrication',
+      'Brake Inspection & Adjustment',
+      'Clutch & Accelerator Cable Inspection',
+      'Battery & Electrical System Inspection',
+      'Tyre Air Pressure & Tyre Condition Check',
+      'Engine Flush to clean carbon deposits and dirt from the engine',
+      'Engine Oil Additive for improved engine smoothness and protection',
+      'Complete Nut & Bolt Tightening',
+      'Road Test & Final Quality Inspection',
     ],
-    estimated_time: '4 - 5 Hours',
-    price_starting_at: '₹799',
+    package_breakdown: [
+      { item: 'Premium Service (Labour)', price: '₹350/-' },
+      { item: 'Engine Oil', price: '₹605/-' },
+      { item: 'Chain Lube', price: '₹195/-' },
+      { item: 'Chain Cleaner', price: '₹170/-' },
+      { item: 'Engine Oil Additive', price: '₹265/-' },
+      { item: 'Engine Flush', price: '₹235/-' },
+      { item: 'Filter (Air / Oil / Petrol)', price: 'As Required' },
+    ],
+    benefits: [
+      'Helps improve engine performance and power',
+      'Makes the engine smoother and quieter',
+      'Helps improve mileage',
+      'Increases the life of the chain and sprocket',
+      'Reduces carbon deposits and dirt inside the engine',
+      'Helps reduce the chances of major repair expenses in the future',
+      'Makes your bike safer and more reliable',
+    ],
+    important_note: 'If any additional spare part needs to be replaced during servicing, the cost will be added separately to the final bill. No additional work will be carried out without the customer’s prior approval.',
+    estimated_time: '3 - 4 Hours',
+    price_starting_at: '₹1,820',
     category: 'maintenance',
     image_url: '/images/services/premium-service.jpg',
     is_popular: true,
@@ -384,9 +409,16 @@ export async function initDb() {
         is_popular BOOLEAN DEFAULT false,
         is_active BOOLEAN DEFAULT true,
         sort_order INT DEFAULT 0,
+        package_breakdown JSONB DEFAULT '[]'::jsonb,
+        benefits JSONB DEFAULT '[]'::jsonb,
+        important_note TEXT,
         created_at TIMESTAMPTZ DEFAULT NOW(),
         updated_at TIMESTAMPTZ DEFAULT NOW()
       );
+
+      ALTER TABLE bike_services ADD COLUMN IF NOT EXISTS package_breakdown JSONB DEFAULT '[]'::jsonb;
+      ALTER TABLE bike_services ADD COLUMN IF NOT EXISTS benefits JSONB DEFAULT '[]'::jsonb;
+      ALTER TABLE bike_services ADD COLUMN IF NOT EXISTS important_note TEXT;
     `);
 
     // 6. Create Customers Table
@@ -511,8 +543,9 @@ export async function initDb() {
         `INSERT INTO bike_services (
           id, slug, name, marathi_name, icon_name, short_description,
           full_description, included, estimated_time, price_starting_at,
-          category, image_url, is_popular, is_active, sort_order
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, true, $14)
+          category, image_url, is_popular, is_active, sort_order,
+          package_breakdown, benefits, important_note
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, true, $14, $15, $16, $17)
         ON CONFLICT (id) DO UPDATE SET
           name = EXCLUDED.name,
           marathi_name = EXCLUDED.marathi_name,
@@ -523,7 +556,10 @@ export async function initDb() {
           full_description = EXCLUDED.full_description,
           included = EXCLUDED.included,
           category = EXCLUDED.category,
-          sort_order = EXCLUDED.sort_order`,
+          sort_order = EXCLUDED.sort_order,
+          package_breakdown = EXCLUDED.package_breakdown,
+          benefits = EXCLUDED.benefits,
+          important_note = EXCLUDED.important_note`,
         [
           s.id,
           s.slug,
@@ -539,6 +575,9 @@ export async function initDb() {
           s.image_url,
           s.is_popular,
           s.sort_order,
+          JSON.stringify((s as any).package_breakdown || []),
+          JSON.stringify((s as any).benefits || []),
+          (s as any).important_note || null,
         ]
       );
     }
