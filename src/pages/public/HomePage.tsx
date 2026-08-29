@@ -9,6 +9,8 @@ import { GallerySection } from '../../components/home/GallerySection';
 import { HowItWorks } from '../../components/home/HowItWorks';
 import { InstagramHighlight } from '../../components/home/InstagramHighlight';
 import { TestimonialsSection } from '../../components/home/TestimonialsSection';
+import { ServiceAreaSection } from '../../components/home/ServiceAreaSection';
+import { WorkshopFAQSection, faqSchema } from '../../components/home/WorkshopFAQSection';
 import { HomeContactSnippet } from '../../components/home/HomeContactSnippet';
 import { CTASection } from '../../components/home/CTASection';
 
@@ -57,7 +59,15 @@ export const HomePage: React.FC = () => {
     areaServed: [
       { '@type': 'City', name: 'Pahur' },
       { '@type': 'City', name: 'Jamner' },
-      { '@type': 'AdministrativeArea', name: 'Jalgaon' },
+      { '@type': 'City', name: 'Shendurni' },
+      { '@type': 'City', name: 'Vakod' },
+      { '@type': 'City', name: 'Neri' },
+      { '@type': 'City', name: 'Fagne' },
+      { '@type': 'City', name: 'Jalgaon' },
+      { '@type': 'City', name: 'Bhusawal' },
+      { '@type': 'City', name: 'Pachora' },
+      { '@type': 'AdministrativeArea', name: 'Jalgaon District' },
+      { '@type': 'AdministrativeArea', name: 'Maharashtra' },
     ],
   };
 
@@ -67,7 +77,7 @@ export const HomePage: React.FC = () => {
         title="Bike Service & Repair in Pahur, Jamner"
         description="Chaudhary Auto is a premier bike garage in Pahur, Taluka Jamner, Dist. Jalgaon offering expert bike servicing, repair, engine work, and complete restoration."
         canonicalPath="/"
-        jsonLd={homeSchema}
+        jsonLd={[homeSchema, faqSchema]}
       />
       {/* 1. Hero */}
       <HeroSection />
@@ -93,13 +103,19 @@ export const HomePage: React.FC = () => {
       {/* 8. How It Works */}
       <HowItWorks />
 
-      {/* 8. Customer Reviews */}
+      {/* 9. Customer Reviews */}
       <TestimonialsSection />
 
-      {/* 9. Location & Contact Information */}
+      {/* 10. Service Area & Regional Coverage */}
+      <ServiceAreaSection />
+
+      {/* 11. Frequently Asked Questions */}
+      <WorkshopFAQSection />
+
+      {/* 12. Location & Contact Information */}
       <HomeContactSnippet />
 
-      {/* 10. Final CTA Banner */}
+      {/* 13. Final CTA Banner */}
       <CTASection />
     </div>
   );

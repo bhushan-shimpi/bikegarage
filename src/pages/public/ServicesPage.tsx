@@ -4,6 +4,7 @@ import { SEO } from '../../components/common/SEO';
 import { PageBanner } from '../../components/common/PageBanner';
 import { ServiceCard } from '../../components/services/ServiceCard';
 import { ServiceDetailModal } from '../../components/services/ServiceDetailModal';
+import { BikeProblemsGuide } from '../../components/services/BikeProblemsGuide';
 import { bikeServicesService } from '../../services/bikeServicesService';
 import { HelpCircle, CheckCircle2, Sparkles, MapPin } from 'lucide-react';
 import { ScrollReveal } from '../../components/common/ScrollReveal';
@@ -153,6 +154,9 @@ export const ServicesPage: React.FC = () => {
             ))}
           </div>
         </div>
+
+        {/* Common Bike Problems & Diagnostic Troubleshooting Guide */}
+        <BikeProblemsGuide />
       </div>
 
       {/* Bottom Yellow Banner */}
