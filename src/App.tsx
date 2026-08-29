@@ -25,6 +25,14 @@ import { AdminServicesPricingPage } from './pages/admin/AdminServicesPricingPage
 import { AdminRepairHistoryPage } from './pages/admin/AdminRepairHistoryPage';
 import { AdminPartsInventoryPage } from './pages/admin/AdminPartsInventoryPage';
 import { AdminRestorationsPage } from './pages/admin/AdminRestorationsPage';
+import { authService } from './services/authService';
+
+const GarageIndexRedirect: React.FC = () => {
+  if (authService.isMechanic()) {
+    return <Navigate to="/garage/billing" replace />;
+  }
+  return <Navigate to="/garage/dashboard" replace />;
+};
 
 export const App: React.FC = () => {
   return (
@@ -49,7 +57,7 @@ export const App: React.FC = () => {
 
         {/* Garage Admin Portal */}
         <Route path="/garage" element={<AdminLayout />}>
-          <Route index element={<Navigate to="/garage/dashboard" replace />} />
+          <Route index element={<GarageIndexRedirect />} />
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="enquiries" element={<EnquiriesListPage />} />
           <Route path="enquiries/:id" element={<EnquiryDetailsPage />} />
