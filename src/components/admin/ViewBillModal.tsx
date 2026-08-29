@@ -21,8 +21,8 @@ export const ViewBillModal: React.FC<ViewBillModalProps> = ({ isOpen, onClose, r
     0;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in overflow-y-auto">
-      <div className="bg-white rounded-2xl w-full max-w-2xl border border-gray-200 shadow-2xl overflow-hidden my-8 max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-xs animate-fade-in overflow-y-auto">
+      <div className="bg-white rounded-2xl w-full max-w-2xl border border-gray-200 shadow-2xl overflow-hidden my-2 sm:my-8 max-h-[95vh] sm:max-h-[90vh] flex flex-col">
         {/* Modal Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-gray-50">
           <div className="flex items-center gap-2.5">
@@ -154,21 +154,21 @@ export const ViewBillModal: React.FC<ViewBillModalProps> = ({ isOpen, onClose, r
         </div>
 
         {/* Modal Footer Actions */}
-        <div className="p-4 border-t border-gray-100 bg-gray-50 flex flex-wrap items-center justify-between gap-2">
+        <div className="p-3 sm:p-4 border-t border-gray-100 bg-gray-50 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2">
           <button
             onClick={() => printInvoice(record)}
-            className="px-3.5 py-2 rounded-xl bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 font-bold text-xs flex items-center gap-1.5 transition-colors"
+            className="w-full sm:w-auto px-3.5 py-2.5 rounded-xl bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
           >
             <Printer className="w-3.5 h-3.5 text-amber-700" />
-            <span>Print Invoice</span>
+            <span>Print Tax Invoice</span>
           </button>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
             <a
               href={getWhatsAppBillUrl(record)}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-colors"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-colors"
             >
               <WhatsAppIcon className="w-4 h-4" />
               <span>Send WhatsApp Bill</span>
@@ -176,7 +176,7 @@ export const ViewBillModal: React.FC<ViewBillModalProps> = ({ isOpen, onClose, r
 
             <button
               onClick={onClose}
-              className="px-4 py-2 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold text-xs"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold text-xs"
             >
               Close
             </button>

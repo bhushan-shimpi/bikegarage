@@ -544,6 +544,32 @@ export async function initDb() {
     }
     console.log('✅ All 12 authentic bike services & images synced with Supabase DB!');
 
+    // 10. Enable Row Level Security (RLS) on all tables and create permissive policies
+    console.log('Enabling Row Level Security (RLS) across all database tables...');
+    const rlsTables = [
+      'enquiries',
+      'appointments',
+      'restorations',
+      'staff_users',
+      'bike_services',
+      'customers',
+      'repair_records',
+      'parts_inventory',
+    ];
+
+    for (const table of rlsTables) {
+      await client.query(`ALTER TABLE IF EXISTS ${table} ENABLE ROW LEVEL SECURITY;`);
+      await client.query(`DROP POLICY IF EXISTS "Allow all operations on ${table}" ON ${table};`);
+      await client.query(`
+        CREATE POLICY "Allow all operations on ${table}" 
+        ON ${table} 
+        FOR ALL 
+        USING (true) 
+        WITH CHECK (true);
+      `);
+    }
+    console.log('✅ Row Level Security (RLS) successfully enabled for all tables with access policies!');
+
     await client.query('COMMIT');
     console.log('✅ Supabase PostgreSQL Schema successfully initialized!');
   } catch (error) {

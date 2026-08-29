@@ -11,6 +11,7 @@ import {
   Copy,
   Check,
   Printer,
+  Plus,
 } from 'lucide-react';
 import { WhatsAppIcon } from '../common/WhatsAppIcon';
 import { repairService } from '../../services/repairService';
@@ -282,8 +283,8 @@ Helpline: +91 7387448878 / 9503853143`;
     <>
       {/* Main Bill Creation Modal */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-fade-in overflow-y-auto">
-          <div className="bg-white rounded-2xl w-full max-w-2xl border border-gray-200 shadow-2xl overflow-hidden my-6 max-h-[92vh] flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-xs animate-fade-in overflow-y-auto">
+          <div className="bg-white rounded-2xl w-full max-w-2xl border border-gray-200 shadow-2xl overflow-hidden my-2 sm:my-6 max-h-[95vh] sm:max-h-[92vh] flex flex-col">
             {/* Header */}
             <div className="flex items-center justify-between px-5 sm:px-6 py-4 border-b border-gray-100 bg-gray-50/80">
               <div className="flex items-center gap-2.5">
@@ -563,29 +564,37 @@ Helpline: +91 7387448878 / 9503853143`;
                   </div>
 
                   {/* Manual Custom Part Inputs */}
-                  <div className="pt-2 border-t border-amber-200/60 flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={customPartName}
-                      onChange={(e) => setCustomPartName(e.target.value)}
-                      placeholder="Or enter custom part name..."
-                      className="flex-1 bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900]"
-                    />
-                    <input
-                      type="number"
-                      inputMode="numeric"
-                      value={customPartCost}
-                      onChange={(e) => setCustomPartCost(e.target.value)}
-                      placeholder="₹ Price"
-                      className="w-24 bg-white border border-gray-300 rounded-lg px-2 py-1.5 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900]"
-                    />
-                    <button
-                      type="button"
-                      onClick={handleAddCustomPart}
-                      className="px-3 py-1.5 bg-gray-900 text-white rounded-lg font-bold text-xs hover:bg-black transition-colors"
-                    >
-                      + Add
-                    </button>
+                  <div className="pt-2.5 border-t border-amber-200/60 space-y-2">
+                    <span className="text-[11px] font-semibold text-gray-700 block">
+                      Or add custom spare part:
+                    </span>
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                      <input
+                        type="text"
+                        value={customPartName}
+                        onChange={(e) => setCustomPartName(e.target.value)}
+                        placeholder="Enter custom part name..."
+                        className="flex-1 min-w-0 bg-white border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900]"
+                      />
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          inputMode="numeric"
+                          value={customPartCost}
+                          onChange={(e) => setCustomPartCost(e.target.value)}
+                          placeholder="₹ Price"
+                          className="flex-1 sm:w-28 bg-white border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900]"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleAddCustomPart}
+                          className="px-4 py-2 bg-gray-900 text-white rounded-lg font-bold text-xs hover:bg-black transition-colors shrink-0 flex items-center justify-center gap-1.5 active:scale-95 cursor-pointer shadow-xs min-h-[36px] whitespace-nowrap"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>Add Part</span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -738,18 +747,18 @@ Helpline: +91 7387448878 / 9503853143`;
               </div>
 
               {/* Submit Buttons */}
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-gray-100">
+              <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2.5 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-100 font-semibold text-xs transition-colors"
+                  className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-gray-300 text-gray-700 hover:bg-gray-100 font-semibold text-xs transition-colors text-center"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs flex items-center gap-2 shadow-xs transition-all disabled:opacity-50"
+                  className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all disabled:opacity-50 active:scale-95 cursor-pointer"
                 >
                   <Receipt className="w-4 h-4" />
                   <span>{isSubmitting ? 'Generating Bill...' : 'Generate Bill & Save'}</span>

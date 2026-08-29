@@ -5,9 +5,22 @@ import { apiClient } from './apiClient';
 
 const STORAGE_KEY = 'chaudhari_auto_services';
 
+let isSyncingServices = false;
+let lastSyncAttempt = 0;
+const SYNC_COOLDOWN_MS = 60 * 1000; // Only attempt sync once every 60 seconds
+
 export const bikeServicesService = {
   // Syncs active services from Supabase PostgreSQL database
   syncWithBackend: async (): Promise<ServiceItem[]> => {
+    const now = Date.now();
+    if (isSyncingServices || now - lastSyncAttempt < SYNC_COOLDOWN_MS) {
+      const saved = storageService.get<ServiceItem[] | null>(STORAGE_KEY, null);
+      return (saved && Array.isArray(saved) && saved.length > 0) ? saved : servicesData;
+    }
+
+    isSyncingServices = true;
+    lastSyncAttempt = now;
+
     try {
       const res = await apiClient.get<{ success: boolean; data: ServiceItem[] }>('/api/services');
       if (res.success && Array.isArray(res.data) && res.data.length > 0) {
@@ -16,13 +29,21 @@ export const bikeServicesService = {
         return res.data;
       }
     } catch {
-      // Graceful fallback to local cache
+      // Graceful fallback to local cache without recursion
+    } finally {
+      isSyncingServices = false;
     }
-    return bikeServicesService.getAll();
+
+    const saved = storageService.get<ServiceItem[] | null>(STORAGE_KEY, null);
+    if (!saved || !Array.isArray(saved) || saved.length === 0) {
+      storageService.set(STORAGE_KEY, servicesData);
+      return servicesData;
+    }
+    return saved;
   },
 
   getAll: (): ServiceItem[] => {
-    // Trigger background sync with Supabase PostgreSQL
+    // Background sync with cooldown (fire-and-forget)
     bikeServicesService.syncWithBackend().catch(() => {});
 
     const saved = storageService.get<ServiceItem[] | null>(STORAGE_KEY, null);
