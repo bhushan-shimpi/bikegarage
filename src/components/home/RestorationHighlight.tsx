@@ -231,7 +231,7 @@ export const RestorationHighlight: React.FC = () => {
           <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 mb-4 rounded-full border border-[#F5B900]/40 bg-[#F5B900]/10 text-[#F5B900] text-xs font-black uppercase tracking-widest">
               <Sparkles className="w-3.5 h-3.5" />
-              <span>🏍️ BIKE RESTORATION – CHAUDHARI AUTO CENTRE</span>
+              <span>🏍️ BIKE RESTORATION – CHAUDHARI AUTO</span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white mb-4 font-sans">
@@ -240,7 +240,7 @@ export const RestorationHighlight: React.FC = () => {
 
             {/* Philosophy Statement */}
             <p className="text-sm sm:text-base text-neutral-200 leading-relaxed max-w-2xl mx-auto font-medium">
-              At Chaudhari Auto Centre, bike restoration is not just about repairing an old motorcycle. Our goal is to bring back its original beauty, performance, and finish while giving every detail the attention it deserves.
+              At Chaudhari Auto, bike restoration is not just about repairing an old motorcycle. Our goal is to bring back its original beauty, performance, and finish while giving every detail the attention it deserves.
             </p>
 
             <p className="text-xs sm:text-sm text-neutral-400 mt-2.5 max-w-xl mx-auto">
@@ -357,7 +357,7 @@ export const RestorationHighlight: React.FC = () => {
             </blockquote>
 
             <p className="text-xs sm:text-sm text-neutral-300 max-w-2xl mx-auto leading-relaxed">
-              At <strong className="text-white">Chaudhari Auto Centre</strong>, we believe in <span className="text-[#F5B900] font-bold">Quality</span>, <span className="text-[#F5B900] font-bold">Genuine Parts</span>, <span className="text-[#F5B900] font-bold">Professional Workmanship</span>, and <span className="text-[#F5B900] font-bold">Super-Fine Finishing</span>.
+              At <strong className="text-white">Chaudhari Auto</strong>, we believe in <span className="text-[#F5B900] font-bold">Quality</span>, <span className="text-[#F5B900] font-bold">Genuine Parts</span>, <span className="text-[#F5B900] font-bold">Professional Workmanship</span>, and <span className="text-[#F5B900] font-bold">Super-Fine Finishing</span>.
             </p>
 
             <div className="mt-4 pt-4 border-t border-white/10 max-w-xl mx-auto">

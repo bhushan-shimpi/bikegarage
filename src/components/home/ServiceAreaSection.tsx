@@ -49,7 +49,7 @@ export const ServiceAreaSection: React.FC = () => {
             <div className="w-12 h-1 bg-[#F5B900] mx-auto mt-2 rounded-full" />
 
             <p className="text-xs sm:text-sm text-neutral-300 max-w-2xl mx-auto mt-3 leading-relaxed">
-              Located on Main Road near Bus Stand in Pahur, Chaudhary Auto is the trusted two-wheeler garage for riders across Taluka Jamner and neighboring towns in the Jalgaon district.
+              Located on Main Road near Bus Stand in Pahur, Chaudhari Auto is the trusted two-wheeler garage for riders across Taluka Jamner and neighboring towns in the Jalgaon district.
             </p>
           </div>
         </ScrollReveal>

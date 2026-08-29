@@ -39,7 +39,7 @@ export const LiveFloatingHelp: React.FC = () => {
 
           <div className="space-y-2">
             <a
-              href="https://wa.me/917387448878?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
+              href="https://wa.me/917387448878?text=Hello%20Chaudhari%20Auto,%20I%20want%20to%20inquire%20about%20bike%20service."
               target="_blank"
               rel="noopener noreferrer"
               className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs uppercase tracking-wider transition-all shadow-md shadow-emerald-950/40 group"

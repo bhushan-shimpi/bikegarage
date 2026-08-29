@@ -8,12 +8,12 @@ export const ContactPage: React.FC = () => {
   const contactSchema = {
     '@context': 'https://schema.org',
     '@type': 'ContactPage',
-    name: 'Contact Chaudhary Auto — Pahur, Jamner, Jalgaon',
+    name: 'Contact Chaudhari Auto — Pahur, Jamner, Jalgaon',
     description:
-      'Get in touch with Chaudhary Auto Centre in Pahur for two-wheeler servicing, repairs, and bike restoration consultations. Phone: +91 7387448878.',
+      'Get in touch with Chaudhari Auto in Pahur for two-wheeler servicing, repairs, and bike restoration consultations. Phone: +91 7387448878.',
     mainEntity: {
       '@type': 'MotorcycleRepairShop',
-      name: 'Chaudhary Auto',
+      name: 'Chaudhari Auto',
       telephone: '+91-7387448878',
       email: 'chaudhariautopahur@gmail.com',
       address: {
@@ -52,13 +52,13 @@ export const ContactPage: React.FC = () => {
     <div className="bg-[#F8F9FA] min-h-screen flex flex-col justify-between">
       <SEO
         title="Contact Us & Workshop Location in Pahur, Jamner"
-        description="Visit Chaudhary Auto at Main Road, Near Bus Stand, Pahur, Taluka Jamner, Dist. Jalgaon. Call +91 73874 48878 or message us on WhatsApp for bike servicing appointments."
+        description="Visit Chaudhari Auto at Main Road, Near Bus Stand, Pahur, Taluka Jamner, Dist. Jalgaon. Call +91 73874 48878 or message us on WhatsApp for bike servicing appointments."
         canonicalPath="/contact"
         jsonLd={contactSchema}
       />
       <div>
         {/* Top Banner */}
-        <PageBanner title="CONTACT CHAUDHARI AUTO CENTRE" breadcrumb="Contact Us" />
+        <PageBanner title="CONTACT CHAUDHARI AUTO" breadcrumb="Contact Us" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
           <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-10">
@@ -71,7 +71,7 @@ export const ContactPage: React.FC = () => {
                     Pahur Two-Wheeler Workshop
                   </span>
                   <h2 className="text-xl sm:text-2xl font-black uppercase text-gray-900 font-sans tracking-tight mt-1">
-                    Chaudhari Auto Centre
+                    Chaudhari Auto
                   </h2>
                   <p className="text-xs text-gray-500 mt-1">
                     Trusted Bike Service & Complete Bike Restoration Since 1994.
@@ -103,7 +103,7 @@ export const ContactPage: React.FC = () => {
                     <div>
                       <span className="font-bold text-gray-900 block">WhatsApp Support (Live)</span>
                       <a
-                        href="https://wa.me/917387448878?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
+                        href="https://wa.me/917387448878?text=Hello%20Chaudhari%20Auto,%20I%20want%20to%20inquire%20about%20bike%20service."
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-emerald-700 hover:underline mt-0.5 block font-bold"
@@ -230,7 +230,7 @@ export const ContactPage: React.FC = () => {
               <ScrollReveal direction="right" className="lg:col-span-7">
                 <div className="relative w-full h-80 sm:h-full min-h-[380px] rounded-xl overflow-hidden border border-gray-300 shadow-inner bg-gray-100 group">
                   <iframe
-                    title="Chaudhari Auto Centre Pahur Location Map"
+                    title="Chaudhari Auto Pahur Location Map"
                     src="https://maps.google.com/maps?q=Pahur,%20Jalgaon,%20Maharashtra&t=&z=14&ie=UTF8&iwloc=&output=embed"
                     className="w-full h-full border-0"
                     loading="lazy"
@@ -239,7 +239,7 @@ export const ContactPage: React.FC = () => {
                   <div className="absolute top-3 left-3 bg-white/95 backdrop-blur px-3 py-2 rounded-lg shadow-md border border-gray-200 text-xs">
                     <span className="font-bold text-gray-900 block flex items-center gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-                      Chaudhari Auto Centre
+                      Chaudhari Auto
                     </span>
                     <span className="text-[11px] text-[#DFA500] font-semibold">Pahur, Maharashtra (Est. 1994)</span>
                   </div>

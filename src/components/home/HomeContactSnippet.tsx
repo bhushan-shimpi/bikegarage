@@ -26,7 +26,7 @@ export const HomeContactSnippet: React.FC = () => {
               <div className="flex items-start gap-3 p-3.5 rounded-xl bg-[#141414] border border-[#262626]">
                 <MapPin className="w-5 h-5 text-[#F5B900] shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold text-white block">Chaudhari Auto Centre</span>
+                  <span className="font-bold text-white block">Chaudhari Auto</span>
                   <span className="text-neutral-400">Main Road, Near Bus Stand, Pahur, Tal. Jamner, Dist. Jalgaon, Maharashtra 424205</span>
                 </div>
               </div>
@@ -92,7 +92,7 @@ export const HomeContactSnippet: React.FC = () => {
           <div className="lg:col-span-6">
             <div className="rounded-2xl overflow-hidden border border-[#2B2B2B] shadow-2xl h-80 sm:h-96 w-full bg-[#1A1A1A] relative">
               <iframe
-                title="Chaudhari Auto Centre Pahur Location"
+                title="Chaudhari Auto Pahur Location"
                 src="https://maps.google.com/maps?q=Pahur,%20Jalgaon,%20Maharashtra&t=&z=14&ie=UTF8&iwloc=&output=embed"
                 className="w-full h-full border-0"
                 loading="lazy"

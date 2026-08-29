@@ -18,8 +18,8 @@ export const HomePage: React.FC = () => {
     '@context': 'https://schema.org',
     '@type': 'MotorcycleRepairShop',
     '@id': 'https://www.chaudhariauto.com/#business',
-    name: 'Chaudhary Auto',
-    alternateName: ['Chaudhari Auto Centre', 'Chaudhary Auto Pahur'],
+    name: 'Chaudhari Auto',
+    alternateName: ['Chaudhari Auto Centre', 'Chaudhary Auto', 'चौधरी ऑटो'],
     url: 'https://www.chaudhariauto.com/',
     logo: 'https://www.chaudhariauto.com/logo.png',
     image: 'https://www.chaudhariauto.com/images/hero-bike.jpg',
@@ -74,7 +74,7 @@ export const HomePage: React.FC = () => {
     <div className="bg-[#0B0B0B] text-white">
       <SEO
         title="Bike Service & Repair in Pahur, Jamner"
-        description="Chaudhary Auto is a premier bike garage in Pahur, Taluka Jamner, Dist. Jalgaon offering expert bike servicing, repair, engine work, and complete restoration."
+        description="Chaudhari Auto provides professional bike servicing, repair and maintenance services in Pahur, Jamner and nearby areas of Jalgaon."
         canonicalPath="/"
         jsonLd={[homeSchema, faqSchema]}
       />

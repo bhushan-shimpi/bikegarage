@@ -17,11 +17,11 @@ export const AboutPage: React.FC = () => {
   const workshopGallery = [
     {
       img: '/images/about/bay1-ramp.jpg',
-      alt: 'Two-wheeler periodic servicing and maintenance ramp at Chaudhary Auto in Pahur',
+      alt: 'Two-wheeler periodic servicing and maintenance ramp at Chaudhari Auto in Pahur',
     },
     {
       img: '/images/about/bay2-engine.jpg',
-      alt: 'Engine overhaul and cylinder boring workbench at Chaudhary Auto workshop in Jamner',
+      alt: 'Engine overhaul and cylinder boring workbench at Chaudhari Auto workshop in Jamner',
     },
     {
       img: '/images/about/bay3-restoration.jpg',
@@ -29,7 +29,7 @@ export const AboutPage: React.FC = () => {
     },
     {
       img: '/images/about/bay4-wash.jpg',
-      alt: 'High-pressure foam wash and detailing bay at Chaudhary Auto',
+      alt: 'High-pressure foam wash and detailing bay at Chaudhari Auto',
     },
   ];
 
@@ -43,12 +43,12 @@ export const AboutPage: React.FC = () => {
   const aboutSchema = {
     '@context': 'https://schema.org',
     '@type': 'AboutPage',
-    name: 'About Chaudhary Auto Centre — Pahur, Jamner, Jalgaon',
+    name: 'About Chaudhari Auto — Pahur, Jamner, Jalgaon',
     description:
-      'Serving riders in Pahur, Jamner, and Jalgaon since 1994. Chaudhary Auto specializes exclusively in motorcycle maintenance, engine repairs, and vintage two-stroke bike restoration.',
+      'Serving riders in Pahur, Jamner, and Jalgaon since 1994. Chaudhari Auto specializes exclusively in motorcycle maintenance, engine repairs, and vintage two-stroke bike restoration.',
     mainEntity: {
       '@type': 'MotorcycleRepairShop',
-      name: 'Chaudhary Auto',
+      name: 'Chaudhari Auto',
       foundingDate: '1994',
       telephone: '+91-7387448878',
       address: {
@@ -66,13 +66,13 @@ export const AboutPage: React.FC = () => {
     <div className="bg-[#F8F9FA] min-h-screen flex flex-col justify-between">
       <SEO
         title="About Our Bike Garage & 30-Year Legacy in Pahur"
-        description="Learn about Chaudhary Auto: Pahur's premier two-wheeler workshop founded in 1994. Over 30 years of trusted motorcycle servicing, engine rebuilds, and restoration craftsmanship."
+        description="Learn about Chaudhari Auto: Pahur's premier two-wheeler workshop founded in 1994. Over 30 years of trusted motorcycle servicing, engine rebuilds, and restoration craftsmanship."
         canonicalPath="/about"
         jsonLd={aboutSchema}
       />
       <div>
         {/* Top Banner */}
-        <PageBanner title="ABOUT CHAUDHARI AUTO CENTRE" breadcrumb="About Us" />
+        <PageBanner title="ABOUT CHAUDHARI AUTO" breadcrumb="About Us" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-16">
           {/* Top Section: Story & Workshop Facade */}
@@ -83,7 +83,7 @@ export const AboutPage: React.FC = () => {
                 Our Two-Wheeler Heritage
               </span>
               <h2 className="text-2xl sm:text-3xl font-black uppercase text-gray-900 tracking-tight font-sans">
-                Chaudhari Auto Centre, Pahur
+                Chaudhari Auto, Pahur
               </h2>
               <div className="w-12 h-1 bg-[#F5B900] rounded-full" />
 
@@ -92,7 +92,7 @@ export const AboutPage: React.FC = () => {
               </p>
 
               <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
-                Founded in 1994, Chaudhari Auto Centre has grown from a humble single-bench repair shop into Pahur's most respected two-wheeler service and restoration hub. Over the last 30 years, we have worked on thousands of commuter motorcycles (Hero, Honda, Bajaj, Yamaha) and vintage classics (फक्त मोटरसायकल व बाईक — स्कूटर किंवा मोपेडचे काम केले जात नाही).
+                Founded in 1994, Chaudhari Auto has grown from a humble single-bench repair shop into Pahur's most respected two-wheeler service and restoration hub. Over the last 30 years, we have worked on thousands of commuter motorcycles (Hero, Honda, Bajaj, Yamaha) and vintage classics (फक्त मोटरसायकल व बाईक — स्कूटर किंवा मोपेडचे काम केले जात नाही).
               </p>
 
               <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">

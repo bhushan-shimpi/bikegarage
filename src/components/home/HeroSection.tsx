@@ -12,7 +12,7 @@ export const HeroSection: React.FC = () => {
         <div className="relative w-full aspect-[16/9] overflow-hidden bg-[#0B0B0B]">
           <img
             src="/images/hero-bike-mobile.jpg"
-            alt="Premium bike servicing and motorcycle repair at Chaudhary Auto in Pahur"
+            alt="Premium bike servicing and motorcycle repair at Chaudhari Auto in Pahur"
             fetchPriority="high"
             decoding="async"
             className="w-full h-full object-cover object-center"
@@ -25,7 +25,7 @@ export const HeroSection: React.FC = () => {
         <div className="px-5 xs:px-6 pt-1 pb-4 flex flex-col">
           {/* Eyebrow */}
           <p className="text-[#F5B900] text-xs font-bold uppercase tracking-[0.2em] mb-1.5 animate-fade-in-up">
-            CHAUDHARY AUTO • TRUSTED SINCE 1994
+            CHAUDHARI AUTO • TRUSTED SINCE 1994
           </p>
 
           {/* Mobile Display Heading */}
@@ -82,7 +82,7 @@ export const HeroSection: React.FC = () => {
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
             src="/images/hero-bike.jpg"
-            alt="Chaudhary Auto motorcycle servicing and repair workshop in Pahur, Jamner"
+            alt="Chaudhari Auto motorcycle servicing and repair workshop in Pahur, Jamner"
             fetchPriority="high"
             decoding="async"
             className="w-full h-full object-cover object-right brightness-105 contrast-105"
@@ -107,7 +107,7 @@ export const HeroSection: React.FC = () => {
           <div className="max-w-lg lg:max-w-xl">
             {/* Eyebrow */}
             <p className="text-[#F5B900] text-xs lg:text-sm font-bold uppercase tracking-[0.22em] mb-2 animate-fade-in-up">
-              CHAUDHARY AUTO • TRUSTED SINCE 1994
+              CHAUDHARI AUTO • TRUSTED SINCE 1994
             </p>
 
             {/* Semantic Main Heading */}

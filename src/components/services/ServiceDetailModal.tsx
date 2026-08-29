@@ -70,7 +70,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
 
           <div className="flex items-center gap-2 mb-2">
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-[#F5B900] text-black">
-              Chaudhary Auto
+              Chaudhari Auto
             </span>
             <span className="flex items-center gap-1 text-xs text-gray-300 font-medium">
               <MapPin className="w-3.5 h-3.5 text-[#F5B900]" />

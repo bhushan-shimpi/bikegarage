@@ -22,7 +22,7 @@ export const NotFoundPage: React.FC = () => {
         </h2>
 
         <p className="text-sm text-neutral-400 mb-8 leading-relaxed">
-          Looks like this road leads nowhere! Head back to the Chaudhari Auto Centre garage home.
+          Looks like this road leads nowhere! Head back to the Chaudhari Auto garage home.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">

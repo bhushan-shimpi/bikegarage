@@ -212,7 +212,7 @@ export const servicesData: ServiceItem[] = [
     marathiName: 'बाईक रिस्टोरेशन (१००सीसी व १५०सीसी)',
     iconName: 'PackageCheck',
     shortDescription: 'Bringing vintage & standard motorcycles back to showroom condition with oven paint & ceramic coating',
-    fullDescription: 'At Chaudhari Auto Centre, bike restoration is not just about repairing an old motorcycle. Our goal is to bring back its original beauty, performance, and finish while giving every detail the attention it deserves. Standard quotations available for 100cc (₹18,850 base / ₹20,000+ showroom) and 150cc (₹24,500 base / ₹25,000+ showroom) motorcycles.',
+    fullDescription: 'At Chaudhari Auto, bike restoration is not just about repairing an old motorcycle. Our goal is to bring back its original beauty, performance, and finish while giving every detail the attention it deserves. Standard quotations available for 100cc (₹18,850 base / ₹20,000+ showroom) and 150cc (₹24,500 base / ₹25,000+ showroom) motorcycles.',
     included: [
       'Complete Inspection — Thorough inspection of every single part before restoration begins',
       'Colour and Ceramic Coating — Oven / bhatti paint baking process for factory gloss',

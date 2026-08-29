@@ -114,7 +114,7 @@ export const InquiryPage: React.FC = () => {
     <div className="bg-[#F8F9FA] min-h-screen pb-16">
       <SEO
         title="Book Bike Service & Workshop Appointment in Pahur"
-        description="Book your two-wheeler service appointment at Chaudhary Auto in Pahur, Jamner. Fast scheduling, transparent pricing, and genuine spare parts."
+        description="Book your two-wheeler service appointment at Chaudhari Auto in Pahur, Jamner. Fast scheduling, transparent pricing, and genuine spare parts."
         canonicalPath="/inquiry"
       />
       {/* Top Banner */}
@@ -137,7 +137,7 @@ export const InquiryPage: React.FC = () => {
             </h2>
 
             <p className="text-xs sm:text-sm text-gray-600 max-w-md mx-auto mb-6">
-              Thank you! Your request is registered at Chaudhari Auto Centre, Pahur. Our team will contact you shortly to confirm intake timing.
+              Thank you! Your request is registered at Chaudhari Auto, Pahur. Our team will contact you shortly to confirm intake timing.
             </p>
 
             {/* Summary Box */}
@@ -179,7 +179,7 @@ export const InquiryPage: React.FC = () => {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a
                 href={`https://wa.me/917387448878?text=${encodeURIComponent(
-                  `Hello Chaudhari Auto Centre, I have submitted an enquiry (Ticket: ${submittedEnquiry.ticketNumber}) for my ${submittedEnquiry.bike.model} (${submittedEnquiry.service.serviceName}).`
+                  `Hello Chaudhari Auto, I have submitted an enquiry (Ticket: ${submittedEnquiry.ticketNumber}) for my ${submittedEnquiry.bike.model} (${submittedEnquiry.service.serviceName}).`
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -355,7 +355,7 @@ export const InquiryPage: React.FC = () => {
                     <span>Call: +91 73874 48878</span>
                   </a>
                   <a
-                    href="https://wa.me/917387448878?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
+                    href="https://wa.me/917387448878?text=Hello%20Chaudhari%20Auto,%20I%20want%20to%20inquire%20about%20bike%20service."
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold transition-colors border border-emerald-200"

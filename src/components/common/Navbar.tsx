@@ -57,13 +57,13 @@ export const Navbar: React.FC = () => {
             >
               <img
                 src="/images/logo.png"
-                alt="Chaudhari Auto Centre"
+                alt="Chaudhari Auto"
                 className="h-9 sm:h-10 w-auto object-contain shrink-0 transition-transform duration-200 group-hover:scale-105"
               />
               {/* Brand text: hidden on xs, visible on sm+ */}
               <div className="hidden sm:flex flex-col">
                 <span className="text-sm lg:text-base font-black tracking-tight text-white uppercase font-sans leading-none">
-                  CHAUDHARI AUTO CENTRE
+                  CHAUDHARI AUTO
                 </span>
                 <span className="text-[9px] lg:text-[10px] font-black tracking-[0.25em] text-[#F5B900] uppercase mt-0.5 leading-none">
                   PAHUR • EST. 1994
@@ -178,7 +178,7 @@ export const Navbar: React.FC = () => {
               <div className="flex items-center gap-2.5">
                 <img
                   src="/images/logo.png"
-                  alt="Chaudhari Auto Centre"
+                  alt="Chaudhari Auto"
                   className="h-9 w-auto object-contain"
                 />
                 <div className="flex flex-col">

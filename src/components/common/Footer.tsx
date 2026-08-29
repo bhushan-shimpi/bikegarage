@@ -12,12 +12,12 @@ export const Footer: React.FC = () => {
             <Link to="/" className="flex items-center gap-3">
               <img
                 src="/images/logo.png"
-                alt="Chaudhari Auto Centre Logo"
+                alt="Chaudhari Auto Logo"
                 className="h-12 w-auto object-contain"
               />
               <div className="flex flex-col">
                 <span className="text-base font-black text-white uppercase tracking-tight font-sans">
-                  CHAUDHARI AUTO CENTRE
+                  CHAUDHARI AUTO
                 </span>
                 <span className="text-xs font-black tracking-[0.25em] text-[#F5B900] uppercase mt-0.5">
                   PAHUR • EST. 1994
@@ -205,7 +205,7 @@ export const Footer: React.FC = () => {
         {/* Bottom copyright and staff login */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-2.5 text-neutral-500 text-[11px]">
           <span>
-            © 2026 Chaudhari Auto Centre, Pahur. All Rights Reserved. Trusted Bike Service Since 1994.
+            © 2026 Chaudhari Auto, Pahur. All Rights Reserved. Trusted Bike Service Since 1994.
           </span>
           <Link
             to="/garage/login"

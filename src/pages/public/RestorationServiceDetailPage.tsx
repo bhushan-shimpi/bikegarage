@@ -26,7 +26,7 @@ export const RestorationServiceDetailPage: React.FC = () => {
     name: 'Bike Restoration Service (100cc & 150cc)',
     provider: {
       '@type': 'MotorcycleRepairShop',
-      name: 'Chaudhary Auto',
+      name: 'Chaudhari Auto',
       telephone: '+91-7387448878',
       address: {
         '@type': 'PostalAddress',
@@ -168,7 +168,7 @@ export const RestorationServiceDetailPage: React.FC = () => {
               </p>
 
               <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed pt-1">
-                At Chaudhary Auto Centre, bike restoration is not just about repairing an old motorcycle. Our goal is to bring back its original factory beauty, performance, and showroom finish. Whether restoring a 100cc commuter like Hero Honda Splendor, Passion, CD100, a 150cc street bike like Bajaj Pulsar 150, or a vintage two-stroke legend like Yamaha RX100, riders from Pahur, Jamner, Jalgaon, and across northern Maharashtra trust our workshop. We disassemble the motorcycle down to its bare frame, bake paint in professional bhatti ovens, apply ceramic protective coatings, and install 100% genuine OEM fiber parts and metallic monograms.
+                At Chaudhari Auto, bike restoration is not just about repairing an old motorcycle. Our goal is to bring back its original factory beauty, performance, and showroom finish. Whether restoring a 100cc commuter like Hero Honda Splendor, Passion, CD100, a 150cc street bike like Bajaj Pulsar 150, or a vintage two-stroke legend like Yamaha RX100, riders from Pahur, Jamner, Jalgaon, and across northern Maharashtra trust our workshop. We disassemble the motorcycle down to its bare frame, bake paint in professional bhatti ovens, apply ceramic protective coatings, and install 100% genuine OEM fiber parts and metallic monograms.
               </p>
 
               <div className="flex flex-wrap items-center gap-4 pt-2 text-xs text-neutral-300">

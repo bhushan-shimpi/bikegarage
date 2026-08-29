@@ -238,7 +238,7 @@ DATE: ${formData.formDate}
   // WhatsApp Message Formatter
   const getWhatsAppLink = () => {
     if (!submittedData) return '#';
-    const msg = `🏍️ *CHAUDHARI AUTO CENTRE — BIKE RESTORATION JOB SHEET*
+    const msg = `🏍️ *CHAUDHARI AUTO — BIKE RESTORATION JOB SHEET*
 ━━━━━━━━━━━━━━━━━━━━
 📋 *Ticket:* ${submittedTicket || 'CAC-RESTORE'}
 👤 *Customer:* ${submittedData.customerName}
@@ -267,7 +267,7 @@ ${submittedData.specialRequirements || 'Standard Factory Spec'}
 ✍️ *Customer Confirmation:* ${submittedData.customerSignature || submittedData.customerName}
 📅 *Date:* ${submittedData.formDate}
 ━━━━━━━━━━━━━━━━━━━━
-_Chaudhari Auto Centre, Jalgaon Road, Pahur_`;
+_Chaudhari Auto, Jalgaon Road, Pahur_`;
 
     return `https://wa.me/917387448878?text=${encodeURIComponent(msg)}`;
   };
@@ -276,7 +276,7 @@ _Chaudhari Auto Centre, Jalgaon Road, Pahur_`;
     <div className="bg-[#F8F9FA] min-h-screen text-gray-900 pb-16">
       <SEO
         title="Bike Restoration Job Sheet Form in Pahur"
-        description="Register your motorcycle for complete restoration at Chaudhary Auto Pahur. Choose your tasks: engine rebuild, oven paint, ceramic coating, and genuine parts."
+        description="Register your motorcycle for complete restoration at Chaudhari Auto Pahur. Choose your tasks: engine rebuild, oven paint, ceramic coating, and genuine parts."
         canonicalPath="/restoration-form"
       />
       {/* Top Banner */}

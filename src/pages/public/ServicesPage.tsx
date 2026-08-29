@@ -32,7 +32,7 @@ export const ServicesPage: React.FC = () => {
   const servicesSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    name: 'Bike Services & Pricing — Chaudhary Auto Pahur',
+    name: 'Bike Services & Pricing — Chaudhari Auto Pahur',
     description:
       'Complete catalog of motorcycle maintenance, engine repair, oil replacement, and bike restoration services in Pahur, Jamner, Jalgaon.',
     itemListElement: services.map((s, idx) => ({
@@ -44,7 +44,7 @@ export const ServicesPage: React.FC = () => {
         description: s.shortDescription,
         provider: {
           '@type': 'MotorcycleRepairShop',
-          name: 'Chaudhary Auto',
+          name: 'Chaudhari Auto',
         },
       },
     })),
@@ -54,7 +54,7 @@ export const ServicesPage: React.FC = () => {
     <div className="bg-[#F8F9FA] min-h-screen flex flex-col justify-between">
       <SEO
         title="Bike Services & Pricing in Pahur, Jamner"
-        description="Explore Chaudhary Auto's comprehensive two-wheeler service packages in Pahur, Jalgaon: General Service, Premium Package (₹1,820), Engine Overhaul, Oil Change, and Brake Service."
+        description="Explore Chaudhari Auto's comprehensive two-wheeler service packages in Pahur, Jalgaon: General Service, Premium Package (₹1,820), Engine Overhaul, Oil Change, and Brake Service."
         canonicalPath="/services"
         jsonLd={servicesSchema}
       />

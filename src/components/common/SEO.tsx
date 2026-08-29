@@ -10,9 +10,9 @@ interface SEOProps {
   robots?: string;
 }
 
-const DEFAULT_TITLE = 'Chaudhary Auto | Bike Service & Repair in Pahur, Jamner';
+const DEFAULT_TITLE = 'Chaudhari Auto | Bike Service & Repair in Pahur, Jamner';
 const DEFAULT_DESCRIPTION =
-  'Chaudhary Auto is a premier bike garage in Pahur, Taluka Jamner, Dist. Jalgaon offering expert bike servicing, repair, engine work, and complete restoration.';
+  'Chaudhari Auto provides professional bike servicing, repair and maintenance services in Pahur, Jamner and nearby areas of Jalgaon.';
 const DOMAIN = 'https://www.chaudhariauto.com';
 const DEFAULT_IMAGE = `${DOMAIN}/images/hero-bike.jpg`;
 
@@ -26,7 +26,7 @@ export const SEO: React.FC<SEOProps> = ({
   robots = 'index, follow',
 }) => {
   const fullTitle = title
-    ? `${title} | Chaudhary Auto`
+    ? `${title} | Chaudhari Auto`
     : DEFAULT_TITLE;
   const fullDescription = description || DEFAULT_DESCRIPTION;
   const canonicalUrl = `${DOMAIN}${canonicalPath.startsWith('/') ? canonicalPath : `/${canonicalPath}`}`.replace(
@@ -69,7 +69,7 @@ export const SEO: React.FC<SEOProps> = ({
     setMetaTag('property', 'og:url', canonicalUrl);
     setMetaTag('property', 'og:image', fullImage);
     setMetaTag('property', 'og:type', type);
-    setMetaTag('property', 'og:site_name', 'Chaudhary Auto');
+    setMetaTag('property', 'og:site_name', 'Chaudhari Auto');
     setMetaTag('property', 'og:locale', 'en_IN');
 
     // 5. Twitter Card Tags

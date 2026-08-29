@@ -222,7 +222,7 @@ export const RestorationQuotationCards: React.FC<QuotationProps> = ({
             <div className={`p-4 sm:p-5 border-t flex items-center gap-2 ${isDark ? 'border-white/10 bg-neutral-950/40' : 'border-gray-100 bg-gray-50'}`}>
               <a
                 href={`https://wa.me/917387448878?text=${encodeURIComponent(
-                  'Hello Chaudhary Auto! I want a restoration quotation for my 100cc motorcycle (₹18,850 fixed / ₹20,000+ showroom). Please assist.'
+                  'Hello Chaudhari Auto! I want a restoration quotation for my 100cc motorcycle (₹18,850 fixed / ₹20,000+ showroom). Please assist.'
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -386,7 +386,7 @@ export const RestorationQuotationCards: React.FC<QuotationProps> = ({
             <div className={`p-4 sm:p-5 border-t flex items-center gap-2 ${isDark ? 'border-white/10 bg-neutral-950/40' : 'border-gray-100 bg-gray-50'}`}>
               <a
                 href={`https://wa.me/917387448878?text=${encodeURIComponent(
-                  'Hello Chaudhary Auto! I want a restoration quotation for my 150cc motorcycle (₹24,500 fixed / ₹25,000+ showroom). Please assist.'
+                  'Hello Chaudhari Auto! I want a restoration quotation for my 150cc motorcycle (₹24,500 fixed / ₹25,000+ showroom). Please assist.'
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -423,7 +423,7 @@ export const RestorationQuotationCards: React.FC<QuotationProps> = ({
         </div>
 
         <span className="text-[11px] font-bold text-[#F5B900] whitespace-nowrap">
-          📍 Chaudhari Auto Centre, Pahur
+          📍 Chaudhari Auto, Pahur
         </span>
       </div>
     </div>

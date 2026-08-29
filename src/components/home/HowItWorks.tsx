@@ -50,7 +50,7 @@ export const HowItWorks: React.FC = () => {
             </h2>
             <div className="w-10 h-0.5 sm:w-12 sm:h-1 bg-[#F5B900] mx-auto mt-1.5 sm:mt-2 rounded-full" />
             <p className="text-[11px] sm:text-sm text-neutral-400 mt-2 sm:mt-3">
-              Getting your two-wheeler serviced at Chaudhari Auto Centre is effortless, transparent, and reliable.
+              Getting your two-wheeler serviced at Chaudhari Auto is effortless, transparent, and reliable.
             </p>
           </div>
         </ScrollReveal>

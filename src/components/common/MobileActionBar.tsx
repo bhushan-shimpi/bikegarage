@@ -16,7 +16,7 @@ export const MobileActionBar: React.FC = () => {
 
       {/* WhatsApp Button */}
       <a
-        href="https://wa.me/917387448878?text=Hello%20Chaudhari%20Auto%20Centre,%20I%20want%20to%20inquire%20about%20bike%20service."
+        href="https://wa.me/917387448878?text=Hello%20Chaudhari%20Auto,%20I%20want%20to%20inquire%20about%20bike%20service."
         target="_blank"
         rel="noopener noreferrer"
         className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg bg-[#25D366] text-white active:bg-[#1EBE5D] text-xs font-bold transition-colors shadow-sm"

@@ -12,11 +12,11 @@ export const workshopFAQs: FAQItem[] = [
   {
     question: 'Where can I get my bike serviced in Pahur, Jamner, or Jalgaon?',
     answer:
-      'Chaudhary Auto Centre is conveniently located on Main Road, Near Bus Stand in Pahur (Taluka Jamner, District Jalgaon, Maharashtra). We are easily accessible to riders from Pahur, Jamner, Vakod, Shendurni, Neri, and across Jalgaon district. The workshop is open 7 days a week from 9:00 AM to 8:00 PM for routine servicing, major repairs, and complete restorations.',
+      'Chaudhari Auto is conveniently located on Main Road, Near Bus Stand in Pahur (Taluka Jamner, District Jalgaon, Maharashtra). We are easily accessible to riders from Pahur, Jamner, Vakod, Shendurni, Neri, and across Jalgaon district. The workshop is open 7 days a week from 9:00 AM to 8:00 PM for routine servicing, major repairs, and complete restorations.',
     category: 'Location & Timing',
   },
   {
-    question: 'Which motorcycle servicing and repair services are available at Chaudhary Auto?',
+    question: 'Which motorcycle servicing and repair services are available at Chaudhari Auto?',
     answer:
       'We specialize exclusively in motorcycles and geared two-wheelers (Hero, Bajaj, Honda, Yamaha, TVS, Royal Enfield, KTM). Our services include general periodic servicing, our comprehensive Premium Servicing Package (with engine flush and oil additive), engine overhaul and rebuilding, clutch and gearbox repairs, carburetor and fuel-injection (FI) tuning, electrical wiring repair, battery diagnostics, chain cleaning and lubrication, brake servicing, and showroom-condition vintage/classic bike restorations.',
     category: 'Services',
@@ -30,7 +30,7 @@ export const workshopFAQs: FAQItem[] = [
   {
     question: 'When should motorcycle engine oil be replaced, and why does it matter?',
     answer:
-      'Standard mineral engine oil should be replaced every 2,500 to 3,000 km. Semi-synthetic and fully synthetic oils typically last between 3,500 and 5,000 km depending on riding conditions. Degraded engine oil causes excessive engine friction, overheating, reduced pickup, and valve noise. At Chaudhary Auto, we inspect oil level, color, and viscosity on every service checkup.',
+      'Standard mineral engine oil should be replaced every 2,500 to 3,000 km. Semi-synthetic and fully synthetic oils typically last between 3,500 and 5,000 km depending on riding conditions. Degraded engine oil causes excessive engine friction, overheating, reduced pickup, and valve noise. At Chaudhari Auto, we inspect oil level, color, and viscosity on every service checkup.',
     category: 'Engine Care',
   },
   {
@@ -52,9 +52,9 @@ export const workshopFAQs: FAQItem[] = [
     category: 'Maintenance',
   },
   {
-    question: 'Does Chaudhary Auto offer complete bike restoration for old and classic motorcycles?',
+    question: 'Does Chaudhari Auto offer complete bike restoration for old and classic motorcycles?',
     answer:
-      'Yes. Chaudhary Auto is renowned across Jalgaon district for complete bike restoration—especially 100cc commuters (Hero Honda Splendor, CD100, Passion) and 150cc performance bikes (Bajaj Pulsar, Yamaha 2-stroke RX100). Our restoration involves stripping the motorcycle to the bare chassis, professional oven/bhatti baked paint, ceramic clear-coat protection, OEM fiber kits, original stickers, and full mechanical rebuilds.',
+      'Yes. Chaudhari Auto is renowned across Jalgaon district for complete bike restoration—especially 100cc commuters (Hero Honda Splendor, CD100, Passion) and 150cc performance bikes (Bajaj Pulsar, Yamaha 2-stroke RX100). Our restoration involves stripping the motorcycle to the bare chassis, professional oven/bhatti baked paint, ceramic clear-coat protection, OEM fiber kits, original stickers, and full mechanical rebuilds.',
     category: 'Restoration',
   },
   {
