@@ -35,22 +35,6 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- Service Appointment Booking & Customer Inquiry -->
-  <url>
-    <loc>https://www.chaudhariauto.com/inquiry</loc>
-    <lastmod>2026-08-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- Online Bike Restoration Job Sheet Form -->
-  <url>
-    <loc>https://www.chaudhariauto.com/restoration-form</loc>
-    <lastmod>2026-08-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
   <!-- Contact & Workshop Location (Pahur, Jamner, Jalgaon) -->
   <url>
     <loc>https://www.chaudhariauto.com/contact</loc>
