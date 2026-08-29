@@ -42,6 +42,8 @@ export const App: React.FC = () => {
         <Route path="/" element={<PublicLayout />}>
           <Route index element={<HomePage />} />
           <Route path="services" element={<ServicesPage />} />
+          <Route path="services/bike-restoration" element={<Navigate to="/restoration-form" replace />} />
+          <Route path="services/:slug" element={<ServicesPage />} />
           <Route path="about" element={<AboutPage />} />
           {/* Single unified page for Book Appointment & Inquiry */}
           <Route path="inquiry" element={<InquiryPage />} />

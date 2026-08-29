@@ -19,6 +19,8 @@ import {
 import { Button } from '../common/Button';
 import { ScrollReveal } from '../common/ScrollReveal';
 import { RestorationQuotationCards } from '../restoration/RestorationQuotationCards';
+import { ServiceDetailModal } from '../services/ServiceDetailModal';
+import { bikeServicesService } from '../../services/bikeServicesService';
 
 // ─── Individual Restoration Video Card (Clean: No text overlay) ───
 interface VideoCardProps {
@@ -158,6 +160,11 @@ const RestorationVideoCard: React.FC<VideoCardProps> = ({
 };
 
 export const RestorationHighlight: React.FC = () => {
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const restorationService =
+    bikeServicesService.getAll().find((s) => s.slug === 'bike-restoration' || s.id === 's10') ||
+    null;
+
   const restorationProcess = [
     {
       icon: Search,
@@ -382,17 +389,23 @@ export const RestorationHighlight: React.FC = () => {
             </Button>
           </Link>
 
-          <Link to="/services/bike-restoration" className="w-full sm:w-auto">
-            <Button
-              variant="secondary"
-              size="lg"
-              leftIcon={<Wrench className="w-4 h-4 text-[#F5B900] shrink-0" />}
-              className="w-full sm:w-auto text-xs sm:text-sm py-3.5 px-6"
-            >
-              <span>View Restoration Details</span>
-            </Button>
-          </Link>
+          <Button
+            variant="secondary"
+            size="lg"
+            onClick={() => setIsDetailModalOpen(true)}
+            leftIcon={<Wrench className="w-4 h-4 text-[#F5B900] shrink-0" />}
+            className="w-full sm:w-auto text-xs sm:text-sm py-3.5 px-6 cursor-pointer"
+          >
+            <span>View Restoration Details</span>
+          </Button>
         </div>
+
+        {/* Restoration Detail Modal */}
+        <ServiceDetailModal
+          service={restorationService}
+          isOpen={isDetailModalOpen}
+          onClose={() => setIsDetailModalOpen(false)}
+        />
 
       </div>
     </section>
