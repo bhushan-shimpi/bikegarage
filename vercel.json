@@ -4,6 +4,10 @@
   "framework": "vite",
   "rewrites": [
     {
+      "source": "/api/:match*",
+      "destination": "https://bikegarage-yr7m.vercel.app/api/:match*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
