@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ServiceItem } from '../../types/service';
+import { RestorationQuotationCards } from '../restoration/RestorationQuotationCards';
 
 interface ServiceDetailModalProps {
   service: ServiceItem | null;
@@ -120,50 +121,66 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
             </p>
           </div>
 
-          {/* Materials & Service Charges Table */}
-          {service.packageBreakdown && service.packageBreakdown.length > 0 && (
-            <div>
-              <h3 className="text-xs font-black uppercase tracking-wider text-gray-900 mb-2.5 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-[#F5B900]" />
-                Materials & Service Charges
-              </h3>
+          {/* If Bike Restoration, show dedicated 100cc & 150cc quotation matrix */}
+          {service.slug === 'bike-restoration' || service.id === 's10' ? (
+            <div className="space-y-4 pt-1">
+              <RestorationQuotationCards theme="light" />
+              <div className="text-center pt-2">
+                <Link
+                  to="/services/bike-restoration"
+                  onClick={onClose}
+                  className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-black bg-[#F5B900] hover:bg-[#DFA500] px-4 py-2.5 rounded-xl shadow-xs transition-all cursor-pointer"
+                >
+                  <span>Open Full Restoration Details Page</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+          ) : (
+            service.packageBreakdown && service.packageBreakdown.length > 0 && (
+              <div>
+                <h3 className="text-xs font-black uppercase tracking-wider text-gray-900 mb-2.5 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#F5B900]" />
+                  Materials & Service Charges
+                </h3>
 
-              <div className="border border-gray-200 rounded-xl overflow-hidden shadow-2xs">
-                <table className="w-full text-left text-xs border-collapse">
-                  <thead className="bg-gray-100/80 text-gray-700 font-bold border-b border-gray-200">
-                    <tr>
-                      <th className="py-2.5 px-3 sm:px-4">Service / Material</th>
-                      <th className="py-2.5 px-3 sm:px-4 text-right">Price</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100 bg-white">
-                    {service.packageBreakdown.map((row, i) => (
-                      <tr key={i} className="hover:bg-gray-50/80 transition-colors">
-                        <td className="py-2 px-3 sm:px-4 font-medium text-gray-800">
-                          {row.item}
+                <div className="border border-gray-200 rounded-xl overflow-hidden shadow-2xs">
+                  <table className="w-full text-left text-xs border-collapse">
+                    <thead className="bg-gray-100/80 text-gray-700 font-bold border-b border-gray-200">
+                      <tr>
+                        <th className="py-2.5 px-3 sm:px-4">Service / Material</th>
+                        <th className="py-2.5 px-3 sm:px-4 text-right">Price</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100 bg-white">
+                      {service.packageBreakdown.map((row, i) => (
+                        <tr key={i} className="hover:bg-gray-50/80 transition-colors">
+                          <td className="py-2 px-3 sm:px-4 font-medium text-gray-800">
+                            {row.item}
+                          </td>
+                          <td className="py-2 px-3 sm:px-4 text-right font-mono font-bold text-gray-900">
+                            {row.price}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                    <tfoot className="bg-amber-50/80 border-t-2 border-amber-300 font-bold text-gray-900">
+                      <tr>
+                        <td className="py-2.5 px-3 sm:px-4 font-extrabold text-sm">
+                          Total Estimated Cost
                         </td>
-                        <td className="py-2 px-3 sm:px-4 text-right font-mono font-bold text-gray-900">
-                          {row.price}
+                        <td className="py-2.5 px-3 sm:px-4 text-right font-mono text-base font-black text-amber-900">
+                          {service.totalPackagePrice || '₹1,820/-'}
                         </td>
                       </tr>
-                    ))}
-                  </tbody>
-                  <tfoot className="bg-amber-50/80 border-t-2 border-amber-300 font-bold text-gray-900">
-                    <tr>
-                      <td className="py-2.5 px-3 sm:px-4 font-extrabold text-sm">
-                        Total Estimated Cost
-                      </td>
-                      <td className="py-2.5 px-3 sm:px-4 text-right font-mono text-base font-black text-amber-900">
-                        {service.totalPackagePrice || '₹1,820/-'}
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
+                    </tfoot>
+                  </table>
+                </div>
+                <p className="text-[11px] text-gray-500 italic mt-1.5">
+                  *The cost of filters and any other required spare parts may be charged separately.
+                </p>
               </div>
-              <p className="text-[11px] text-gray-500 italic mt-1.5">
-                *The cost of filters and any other required spare parts may be charged separately.
-              </p>
-            </div>
+            )
           )}
 
           {/* Checklist: Premium Service Includes */}

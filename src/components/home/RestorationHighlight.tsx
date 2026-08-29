@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { ScrollReveal } from '../common/ScrollReveal';
-import { RestorationQuotationCards } from '../restoration/RestorationQuotationCards';
 import { ServiceDetailModal } from '../services/ServiceDetailModal';
 import { bikeServicesService } from '../../services/bikeServicesService';
 
@@ -341,13 +340,6 @@ export const RestorationHighlight: React.FC = () => {
           </div>
         </div>
 
-        {/* ─── 💰 100cc & 150cc RESTORATION QUOTATION MATRIX ─── */}
-        <ScrollReveal direction="up">
-          <div className="mb-14">
-            <RestorationQuotationCards theme="dark" />
-          </div>
-        </ScrollReveal>
-
         {/* ─── ⭐ OUR PROMISE CARD ─── */}
         <ScrollReveal direction="up" delay={200}>
           <div className="relative rounded-3xl bg-gradient-to-b from-[#181818] to-[#101010] border border-[#F5B900]/30 p-6 sm:p-10 mb-12 text-center shadow-2xl overflow-hidden">
@@ -389,15 +381,16 @@ export const RestorationHighlight: React.FC = () => {
             </Button>
           </Link>
 
-          <Button
-            variant="secondary"
-            size="lg"
-            onClick={() => setIsDetailModalOpen(true)}
-            leftIcon={<Wrench className="w-4 h-4 text-[#F5B900] shrink-0" />}
-            className="w-full sm:w-auto text-xs sm:text-sm py-3.5 px-6 cursor-pointer"
-          >
-            <span>View Restoration Details</span>
-          </Button>
+          <Link to="/services/bike-restoration" className="w-full sm:w-auto">
+            <Button
+              variant="secondary"
+              size="lg"
+              leftIcon={<Wrench className="w-4 h-4 text-[#F5B900] shrink-0" />}
+              className="w-full sm:w-auto text-xs sm:text-sm py-3.5 px-6 cursor-pointer"
+            >
+              <span>View Restoration Details</span>
+            </Button>
+          </Link>
         </div>
 
         {/* Restoration Detail Modal */}
