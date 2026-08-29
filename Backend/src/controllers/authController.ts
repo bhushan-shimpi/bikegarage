@@ -127,3 +127,71 @@ export const getMe = async (req: AuthenticatedRequest, res: Response): Promise<v
     res.status(500).json({ success: false, error: 'Failed to fetch user profile' });
   }
 };
+
+export const createMechanic = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { name, usernameOrMobile, password } = req.body;
+
+    if (!name || !usernameOrMobile || !password) {
+      res.status(400).json({ success: false, error: 'Name, Username/Mobile, and Password are required' });
+      return;
+    }
+
+    const cleanUser = usernameOrMobile.trim().toLowerCase();
+    const cleanPass = password.trim();
+    const cleanName = name.trim();
+    const mobile = cleanUser.match(/^\d{10}$/) ? cleanUser : '';
+
+    // Check if user already exists
+    const existing = await query(
+      'SELECT id FROM staff_users WHERE LOWER(username) = $1 OR (mobile = $1 AND mobile != \'\')',
+      [cleanUser]
+    );
+    if (existing.rows.length > 0) {
+      res.status(400).json({ success: false, error: 'An account with this username or mobile number already exists' });
+      return;
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(cleanPass, salt);
+    const id = `usr-mech-${Date.now()}`;
+
+    const insertResult = await query(
+      `INSERT INTO staff_users (id, username, password_hash, name, mobile, role)
+       VALUES ($1, $2, $3, $4, $5, 'mechanic')
+       RETURNING id, username, name, mobile, role`,
+      [id, cleanUser, hash, cleanName, mobile]
+    );
+
+    res.status(201).json({
+      success: true,
+      data: insertResult.rows[0],
+    });
+  } catch (error) {
+    console.error('Error creating mechanic:', error);
+    res.status(500).json({ success: false, error: 'Failed to create mechanic account' });
+  }
+};
+
+export const getMechanics = async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const result = await query(
+      "SELECT id, username, name, mobile, role FROM staff_users WHERE role = 'mechanic' ORDER BY id DESC"
+    );
+    res.json({ success: true, data: result.rows });
+  } catch (error) {
+    console.error('Error fetching mechanics:', error);
+    res.status(500).json({ success: false, error: 'Failed to fetch mechanics' });
+  }
+};
+
+export const deleteMechanic = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    await query("DELETE FROM staff_users WHERE id = $1 AND role = 'mechanic'", [id]);
+    res.json({ success: true, message: 'Mechanic account deleted' });
+  } catch (error) {
+    console.error('Error deleting mechanic:', error);
+    res.status(500).json({ success: false, error: 'Failed to delete mechanic' });
+  }
+};

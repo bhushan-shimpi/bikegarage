@@ -1,78 +1,93 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import {
-  Inbox,
-  Wrench,
+  Receipt,
   Search,
   Phone,
   MessageCircle,
   Eye,
   PlusCircle,
-  RotateCcw,
   CheckCircle2,
-  Receipt,
-  ChevronRight,
+  Calendar,
+  IndianRupee,
+  Clock,
+  RotateCcw,
+  Check,
 } from 'lucide-react';
-import { enquiryService } from '../../services/enquiryService';
-import { Enquiry, EnquiryStatus, isRestorationEnquiry } from '../../types/enquiry';
-import { formatDate, formatPhone } from '../../utils/formatters';
-import { CreateEnquiryModal } from '../../components/admin/CreateEnquiryModal';
+import { repairService } from '../../services/repairService';
+import { RepairRecord } from '../../types/customer';
+import { formatPhone } from '../../utils/formatters';
 import { CreateBillModal } from '../../components/admin/CreateBillModal';
+import { CreateEnquiryModal } from '../../components/admin/CreateEnquiryModal';
+import { ViewBillModal } from '../../components/admin/ViewBillModal';
+import { getWhatsAppBillUrl } from './AdminRepairHistoryPage';
+import { filterRecordByDate, DateFilterType } from '../../utils/dateFilters';
 
 export const DashboardPage: React.FC = () => {
-  const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
+  const [repairs, setRepairs] = useState<RepairRecord[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | EnquiryStatus>('all');
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [paymentFilter, setPaymentFilter] = useState<'all' | 'Paid' | 'Pending'>('all');
+  const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
+  const [customDate, setCustomDate] = useState(() => {
+    const now = new Date();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  });
+
   const [isCreateBillModalOpen, setIsCreateBillModalOpen] = useState(false);
+  const [isCreateEnquiryModalOpen, setIsCreateEnquiryModalOpen] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState<RepairRecord | null>(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  const loadData = () => {
-    const all = enquiryService.getAll();
-    setEnquiries(all.filter((e) => !isRestorationEnquiry(e)));
+  const loadData = async () => {
+    const list = await repairService.getAll();
+    setRepairs(list);
   };
 
   useEffect(() => {
     loadData();
   }, []);
 
-  // 3 Core Garage Metrics: New -> In Service -> Completed
-  const newCount = enquiries.filter((e) => e.status === 'new').length;
-  const inServiceCount = enquiries.filter(
-    (e) => e.status === 'in_progress' || e.status === 'contacted'
-  ).length;
-  const completedCount = enquiries.filter((e) => e.status === 'completed').length;
+  // ─── Core Garage Stats ───
+  const todayPaidRecords = repairs.filter(
+    (r) => filterRecordByDate(r.repairDate || r.createdAt, 'today') && r.paymentStatus === 'Paid'
+  );
+  const todayRevenue = todayPaidRecords.reduce((sum, r) => sum + (Number(r.totalAmount) || 0), 0);
+  const totalBillsCount = repairs.length;
+  const paidBillsCount = repairs.filter((r) => r.paymentStatus === 'Paid').length;
+  const pendingBillsCount = repairs.filter((r) => r.paymentStatus === 'Pending').length;
 
-  const handleStatusChange = (id: string, newStatus: EnquiryStatus) => {
-    enquiryService.updateStatus(id, newStatus);
-    loadData();
-    setSuccessMsg(
-      `Status updated to ${newStatus.toUpperCase().replace('_', ' ')}${
-        newStatus === 'in_progress' ? ' • Saved to Customer Directory!' : ''
-      }`
-    );
-    setTimeout(() => setSuccessMsg(null), 3000);
-  };
+  // ─── Filtered Billing Records ───
+  const filtered = repairs.filter((r) => {
+    const recDate = r.repairDate || r.createdAt;
+    if (!filterRecordByDate(recDate, dateFilter, customDate)) return false;
 
-  // Filter list
-  const filtered = enquiries.filter((item) => {
-    if (statusFilter !== 'all' && item.status !== statusFilter) return false;
+    if (paymentFilter !== 'all' && r.paymentStatus !== paymentFilter) return false;
 
     const q = searchQuery.trim().toLowerCase();
     if (!q) return true;
     return (
-      item.customer.name.toLowerCase().includes(q) ||
-      item.customer.mobile.includes(q) ||
-      item.bike.model.toLowerCase().includes(q) ||
-      item.bike.brand.toLowerCase().includes(q) ||
-      (item.bike.registrationNumber &&
-        item.bike.registrationNumber.toLowerCase().includes(q))
+      r.customerName.toLowerCase().includes(q) ||
+      r.customerMobile.includes(q) ||
+      r.jobNumber.toLowerCase().includes(q) ||
+      (r.bikeModel && r.bikeModel.toLowerCase().includes(q)) ||
+      (r.bikeBrand && r.bikeBrand.toLowerCase().includes(q)) ||
+      (r.registrationNumber && r.registrationNumber.toLowerCase().includes(q))
     );
   });
 
+  const dateFilterTabs: { key: DateFilterType; label: string }[] = [
+    { key: 'all', label: 'All Time' },
+    { key: 'today', label: 'Today' },
+    { key: 'yesterday', label: 'Yesterday' },
+    { key: 'this_week', label: 'This Week' },
+    { key: 'this_month', label: 'This Month' },
+    { key: 'custom', label: 'Custom Day' },
+  ];
+
   return (
     <div className="space-y-5 max-w-7xl mx-auto pb-10 overflow-x-hidden">
-      {/* Clean Top Action Bar (No duplicate "Workshop Dashboard" heading) */}
+      {/* Clean Top Action Bar (Billing Records -> shortcut removed) */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 sm:p-5 rounded-2xl border border-gray-200 shadow-xs">
         <div>
           <div className="flex items-center gap-2">
@@ -85,39 +100,451 @@ export const DashboardPage: React.FC = () => {
             </span>
           </div>
           <p className="text-xs text-gray-500 mt-0.5">
-            Quick garage overview • 5-second customer service action center
+            Workshop Billing & Revenue Dashboard • Quick Customer Job Sheet Management
           </p>
         </div>
 
-        {/* Action Buttons: Billing Shortcut, Create Bill & New Enquiry */}
-        <div className="flex flex-wrap items-center gap-2 self-stretch sm:self-auto">
-          <Link
-            to="/garage/billing"
-            className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all active:scale-98"
-            title="Open Billing & Invoices"
-          >
-            <Receipt className="w-4 h-4 text-amber-700" />
-            <span>Billing Records →</span>
-          </Link>
-
+        {/* Action Buttons: Create Bill & New Enquiry */}
+        <div className="flex items-center gap-2.5 self-stretch sm:self-auto">
           <button
             onClick={() => setIsCreateBillModalOpen(true)}
-            className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-gray-900 hover:bg-black text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-98"
+            className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all active:scale-98"
           >
-            <Receipt className="w-4 h-4 text-[#F5B900]" />
+            <Receipt className="w-4 h-4" />
             <span>+ Create Bill</span>
           </button>
 
           <button
-            onClick={() => setIsCreateModalOpen(true)}
-            className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-98"
+            onClick={() => setIsCreateEnquiryModalOpen(true)}
+            className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-gray-900 hover:bg-black text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all active:scale-98"
           >
-            <PlusCircle className="w-4 h-4" />
+            <PlusCircle className="w-4 h-4 text-[#F5B900] text-xs" />
             <span>+ New Enquiry</span>
           </button>
         </div>
       </div>
 
+      {/* Success Notification */}
+      {successMsg && (
+        <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-xs text-emerald-800 font-medium flex items-center gap-2 animate-fade-in">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+          <span>{successMsg}</span>
+        </div>
+      )}
+
+      {/* ─── 4 MAIN BILLING STATS (2 COLUMNS ON MOBILE, 4 ON DESKTOP) ─── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+        {/* Stat 1: Today Revenue */}
+        <div className="p-3 sm:p-4 rounded-2xl border border-emerald-200 bg-emerald-50/70 shadow-xs flex items-center justify-between">
+          <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1 pr-1">
+            <span className="text-[11px] sm:text-xs font-semibold text-emerald-800 block truncate">
+              Today's Revenue
+            </span>
+            <span className="text-xl sm:text-2xl font-bold text-emerald-950 block font-mono">
+              ₹{todayRevenue.toLocaleString('en-IN')}
+            </span>
+            <span className="text-[10px] sm:text-[11px] text-emerald-700 font-medium block truncate">
+              {todayPaidRecords.length} paid jobs today
+            </span>
+          </div>
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
+            <IndianRupee className="w-5 h-5" />
+          </div>
+        </div>
+
+        {/* Stat 2: Total Bills */}
+        <div className="p-3 sm:p-4 rounded-2xl border border-gray-200 bg-white shadow-xs flex items-center justify-between">
+          <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1 pr-1">
+            <span className="text-[11px] sm:text-xs font-semibold text-gray-500 block truncate">
+              Total Invoices
+            </span>
+            <span className="text-xl sm:text-2xl font-bold text-gray-900 block font-mono">
+              {totalBillsCount}
+            </span>
+            <span className="text-[10px] sm:text-[11px] text-gray-500 font-medium block truncate">
+              Lifetime workshop records
+            </span>
+          </div>
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gray-100 text-gray-700 flex items-center justify-center shrink-0">
+            <Receipt className="w-5 h-5" />
+          </div>
+        </div>
+
+        {/* Stat 3: Paid Bills */}
+        <button
+          onClick={() => setPaymentFilter(paymentFilter === 'Paid' ? 'all' : 'Paid')}
+          className={`p-3 sm:p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs ${
+            paymentFilter === 'Paid'
+              ? 'bg-blue-50/80 border-blue-500 ring-2 ring-blue-500/50'
+              : 'bg-white border-gray-200 hover:border-blue-300'
+          }`}
+        >
+          <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1 pr-1">
+            <span className="text-[11px] sm:text-xs font-semibold text-blue-800 block truncate">
+              Paid Bills
+            </span>
+            <span className="text-xl sm:text-2xl font-bold text-blue-950 block font-mono">
+              {paidBillsCount}
+            </span>
+            <span className="text-[10px] sm:text-[11px] text-blue-700 font-medium block truncate">
+              Settled payments
+            </span>
+          </div>
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center shrink-0">
+            <Check className="w-5 h-5" />
+          </div>
+        </button>
+
+        {/* Stat 4: Pending Payment */}
+        <button
+          onClick={() => setPaymentFilter(paymentFilter === 'Pending' ? 'all' : 'Pending')}
+          className={`p-3 sm:p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs ${
+            paymentFilter === 'Pending'
+              ? 'bg-amber-50/80 border-amber-500 ring-2 ring-amber-500/50'
+              : 'bg-white border-gray-200 hover:border-amber-300'
+          }`}
+        >
+          <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1 pr-1">
+            <span className="text-[11px] sm:text-xs font-semibold text-amber-800 block truncate">
+              Pending Payment
+            </span>
+            <span className="text-xl sm:text-2xl font-bold text-amber-950 block font-mono">
+              {pendingBillsCount}
+            </span>
+            <span className="text-[10px] sm:text-[11px] text-amber-700 font-medium block truncate">
+              Due from customers
+            </span>
+          </div>
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+            <Clock className="w-5 h-5" />
+          </div>
+        </button>
+      </div>
+
+      {/* ─── BILLING HISTORY & INVOICES TABLE ─── */}
+      <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 shadow-xs space-y-4">
+        {/* Header with Search & Filter Tabs */}
+        <div className="space-y-3">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            {/* Search Bar */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by rider, phone, bill #, bike model, plate..."
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-8 py-2 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#F5B900] focus:bg-white"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-gray-700"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            {/* Payment Filter (All, Paid, Pending) */}
+            <div className="flex items-center gap-1.5 self-start sm:self-auto">
+              <span className="text-xs font-bold text-gray-500 mr-1 hidden sm:inline">Payment:</span>
+              {(['all', 'Paid', 'Pending'] as const).map((status) => (
+                <button
+                  key={status}
+                  onClick={() => setPaymentFilter(status)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
+                    paymentFilter === status
+                      ? 'bg-gray-900 text-white border-gray-900 shadow-2xs'
+                      : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
+                  }`}
+                >
+                  {status === 'all' ? 'All' : status}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Date Filter Tabs Bar (Today, Yesterday, This Week, This Month, Custom Day) */}
+          <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-gray-100 no-scrollbar">
+            <span className="text-xs font-semibold text-gray-500 mr-1 flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5 text-amber-600" />
+              Date:
+            </span>
+            {dateFilterTabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setDateFilter(tab.key)}
+                className={`px-3 py-1 rounded-lg text-xs font-bold whitespace-nowrap transition-colors border ${
+                  dateFilter === tab.key
+                    ? 'bg-[#F5B900] text-black border-[#F5B900] shadow-2xs font-extrabold'
+                    : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+
+            {/* Inline Custom Date Picker */}
+            {dateFilter === 'custom' && (
+              <div className="flex items-center gap-1.5 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200 animate-fade-in">
+                <span className="text-[11px] font-bold text-amber-900">Pick Date:</span>
+                <input
+                  type="date"
+                  value={customDate}
+                  onChange={(e) => setCustomDate(e.target.value)}
+                  className="text-xs bg-white border border-gray-300 rounded px-2 py-0.5 text-gray-900 focus:outline-none focus:border-[#F5B900]"
+                />
+              </div>
+            )}
+
+            {(dateFilter !== 'all' || paymentFilter !== 'all' || searchQuery) && (
+              <button
+                onClick={() => {
+                  setDateFilter('all');
+                  setPaymentFilter('all');
+                  setSearchQuery('');
+                }}
+                className="p-1 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-100 ml-auto flex items-center gap-1 text-[11px]"
+                title="Reset all filters"
+              >
+                <RotateCcw className="w-3 h-3" />
+                <span>Reset</span>
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Billing Table or Empty State */}
+        {filtered.length === 0 ? (
+          <div className="py-12 text-center border-2 border-dashed border-gray-200 rounded-xl space-y-2">
+            <Receipt className="w-10 h-10 text-gray-300 mx-auto mb-1" />
+            <p className="text-sm font-semibold text-gray-700">No Billing Records Found</p>
+            <p className="text-xs text-gray-400 max-w-sm mx-auto">
+              No invoices match your selected filter. Click "+ Create Bill" to generate a new repair job card.
+            </p>
+            <button
+              onClick={() => setIsCreateBillModalOpen(true)}
+              className="mt-2 px-4 py-2 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs inline-flex items-center gap-1.5 shadow-2xs"
+            >
+              <Receipt className="w-3.5 h-3.5" />
+              <span>+ Create First Bill</span>
+            </button>
+          </div>
+        ) : (
+          <>
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="border-b border-gray-200 bg-gray-50/80 text-gray-600 font-bold uppercase text-[10px]">
+                    <th className="py-3 px-4">Bill # & Date</th>
+                    <th className="py-3 px-4">Customer & Phone</th>
+                    <th className="py-3 px-4">Motorcycle</th>
+                    <th className="py-3 px-4">Amount & Status</th>
+                    <th className="py-3 px-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {filtered.map((rep) => (
+                    <tr key={rep.id || rep.jobNumber} className="hover:bg-amber-50/20 transition-colors">
+                      {/* Bill # & Date */}
+                      <td className="py-3 px-4">
+                        <button
+                          onClick={() => {
+                            setSelectedRecord(rep);
+                            setIsViewModalOpen(true);
+                          }}
+                          className="font-bold text-gray-900 hover:text-[#DFA500] text-sm block text-left font-mono"
+                        >
+                          {rep.jobNumber}
+                        </button>
+                        <span className="text-[11px] text-gray-400 flex items-center gap-1 mt-0.5">
+                          <Calendar className="w-3 h-3 text-gray-400" />
+                          {rep.repairDate}
+                        </span>
+                      </td>
+
+                      {/* Customer */}
+                      <td className="py-3 px-4">
+                        <span className="font-bold text-gray-900 block text-xs">
+                          {rep.customerName}
+                        </span>
+                        <div className="flex items-center gap-2 text-[11px] text-gray-500 font-mono mt-0.5">
+                          <span>{formatPhone(rep.customerMobile)}</span>
+                          <a
+                            href={`tel:+91${rep.customerMobile}`}
+                            className="text-amber-600 hover:text-amber-700"
+                            title="Call"
+                          >
+                            <Phone className="w-3 h-3" />
+                          </a>
+                          <a
+                            href={getWhatsAppBillUrl(rep)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-emerald-600 hover:text-emerald-700"
+                            title="WhatsApp Invoice"
+                          >
+                            <MessageCircle className="w-3 h-3" />
+                          </a>
+                        </div>
+                      </td>
+
+                      {/* Motorcycle */}
+                      <td className="py-3 px-4">
+                        <span className="font-semibold text-gray-900 block">
+                          {rep.bikeBrand} {rep.bikeModel}
+                        </span>
+                        <div className="flex items-center gap-2 text-[11px] text-gray-500 font-mono">
+                          {rep.registrationNumber && (
+                            <span className="uppercase text-amber-800 font-semibold">
+                              {rep.registrationNumber}
+                            </span>
+                          )}
+                          {rep.currentKm && <span>• {rep.currentKm} KM</span>}
+                        </div>
+                      </td>
+
+                      {/* Amount & Status */}
+                      <td className="py-3 px-4">
+                        <div className="font-bold text-gray-900 text-sm font-mono">
+                          ₹{rep.totalAmount}
+                        </div>
+                        <span
+                          className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mt-0.5 ${
+                            rep.paymentStatus === 'Paid'
+                              ? 'bg-emerald-100 text-emerald-800'
+                              : 'bg-amber-100 text-amber-900'
+                          }`}
+                        >
+                          {rep.paymentMode ? `${rep.paymentMode} • ` : ''}{rep.paymentStatus}
+                        </span>
+                      </td>
+
+                      {/* Actions */}
+                      <td className="py-3 px-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            onClick={() => {
+                              setSelectedRecord(rep);
+                              setIsViewModalOpen(true);
+                            }}
+                            className="p-1.5 rounded-lg border border-gray-200 bg-white text-gray-700 hover:bg-[#F5B900] hover:text-black transition-colors"
+                            title="View Job Sheet"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                          </button>
+
+                          <a
+                            href={getWhatsAppBillUrl(rep)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-2 py-1.5 rounded-lg bg-[#25D366] hover:bg-[#1EBE5D] text-white font-semibold text-[11px] flex items-center gap-1 shadow-2xs transition-colors"
+                            title="Send WhatsApp Bill"
+                          >
+                            <MessageCircle className="w-3.5 h-3.5" />
+                            <span className="hidden lg:inline">WhatsApp</span>
+                          </a>
+
+                          <a
+                            href={`tel:+91${rep.customerMobile}`}
+                            className="p-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+                            title="Call Customer"
+                          >
+                            <Phone className="w-3.5 h-3.5" />
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile Cards View */}
+            <div className="md:hidden space-y-2.5">
+              {filtered.map((rep) => (
+                <div
+                  key={rep.id || rep.jobNumber}
+                  className="p-3.5 rounded-2xl bg-white border border-gray-200 shadow-2xs space-y-2.5"
+                >
+                  <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                    <div>
+                      <button
+                        onClick={() => {
+                          setSelectedRecord(rep);
+                          setIsViewModalOpen(true);
+                        }}
+                        className="font-bold text-gray-900 text-sm font-mono text-left block"
+                      >
+                        {rep.jobNumber}
+                      </button>
+                      <span className="text-[10px] text-gray-400">{rep.repairDate}</span>
+                    </div>
+
+                    <span
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                        rep.paymentStatus === 'Paid'
+                          ? 'bg-emerald-100 text-emerald-800'
+                          : 'bg-amber-100 text-amber-900'
+                      }`}
+                    >
+                      {rep.paymentStatus}
+                    </span>
+                  </div>
+
+                  <div className="text-xs space-y-1">
+                    <div className="font-bold text-gray-900">{rep.customerName}</div>
+                    <div className="text-gray-600">
+                      {rep.bikeBrand} {rep.bikeModel} {rep.registrationNumber && `(${rep.registrationNumber})`}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                    <div className="font-bold text-base text-gray-900 font-mono">
+                      ₹{rep.totalAmount}
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <a
+                        href={getWhatsAppBillUrl(rep)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3 py-1.5 rounded-xl bg-[#25D366] text-white text-xs font-bold flex items-center gap-1 shadow-2xs"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5" />
+                        <span>WhatsApp Bill</span>
+                      </a>
+
+                      <button
+                        onClick={() => {
+                          setSelectedRecord(rep);
+                          setIsViewModalOpen(true);
+                        }}
+                        className="p-1.5 rounded-xl bg-gray-100 text-gray-700 border border-gray-200"
+                        title="View Bill"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+
+                      <a
+                        href={`tel:+91${rep.customerMobile}`}
+                        className="p-1.5 rounded-xl bg-gray-100 text-gray-700 border border-gray-200"
+                        title="Call"
+                      >
+                        <Phone className="w-4 h-4" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* ─── MODALS ─── */}
       <CreateBillModal
         isOpen={isCreateBillModalOpen}
         onClose={() => setIsCreateBillModalOpen(false)}
@@ -129,414 +556,19 @@ export const DashboardPage: React.FC = () => {
       />
 
       <CreateEnquiryModal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        onSuccess={() => loadData()}
+        isOpen={isCreateEnquiryModalOpen}
+        onClose={() => setIsCreateEnquiryModalOpen(false)}
+        onSuccess={() => {
+          setSuccessMsg('New enquiry logged successfully!');
+          setTimeout(() => setSuccessMsg(null), 3000);
+        }}
       />
 
-      {/* Success Notification */}
-      {successMsg && (
-        <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-xs text-emerald-800 font-medium flex items-center gap-2 animate-fade-in">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-          <span>{successMsg}</span>
-        </div>
-      )}
-
-      {/* ─── 3 MAIN STATS (2 COLUMNS ON MOBILE, 3 ON DESKTOP) ─── */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4">
-        {/* Stat 1: New Enquiries */}
-        <button
-          onClick={() => setStatusFilter(statusFilter === 'new' ? 'all' : 'new')}
-          className={`p-3 sm:p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs ${
-            statusFilter === 'new'
-              ? 'bg-amber-50/80 border-[#F5B900] ring-2 ring-[#F5B900]/50'
-              : 'bg-white border-gray-200 hover:border-amber-300 hover:bg-gray-50/50'
-          }`}
-        >
-          <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1 pr-1">
-            <span className="text-[11px] sm:text-xs font-semibold text-gray-500 block truncate">
-              New Enquiries
-            </span>
-            <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 block">
-              {newCount}
-            </span>
-            <span className="text-[10px] sm:text-[11px] text-amber-700 font-medium block truncate">
-              Awaiting response
-            </span>
-          </div>
-          <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
-            <Inbox className="w-4 h-4 sm:w-6 sm:h-6" />
-          </div>
-        </button>
-
-        {/* Stat 2: In Service */}
-        <button
-          onClick={() => setStatusFilter(statusFilter === 'in_progress' ? 'all' : 'in_progress')}
-          className={`p-3 sm:p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs ${
-            statusFilter === 'in_progress'
-              ? 'bg-blue-50/80 border-blue-500 ring-2 ring-blue-500/50'
-              : 'bg-white border-gray-200 hover:border-blue-300 hover:bg-gray-50/50'
-          }`}
-        >
-          <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1 pr-1">
-            <span className="text-[11px] sm:text-xs font-semibold text-gray-500 block truncate">
-              In Service
-            </span>
-            <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-blue-950 block">
-              {inServiceCount}
-            </span>
-            <span className="text-[10px] sm:text-[11px] text-blue-700 font-medium block truncate">
-              Bikes in repair
-            </span>
-          </div>
-          <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center shrink-0">
-            <Wrench className="w-4 h-4 sm:w-6 sm:h-6" />
-          </div>
-        </button>
-
-        {/* Stat 3: Completed */}
-        <button
-          onClick={() => setStatusFilter(statusFilter === 'completed' ? 'all' : 'completed')}
-          className={`p-3 sm:p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs col-span-2 md:col-span-1 ${
-            statusFilter === 'completed'
-              ? 'bg-emerald-50/80 border-emerald-500 ring-2 ring-emerald-500/50'
-              : 'bg-white border-gray-200 hover:border-emerald-300 hover:bg-gray-50/50'
-          }`}
-        >
-          <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1 pr-1">
-            <span className="text-[11px] sm:text-xs font-semibold text-gray-500 block truncate">
-              Completed
-            </span>
-            <span className="text-xl sm:text-2xl lg:text-3xl font-bold text-emerald-950 block">
-              {completedCount}
-            </span>
-            <span className="text-[10px] sm:text-[11px] text-emerald-700 font-medium block truncate">
-              Delivered to rider
-            </span>
-          </div>
-          <div className="w-9 h-9 sm:w-12 sm:h-12 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
-            <CheckCircle2 className="w-4 h-4 sm:w-6 sm:h-6" />
-          </div>
-        </button>
-      </div>
-
-      {/* ─── QUICK SHORTCUT: BILLING & INVOICES ─── */}
-      <div className="bg-gradient-to-r from-gray-900 via-neutral-900 to-gray-900 border border-gray-800 text-white rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
-        <div className="flex items-center gap-3.5">
-          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#F5B900] text-black flex items-center justify-center shrink-0 shadow-xs">
-            <Receipt className="w-5 h-5 sm:w-6 sm:h-6" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-sm sm:text-base text-white">
-                Billing & Customer Invoices
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-wider bg-[#F5B900] text-black px-2 py-0.5 rounded-full">
-                Quick Shortcut
-              </span>
-            </div>
-            <p className="text-xs text-gray-300 mt-0.5">
-              Access all repair bills, paid/pending payments, parts costs & one-click WhatsApp invoices
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2.5 w-full sm:w-auto">
-          <button
-            onClick={() => setIsCreateBillModalOpen(true)}
-            className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-98"
-          >
-            <Receipt className="w-3.5 h-3.5" />
-            <span>+ Create Bill</span>
-          </button>
-
-          <Link
-            to="/garage/billing"
-            className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
-          >
-            <span>Open Billing</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-      </div>
-
-      {/* ─── SIMPLIFIED ENQUIRIES LAYOUT ─── */}
-      <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 shadow-xs space-y-4">
-        {/* Search & Simple Status Tabs */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          {/* Search bar */}
-          <div className="relative flex-1 max-w-md">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by rider name, phone, bike..."
-              className="w-full bg-gray-50 border border-gray-200 rounded-lg pl-9 pr-8 py-2 text-xs sm:text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#F5B900] focus:bg-white"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-gray-400 hover:text-gray-700"
-              >
-                ✕
-              </button>
-            )}
-          </div>
-
-          {/* Simple Status Filters: New, Contacted, In Progress, Completed, Cancelled (with no-scrollbar) */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 no-scrollbar">
-            {[
-              { key: 'all', label: 'All' },
-              { key: 'new', label: 'New' },
-              { key: 'contacted', label: 'Contacted' },
-              { key: 'in_progress', label: 'In Progress' },
-              { key: 'completed', label: 'Completed' },
-              { key: 'cancelled', label: 'Cancelled' },
-            ].map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => setStatusFilter(tab.key as any)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors border ${
-                  statusFilter === tab.key
-                    ? 'bg-[#F5B900] text-black border-[#F5B900] shadow-2xs'
-                    : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-
-            {(statusFilter !== 'all' || searchQuery) && (
-              <button
-                onClick={() => {
-                  setStatusFilter('all');
-                  setSearchQuery('');
-                }}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 border border-gray-200 hover:bg-gray-100 shrink-0"
-                title="Reset filters"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Counter */}
-        <div className="text-xs text-gray-500 pt-1 border-t border-gray-100 flex items-center justify-between">
-          <span>
-            Showing <strong className="text-gray-900">{filtered.length}</strong> enquiries
-            {statusFilter !== 'all' && ` (filtered)`}
-          </span>
-          <Link
-            to="/garage/enquiries"
-            className="text-xs font-semibold text-amber-700 hover:text-amber-800 hover:underline"
-          >
-            View All in Enquiries Page →
-          </Link>
-        </div>
-
-        {/* List Content */}
-        {filtered.length === 0 ? (
-          <div className="text-center py-12 text-gray-500">
-            <Inbox className="w-8 h-8 mx-auto text-gray-400 mb-2" />
-            <p className="text-sm font-semibold text-gray-700">No enquiries match your filter.</p>
-            <p className="text-xs text-gray-400 mt-0.5">Try resetting search or filters.</p>
-          </div>
-        ) : (
-          <>
-            {/* Desktop Simple Table: Customer, Bike, Service, Status, Actions */}
-            <div className="hidden lg:block overflow-x-auto">
-              <table className="w-full text-left border-collapse text-xs">
-                <thead>
-                  <tr className="border-b border-gray-200 text-xs font-semibold text-gray-600 bg-gray-50/70">
-                    <th className="py-3 px-4">Customer</th>
-                    <th className="py-3 px-4">Bike</th>
-                    <th className="py-3 px-4">Service</th>
-                    <th className="py-3 px-4">Status</th>
-                    <th className="py-3 px-4 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {filtered.map((item) => (
-                    <tr key={item.id} className="hover:bg-amber-50/20 transition-colors">
-                      {/* Customer: Name + Phone */}
-                      <td className="py-3.5 px-4">
-                        <Link
-                          to={`/garage/enquiries/${item.id}`}
-                          className="font-semibold text-gray-900 hover:text-[#DFA500] text-sm block"
-                        >
-                          {item.customer.name}
-                        </Link>
-                        <span className="text-gray-500 text-xs">
-                          {formatPhone(item.customer.mobile)}
-                        </span>
-                      </td>
-
-                      {/* Bike */}
-                      <td className="py-3.5 px-4">
-                        <span className="font-semibold text-gray-900 block">
-                          {item.bike.brand} {item.bike.model}
-                        </span>
-                        {item.bike.registrationNumber && (
-                          <span className="text-[11px] text-gray-500">
-                            {item.bike.registrationNumber}
-                          </span>
-                        )}
-                      </td>
-
-                      {/* Service */}
-                      <td className="py-3.5 px-4">
-                        <span className="inline-block font-medium text-amber-900 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded text-[11px]">
-                          {item.service.serviceName}
-                        </span>
-                        <span className="block text-[11px] text-gray-400 mt-0.5">
-                          {formatDate(item.createdAt)}
-                        </span>
-                      </td>
-
-                      {/* Status Dropdown: Simple 5 options */}
-                      <td className="py-3.5 px-4">
-                        <select
-                          value={item.status}
-                          onChange={(e) =>
-                            handleStatusChange(item.id, e.target.value as EnquiryStatus)
-                          }
-                          className="text-xs font-semibold rounded-lg px-2.5 py-1 border border-gray-300 bg-white text-gray-800 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#F5B900]"
-                        >
-                          <option value="new">New</option>
-                          <option value="contacted">Contacted</option>
-                          <option value="in_progress">In Progress</option>
-                          <option value="completed">Completed</option>
-                          <option value="cancelled">Cancelled</option>
-                        </select>
-                      </td>
-
-                      {/* Direct Call, WhatsApp, View Actions */}
-                      <td className="py-3.5 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <a
-                            href={`tel:+91${item.customer.mobile}`}
-                            title="Direct Call"
-                            className="p-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-[#F5B900] hover:text-black transition-colors"
-                          >
-                            <Phone className="w-3.5 h-3.5" />
-                          </a>
-
-                          <a
-                            href={`https://wa.me/91${item.customer.mobile}?text=${encodeURIComponent(
-                              `Hello ${item.customer.name}, this is Chaudhari Auto Centre, Pahur. We received your enquiry for ${item.bike.brand} ${item.bike.model} (${item.service.serviceName}). Please let us know when you would like to bring your bike.`
-                            )}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title="Direct WhatsApp"
-                            className="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-600 hover:text-white transition-colors"
-                          >
-                            <MessageCircle className="w-3.5 h-3.5" />
-                          </a>
-
-                          <Link
-                            to={`/garage/enquiries/${item.id}`}
-                            title="View Full Details"
-                            className="p-1.5 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
-                          >
-                            <Eye className="w-3.5 h-3.5" />
-                          </Link>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Mobile Card List (Perfect for 320px–430px with NO horizontal scrolling) */}
-            <div className="lg:hidden space-y-3">
-              {filtered.map((item) => (
-                <div
-                  key={item.id}
-                  className="p-3.5 rounded-xl bg-gray-50 border border-gray-200 space-y-2.5"
-                >
-                  {/* Card Top: Customer info & Quick Action Buttons */}
-                  <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0 flex-1">
-                      <Link
-                        to={`/garage/enquiries/${item.id}`}
-                        className="font-bold text-gray-900 text-sm block truncate hover:text-[#DFA500]"
-                      >
-                        {item.customer.name}
-                      </Link>
-                      <span className="text-xs text-gray-500 font-medium block">
-                        {formatPhone(item.customer.mobile)}
-                      </span>
-                    </div>
-
-                    {/* Direct Call & WhatsApp Buttons */}
-                    <div className="flex items-center gap-1.5 shrink-0">
-                      <a
-                        href={`tel:+91${item.customer.mobile}`}
-                        className="p-2 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 active:scale-95 transition-transform"
-                        title="Call Customer"
-                      >
-                        <Phone className="w-4 h-4" />
-                      </a>
-                      <a
-                        href={`https://wa.me/91${item.customer.mobile}?text=${encodeURIComponent(
-                          `Hello ${item.customer.name}, this is Chaudhari Auto Centre, Pahur. Regarding your bike ${item.bike.brand} ${item.bike.model}...`
-                        )}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 active:scale-95 transition-transform"
-                        title="WhatsApp Customer"
-                      >
-                        <MessageCircle className="w-4 h-4" />
-                      </a>
-                    </div>
-                  </div>
-
-                  {/* Card Details: Bike & Service */}
-                  <div className="p-2 rounded-lg bg-white border border-gray-100 text-xs space-y-1">
-                    <div className="font-semibold text-gray-900 truncate">
-                      🛵 {item.bike.brand} {item.bike.model}{' '}
-                      {item.bike.registrationNumber && `(${item.bike.registrationNumber})`}
-                    </div>
-                    <div className="text-amber-900 font-medium truncate">
-                      🔧 {item.service.serviceName}
-                    </div>
-                    <div className="text-gray-400 text-[10px]">
-                      {formatDate(item.createdAt)}
-                    </div>
-                  </div>
-
-                  {/* Card Bottom: Status dropdown & View details */}
-                  <div className="flex items-center justify-between gap-2 pt-1">
-                    <select
-                      value={item.status}
-                      onChange={(e) =>
-                        handleStatusChange(item.id, e.target.value as EnquiryStatus)
-                      }
-                      className="text-xs font-semibold rounded-lg px-2.5 py-1.5 border border-gray-300 bg-white text-gray-800"
-                    >
-                      <option value="new">New</option>
-                      <option value="contacted">Contacted</option>
-                      <option value="in_progress">In Progress</option>
-                      <option value="completed">Completed</option>
-                      <option value="cancelled">Cancelled</option>
-                    </select>
-
-                    <Link
-                      to={`/garage/enquiries/${item.id}`}
-                      className="px-3 py-1.5 rounded-lg bg-[#F5B900] text-black text-xs font-bold shadow-2xs shrink-0"
-                    >
-                      View
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
-      </div>
+      <ViewBillModal
+        isOpen={isViewModalOpen}
+        onClose={() => setIsViewModalOpen(false)}
+        record={selectedRecord}
+      />
     </div>
   );
 };

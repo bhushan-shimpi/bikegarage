@@ -21,7 +21,11 @@ export const LoginPage: React.FC = () => {
       setIsLoading(false);
 
       if (result.success) {
-        navigate('/garage/dashboard');
+        if (result.user?.role === 'mechanic' || result.user?.role === 'technician') {
+          navigate('/garage/billing');
+        } else {
+          navigate('/garage/dashboard');
+        }
       } else {
         setError(result.error || 'Invalid credentials');
       }

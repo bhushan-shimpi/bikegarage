@@ -24,12 +24,21 @@ export const AdminLayout: React.FC = () => {
 
   const { title, subtitle } = getHeaderTitle(location.pathname);
 
-  // Check mock authentication
+  // Check authentication & role-based route guard
   useEffect(() => {
     if (!authService.isAuthenticated()) {
       navigate('/garage/login');
+      return;
     }
-  }, [navigate]);
+
+    // Role guard: Mechanic accounts only have access to Billing & Job Cards
+    if (authService.isMechanic()) {
+      const p = location.pathname;
+      if (!p.includes('/garage/billing') && !p.includes('/garage/repair-history')) {
+        navigate('/garage/billing', { replace: true });
+      }
+    }
+  }, [navigate, location.pathname]);
 
   return (
     <div className="min-h-screen bg-[#F4F5F7] text-gray-900 flex">

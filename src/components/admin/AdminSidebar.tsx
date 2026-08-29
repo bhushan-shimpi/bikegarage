@@ -10,7 +10,6 @@ import {
   ClipboardList,
   Settings,
   LogOut,
-  ExternalLink,
   ChevronRight,
 } from 'lucide-react';
 import { authService } from '../../services/authService';
@@ -23,22 +22,25 @@ interface AdminSidebarProps {
 export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const currentUser = authService.getCurrentUser();
+  const isMechanic = authService.isMechanic();
 
   const handleLogout = () => {
     authService.logout();
     navigate('/garage/login');
   };
 
-  const navItems = [
-    { name: 'Dashboard', path: '/garage/dashboard', icon: LayoutDashboard },
-    { name: 'Enquiries', path: '/garage/enquiries', icon: Inbox },
-    { name: 'Billing', path: '/garage/billing', icon: Receipt },
-    { name: 'Restorations', path: '/garage/restorations', icon: Sparkles },
-    { name: 'Spare Part Pricing', path: '/garage/parts', icon: Tag },
-    { name: 'Customers List', path: '/garage/customers', icon: Users },
-    { name: 'Services Table', path: '/garage/services', icon: ClipboardList },
-    { name: 'Settings', path: '/garage/settings', icon: Settings },
-  ];
+  const navItems = isMechanic
+    ? [{ name: 'Billing', path: '/garage/billing', icon: Receipt }]
+    : [
+        { name: 'Dashboard', path: '/garage/dashboard', icon: LayoutDashboard },
+        { name: 'Enquiries', path: '/garage/enquiries', icon: Inbox },
+        { name: 'Billing', path: '/garage/billing', icon: Receipt },
+        { name: 'Restorations', path: '/garage/restorations', icon: Sparkles },
+        { name: 'Spare Part Pricing', path: '/garage/parts', icon: Tag },
+        { name: 'Customers List', path: '/garage/customers', icon: Users },
+        { name: 'Services Table', path: '/garage/services', icon: ClipboardList },
+        { name: 'Settings', path: '/garage/settings', icon: Settings },
+      ];
 
   return (
     <>
@@ -104,38 +106,20 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
           </nav>
         </div>
 
-        {/* User Info & Footer Actions on Light Background */}
-        <div className="p-4 border-t border-gray-100 bg-gray-50/70 space-y-3">
-          {/* User badge */}
-          <div className="p-2.5 rounded-lg bg-white border border-gray-200 flex items-center gap-3 shadow-xs">
-            <div className="w-8 h-8 rounded-full bg-[#F5B900] text-black flex items-center justify-center font-black text-xs">
-              CA
-            </div>
-            <div className="flex flex-col overflow-hidden">
-              <span className="text-xs font-bold text-gray-900 truncate">
-                {currentUser?.name || 'Chaudhari Auto Staff'}
-              </span>
-              <span className="text-[10px] text-[#DFA500] font-semibold truncate">
-                Master Technician (Pahur)
-              </span>
-            </div>
+        {/* Clean Footer Logout Action (User profile badge and Live website link removed) */}
+        <div className="p-4 border-t border-gray-100 bg-gray-50/70">
+          <div className="flex items-center justify-between mb-2.5 px-1">
+            <span className="text-xs font-semibold text-gray-800 truncate">
+              {currentUser?.name || currentUser?.username || 'Staff'}
+            </span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 capitalize">
+              {isMechanic ? 'Mechanic' : 'Super Admin'}
+            </span>
           </div>
 
-          {/* View Public Website */}
-          <a
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-between px-3 py-2 rounded-lg text-xs text-gray-600 hover:text-gray-900 hover:bg-white transition-colors border border-gray-200 bg-white"
-          >
-            <span className="font-semibold">Live Public Website</span>
-            <ExternalLink className="w-3.5 h-3.5 text-[#DFA500]" />
-          </a>
-
-          {/* Logout Button */}
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-red-600 hover:bg-red-50 border border-red-200 transition-colors bg-white"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-red-600 hover:bg-red-50 border border-red-200 transition-colors bg-white shadow-2xs active:scale-98"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>Logout Portal</span>
