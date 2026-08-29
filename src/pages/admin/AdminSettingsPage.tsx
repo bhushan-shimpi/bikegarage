@@ -229,7 +229,7 @@ export const AdminSettingsPage: React.FC = () => {
               </label>
               <input
                 type="text"
-                defaultValue="Main Road, Near Bus Stand, Pahur, Dist. Jalgaon, Maharashtra 424205"
+                defaultValue="Pahur, Pahur Peth, Maharashtra 424205"
                 className="w-full bg-white border border-gray-300 rounded-lg px-3.5 py-2.5 text-sm text-gray-900 focus:outline-none focus:border-[#F5B900]"
               />
             </div>

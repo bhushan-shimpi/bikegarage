@@ -162,7 +162,7 @@ export const printInvoice = (record: RepairRecord): void => {
   <div class="header">
     <h1 class="garage-name">CHAUDHARI AUTO CENTRE</h1>
     <div class="garage-sub">Two-Wheeler Multi-Brand Workshop & Genuine Spare Parts</div>
-    <div class="garage-sub">At Post Pahur, Tal. Jamner, Dist. Jalgaon - 424205</div>
+    <div class="garage-sub">Pahur, Pahur Peth, Tal. Jamner, Dist. Jalgaon - 424205</div>
     <div class="garage-contact">Contact: +91 73874 48878 / +91 95038 53143</div>
     <div class="invoice-title">REPAIR INVOICE & JOB CARD</div>
   </div>

@@ -28,7 +28,7 @@ export const HomePage: React.FC = () => {
     priceRange: '₹₹',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Main Road, Near Bus Stand',
+      streetAddress: 'Pahur Peth',
       addressLocality: 'Pahur',
       addressRegion: 'Maharashtra',
       postalCode: '424205',

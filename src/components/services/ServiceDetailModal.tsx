@@ -74,7 +74,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
             </span>
             <span className="flex items-center gap-1 text-xs text-gray-300 font-medium">
               <MapPin className="w-3.5 h-3.5 text-[#F5B900]" />
-              Pahur, Tal. Jamner, Dist. Jalgaon
+              Pahur Peth, Pahur, Dist. Jalgaon
             </span>
           </div>
 

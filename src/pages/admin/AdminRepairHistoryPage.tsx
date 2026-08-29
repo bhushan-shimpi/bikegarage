@@ -69,7 +69,7 @@ ${partsList}
 📊 *Payment Status:* ${record.paymentStatus}
 ----------------------------------------
 🙏 *Thank you for choosing Chaudhari Auto Centre!*
-📍 Main Road, Near Bus Stand, Pahur, Jalgaon (MH)
+📍 Pahur, Pahur Peth, Maharashtra 424205
 📞 Helpline: +91 7387448878 / 9503853143`;
 
   return `https://wa.me/91${cleanMobile}?text=${encodeURIComponent(message)}`;

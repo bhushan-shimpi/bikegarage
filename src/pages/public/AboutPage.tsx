@@ -53,7 +53,7 @@ export const AboutPage: React.FC = () => {
       telephone: '+91-7387448878',
       address: {
         '@type': 'PostalAddress',
-        streetAddress: 'Main Road, Near Bus Stand',
+        streetAddress: 'Pahur Peth',
         addressLocality: 'Pahur',
         addressRegion: 'Maharashtra',
         postalCode: '424205',

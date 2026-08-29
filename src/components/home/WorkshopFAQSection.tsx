@@ -12,7 +12,7 @@ export const workshopFAQs: FAQItem[] = [
   {
     question: 'Where can I get my bike serviced in Pahur, Jamner, or Jalgaon?',
     answer:
-      'Chaudhari Auto is conveniently located on Main Road, Near Bus Stand in Pahur (Taluka Jamner, District Jalgaon, Maharashtra). We are easily accessible to riders from Pahur, Jamner, Vakod, Shendurni, Neri, and across Jalgaon district. The workshop is open 7 days a week from 9:00 AM to 8:00 PM for routine servicing, major repairs, and complete restorations.',
+      'Chaudhari Auto is conveniently located at Pahur Peth, Pahur (Taluka Jamner, District Jalgaon, Maharashtra 424205). We are easily accessible to riders from Pahur, Jamner, Vakod, Shendurni, Neri, and across Jalgaon district. The workshop is open 7 days a week from 9:00 AM to 8:00 PM for routine servicing, major repairs, and complete restorations.',
     category: 'Location & Timing',
   },
   {

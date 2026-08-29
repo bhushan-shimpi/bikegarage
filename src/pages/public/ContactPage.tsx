@@ -18,7 +18,7 @@ export const ContactPage: React.FC = () => {
       email: 'chaudhariautopahur@gmail.com',
       address: {
         '@type': 'PostalAddress',
-        streetAddress: 'Main Road, Near Bus Stand',
+        streetAddress: 'Pahur Peth',
         addressLocality: 'Pahur',
         addressRegion: 'Maharashtra',
         postalCode: '424205',
@@ -52,7 +52,7 @@ export const ContactPage: React.FC = () => {
     <div className="bg-[#F8F9FA] min-h-screen flex flex-col justify-between">
       <SEO
         title="Contact Us & Workshop Location in Pahur, Jamner"
-        description="Visit Chaudhari Auto at Main Road, Near Bus Stand, Pahur, Taluka Jamner, Dist. Jalgaon. Call +91 73874 48878 or message us on WhatsApp for bike servicing appointments."
+        description="Visit Chaudhari Auto at Pahur, Pahur Peth, Taluka Jamner, Dist. Jalgaon, Maharashtra 424205. Call +91 73874 48878 or message us on WhatsApp for bike servicing appointments."
         canonicalPath="/contact"
         jsonLd={contactSchema}
       />
@@ -174,7 +174,7 @@ export const ContactPage: React.FC = () => {
                     <div>
                       <span className="font-bold text-gray-900 block">Workshop Address</span>
                       <span className="text-gray-600 mt-0.5 block">
-                        Main Road, Near Bus Stand, Pahur, Tal. Jamner, Dist. Jalgaon, Maharashtra - 424205
+                        Pahur, Pahur Peth, Tal. Jamner, Dist. Jalgaon, Maharashtra - 424205
                       </span>
                     </div>
                   </div>
@@ -231,7 +231,7 @@ export const ContactPage: React.FC = () => {
                 <div className="relative w-full h-80 sm:h-full min-h-[380px] rounded-xl overflow-hidden border border-gray-300 shadow-inner bg-gray-100 group">
                   <iframe
                     title="Chaudhari Auto Pahur Location Map"
-                    src="https://maps.google.com/maps?q=Pahur,%20Jalgaon,%20Maharashtra&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                    src="https://maps.google.com/maps?q=Chaudhari%20Auto%20Centre,%20Pahur,%20Pahur%20Peth,%20Maharashtra%20424205&t=&z=16&ie=UTF8&iwloc=&output=embed"
                     className="w-full h-full border-0"
                     loading="lazy"
                   />

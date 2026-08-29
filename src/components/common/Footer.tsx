@@ -134,8 +134,7 @@ export const Footer: React.FC = () => {
             <div className="flex items-start gap-2.5 text-neutral-300">
               <MapPin className="w-3.5 h-3.5 text-[#F5B900] shrink-0 mt-0.5" />
               <span>
-                Main Road, Near Bus Stand, Pahur, Dist. Jalgaon, Maharashtra
-                424205
+                Pahur, Pahur Peth, Dist. Jalgaon, Maharashtra 424205
               </span>
             </div>
 
