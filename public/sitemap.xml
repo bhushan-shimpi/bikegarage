@@ -5,7 +5,7 @@
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   <!-- Homepage -->
   <url>
-    <loc>https://chaudhariauto.com/</loc>
+    <loc>https://www.chaudhariauto.com/</loc>
     <lastmod>2026-08-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -13,7 +13,7 @@
 
   <!-- All Two-Wheeler Services & Pricing -->
   <url>
-    <loc>https://chaudhariauto.com/services</loc>
+    <loc>https://www.chaudhariauto.com/services</loc>
     <lastmod>2026-08-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -21,7 +21,7 @@
 
   <!-- Bike Restoration Service Details (100cc & 150cc) -->
   <url>
-    <loc>https://chaudhariauto.com/services/bike-restoration</loc>
+    <loc>https://www.chaudhariauto.com/services/bike-restoration</loc>
     <lastmod>2026-08-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -29,7 +29,7 @@
 
   <!-- About Workshop & Heritage Since 1994 -->
   <url>
-    <loc>https://chaudhariauto.com/about</loc>
+    <loc>https://www.chaudhariauto.com/about</loc>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -37,7 +37,7 @@
 
   <!-- Service Appointment Booking & Customer Inquiry -->
   <url>
-    <loc>https://chaudhariauto.com/inquiry</loc>
+    <loc>https://www.chaudhariauto.com/inquiry</loc>
     <lastmod>2026-08-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -45,7 +45,7 @@
 
   <!-- Online Bike Restoration Job Sheet Form -->
   <url>
-    <loc>https://chaudhariauto.com/restoration-form</loc>
+    <loc>https://www.chaudhariauto.com/restoration-form</loc>
     <lastmod>2026-08-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -53,7 +53,7 @@
 
   <!-- Contact & Workshop Location (Pahur, Jamner, Jalgaon) -->
   <url>
-    <loc>https://chaudhariauto.com/contact</loc>
+    <loc>https://www.chaudhariauto.com/contact</loc>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

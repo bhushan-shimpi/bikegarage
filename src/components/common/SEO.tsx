@@ -13,7 +13,7 @@ interface SEOProps {
 const DEFAULT_TITLE = 'Chaudhary Auto | Bike Service & Repair in Pahur, Jamner';
 const DEFAULT_DESCRIPTION =
   'Chaudhary Auto is a premier bike garage in Pahur, Taluka Jamner, Dist. Jalgaon offering expert bike servicing, repair, engine work, and complete restoration.';
-const DOMAIN = 'https://chaudhariauto.com';
+const DOMAIN = 'https://www.chaudhariauto.com';
 const DEFAULT_IMAGE = `${DOMAIN}/images/hero-bike.jpg`;
 
 export const SEO: React.FC<SEOProps> = ({
