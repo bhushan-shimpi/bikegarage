@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Search,
   Check,
-  RotateCcw,
   Sparkles,
   Clock,
   Edit2,
@@ -211,15 +210,6 @@ export const AdminServicesPricingPage: React.FC = () => {
     }
   };
 
-  const handleResetDefaults = () => {
-    if (window.confirm('Reset all service prices to standard garage defaults?')) {
-      bikeServicesService.resetDefaults();
-      loadData();
-      setSuccessMsg('All service prices reset to defaults');
-      setTimeout(() => setSuccessMsg(null), 3000);
-    }
-  };
-
   const filtered = services.filter(
     (s) =>
       s.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -242,24 +232,13 @@ export const AdminServicesPricingPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={handleOpenAddModal}
-            className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Add Service</span>
-          </button>
-
-          <button
-            onClick={handleResetDefaults}
-            className="p-2.5 sm:px-3 sm:py-2.5 rounded-xl bg-gray-100 border border-gray-200 hover:bg-gray-200 text-gray-700 text-xs font-bold flex items-center gap-1.5 transition-colors"
-            title="Reset to factory preset rates"
-          >
-            <RotateCcw className="w-4 h-4 text-gray-500" />
-            <span className="hidden sm:inline">Reset</span>
-          </button>
-        </div>
+        <button
+          onClick={handleOpenAddModal}
+          className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-sm transition-all active:scale-95 shrink-0"
+        >
+          <Plus className="w-4 h-4" />
+          <span>Add Service</span>
+        </button>
       </div>
 
       {/* Success Notification Banner */}

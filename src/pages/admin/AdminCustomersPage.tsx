@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import {
   Users,
   Phone,
-  MessageCircle,
   Bike,
   Plus,
   Trash2,
@@ -15,6 +13,8 @@ import {
   Calendar,
   FileText,
 } from 'lucide-react';
+import { WhatsAppIcon } from '../../components/common/WhatsAppIcon';
+import { CreateBillModal } from '../../components/admin/CreateBillModal';
 import { customerService } from '../../services/customerService';
 import { Customer, RepairRecord } from '../../types/customer';
 import { formatPhone } from '../../utils/formatters';
@@ -24,6 +24,7 @@ export const AdminCustomersPage: React.FC = () => {
   const [search, setSearch] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+  const [isBillModalOpen, setIsBillModalOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [customerHistory, setCustomerHistory] = useState<RepairRecord[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
@@ -243,7 +244,7 @@ export const AdminCustomersPage: React.FC = () => {
                     className="p-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white transition-colors shadow-2xs"
                     title="Chat on WhatsApp"
                   >
-                    <MessageCircle className="w-3.5 h-3.5" />
+                    <WhatsAppIcon className="w-3.5 h-3.5" />
                   </a>
                 </div>
 
@@ -259,13 +260,14 @@ export const AdminCustomersPage: React.FC = () => {
                     <span>History</span>
                   </button>
 
-                  <Link
-                    to="/garage/billing"
-                    className="px-3 py-1.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-bold transition-colors shadow-2xs whitespace-nowrap"
+                  <button
+                    type="button"
+                    onClick={() => setIsBillModalOpen(true)}
+                    className="px-3 py-1.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-bold transition-colors shadow-2xs whitespace-nowrap cursor-pointer"
                     title="Create Job Card / Bill"
                   >
                     + Bill
-                  </Link>
+                  </button>
 
                   <button
                     type="button"
@@ -572,6 +574,17 @@ export const AdminCustomersPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* In-Page Quick Bill Modal */}
+      <CreateBillModal
+        isOpen={isBillModalOpen}
+        onClose={() => setIsBillModalOpen(false)}
+        onSuccess={() => {
+          setSuccessMsg('Repair bill created successfully!');
+          customerService.getAll().then(setCustomers);
+          setTimeout(() => setSuccessMsg(null), 4000);
+        }}
+      />
     </div>
   );
 };

@@ -6,16 +6,18 @@ import {
   Bike,
   User,
   Search,
-  MessageCircle,
   CheckCircle2,
   Receipt,
   Copy,
   Check,
   Printer,
 } from 'lucide-react';
+import { WhatsAppIcon } from '../common/WhatsAppIcon';
 import { repairService } from '../../services/repairService';
 import { customerService } from '../../services/customerService';
 import { partService } from '../../services/partService';
+import { bikeServicesService } from '../../services/bikeServicesService';
+import { ServiceItem } from '../../types/service';
 import {
   RepairRecord,
   Customer,
@@ -38,6 +40,7 @@ export const CreateBillModal: React.FC<CreateBillModalProps> = ({
 }) => {
   const [allCustomers, setAllCustomers] = useState<Customer[]>([]);
   const [allParts, setAllParts] = useState<SparePart[]>([]);
+  const [availableServices, setAvailableServices] = useState<ServiceItem[]>([]);
 
   // Customer suggestions
   const [customerSuggestions, setCustomerSuggestions] = useState<Customer[]>([]);
@@ -67,6 +70,7 @@ export const CreateBillModal: React.FC<CreateBillModalProps> = ({
     registrationNumber: '',
     currentKm: '',
     serviceType: 'General Bike Service',
+    servicePrice: 299,
     problemDetails: '',
     partsReplaced: [] as { name: string; cost: number }[],
     laborCharge: 200,
@@ -84,6 +88,19 @@ export const CreateBillModal: React.FC<CreateBillModalProps> = ({
     if (isOpen) {
       customerService.getAll().then(setAllCustomers);
       partService.getAll().then(setAllParts);
+      const services = bikeServicesService.getAll();
+      setAvailableServices(services);
+      if (services.length > 0) {
+        const defaultSvc = services.find((s) => s.name === 'General Bike Service') || services[0];
+        const defaultPrice = defaultSvc.priceStartingAt
+          ? Number(defaultSvc.priceStartingAt.replace(/[^\d.]/g, '')) || 299
+          : 299;
+        setFormData((prev) => ({
+          ...prev,
+          serviceType: defaultSvc.name,
+          servicePrice: defaultPrice,
+        }));
+      }
       setFormError(null);
     }
   }, [isOpen]);
@@ -157,10 +174,11 @@ export const CreateBillModal: React.FC<CreateBillModalProps> = ({
   };
 
   const partsTotal = formData.partsReplaced.reduce((sum, p) => sum + (Number(p.cost) || 0), 0);
-  const grandTotal = Math.max(
-    0,
-    partsTotal + (Number(formData.laborCharge) || 0) - (Number(formData.discount) || 0)
-  );
+  const serviceTotal = Number(formData.servicePrice) || 0;
+  const laborTotal = Number(formData.laborCharge) || 0;
+  const billSubtotal = partsTotal + serviceTotal + laborTotal;
+  const overallDiscount = Number(formData.discount) || 0;
+  const grandTotal = Math.max(0, billSubtotal - overallDiscount);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -175,8 +193,10 @@ export const CreateBillModal: React.FC<CreateBillModalProps> = ({
     try {
       const created = await repairService.create({
         ...formData,
+        servicePrice: serviceTotal,
         partsTotal,
-        discount: Number(formData.discount) || 0,
+        laborCharge: laborTotal,
+        discount: overallDiscount,
         paymentMode: formData.paymentMode,
         totalAmount: grandTotal,
       });
@@ -203,9 +223,12 @@ export const CreateBillModal: React.FC<CreateBillModalProps> = ({
       createdBillRecord.partsTotal ||
       createdBillRecord.partsReplaced?.reduce((sum, p) => sum + (Number(p.cost) || 0), 0) ||
       0;
+    const sPrice = createdBillRecord.servicePrice || 0;
+    const lCharge = createdBillRecord.laborCharge || 0;
+    const bSubtotal = pTotal + sPrice + lCharge;
     const discountStr =
       createdBillRecord.discount && createdBillRecord.discount > 0
-        ? `\n🎁 Discount: -₹${createdBillRecord.discount}`
+        ? `\n🎁 Overall Bill Discount: -₹${createdBillRecord.discount}`
         : '';
 
     const text = `🏍️ CHAUDHARI AUTO CENTRE, PAHUR
@@ -218,13 +241,14 @@ Vehicle: ${createdBillRecord.bikeBrand || ''} ${createdBillRecord.bikeModel || '
     }
 Date: ${createdBillRecord.repairDate}
 
-Service: ${createdBillRecord.serviceType}
+Service: ${createdBillRecord.serviceType}${sPrice > 0 ? ` (₹${sPrice})` : ''}
 
 Parts Replaced:
 ${partsList}
 Parts Total: ₹${pTotal}
 
-Labor Charges: ₹${createdBillRecord.laborCharge}${discountStr}
+Labor Charges: ₹${lCharge}
+Bill Subtotal: ₹${bSubtotal}${discountStr}
 ----------------------------------------
 FINAL AMOUNT: ₹${createdBillRecord.totalAmount}
 Payment Mode: ${createdBillRecord.paymentMode || 'Cash'}
@@ -404,36 +428,62 @@ Helpline: +91 7387448878 / 9503853143`;
                   Service & Spare Parts Fitted
                 </h4>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block font-semibold text-gray-700 mb-1">Service Type</label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="sm:col-span-2">
+                    <label className="block font-semibold text-gray-700 mb-1">
+                      Service Type (from Services Catalog)
+                    </label>
                     <select
                       value={formData.serviceType}
-                      onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
+                      onChange={(e) => {
+                        const selectedName = e.target.value;
+                        const matched = availableServices.find((s) => s.name === selectedName);
+                        const numPrice = matched?.priceStartingAt
+                          ? Number(matched.priceStartingAt.replace(/[^\d.]/g, '')) || 0
+                          : 0;
+                        setFormData((prev) => ({
+                          ...prev,
+                          serviceType: selectedName,
+                          servicePrice: numPrice,
+                        }));
+                      }}
                       className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
                     >
-                      <option value="General Bike Service">General Bike Service</option>
-                      <option value="Engine Oil Replacement">Engine Oil Replacement</option>
-                      <option value="Brake Overhaul & Pad Replacement">Brake Overhaul & Pad Replacement</option>
-                      <option value="Full Engine Rebuild">Full Engine Rebuild</option>
-                      <option value="Chain Sprocket Kit Replacement">Chain Sprocket Kit Replacement</option>
-                      <option value="Wiring & Electrical Repair">Wiring & Electrical Repair</option>
-                      <option value="Carburetor / Injector Tuning">Carburetor / Injector Tuning</option>
-                      <option value="Clutch Plate Replacement">Clutch Plate Replacement</option>
+                      {availableServices.map((svc) => (
+                        <option key={svc.id || svc.name} value={svc.name}>
+                          {svc.name} {svc.priceStartingAt ? `(${svc.priceStartingAt})` : ''}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-gray-700 mb-1">Odometer (KM)</label>
+                    <label className="block font-semibold text-gray-700 mb-1">
+                      Service Price (₹)
+                    </label>
                     <input
-                      type="text"
+                      type="number"
                       inputMode="numeric"
-                      value={formData.currentKm}
-                      onChange={(e) => setFormData({ ...formData, currentKm: e.target.value })}
-                      placeholder="e.g. 24,500"
-                      className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
+                      value={formData.servicePrice}
+                      onChange={(e) =>
+                        setFormData((prev) => ({ ...prev, servicePrice: Number(e.target.value) || 0 }))
+                      }
+                      placeholder="0"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs font-bold text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
                     />
                   </div>
+                </div>
+
+                <div className="max-w-xs">
+                  <label className="block font-semibold text-gray-700 mb-1">Odometer (KM)</label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={formData.currentKm}
+                    onChange={(e) => setFormData({ ...formData, currentKm: e.target.value })}
+                    placeholder="e.g. 24,500"
+                    className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
+                  />
                 </div>
 
                 {/* Live Spare Part Autocomplete Search Bar */}
@@ -589,15 +639,21 @@ Helpline: +91 7387448878 / 9503853143`;
                   </div>
 
                   <div>
-                    <label className="block font-semibold text-gray-700 mb-1">Discount (₹)</label>
+                    <label className="block font-semibold text-gray-700 mb-1">
+                      Discount on Bill (₹)
+                    </label>
                     <input
                       type="number"
                       value={formData.discount}
                       onChange={(e) =>
                         setFormData({ ...formData, discount: Number(e.target.value) || 0 })
                       }
+                      placeholder="0"
                       className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-xs font-bold text-emerald-700 focus:outline-none focus:border-[#F5B900]"
                     />
+                    <span className="text-[10px] text-gray-500 block mt-1">
+                      Applied to overall bill total
+                    </span>
                   </div>
 
                   <div>
@@ -632,11 +688,35 @@ Helpline: +91 7387448878 / 9503853143`;
                   </div>
                 </div>
 
-                {/* Grand Total Bar */}
-                <div className="pt-2 border-t border-gray-200 flex items-center justify-between">
-                  <span className="text-sm font-bold text-gray-700">Total Billed Amount:</span>
-                  <div className="text-xl sm:text-2xl font-black text-gray-900">
-                    ₹{grandTotal}
+                {/* Overall Bill Financial Summary */}
+                <div className="pt-2 border-t border-gray-200">
+                  <div className="bg-gray-50 rounded-xl p-3.5 border border-gray-200 space-y-1.5 text-xs">
+                    <div className="flex justify-between text-gray-600">
+                      <span>Service Rate ({formData.serviceType}):</span>
+                      <span className="font-semibold text-gray-900">₹{serviceTotal}</span>
+                    </div>
+                    <div className="flex justify-between text-gray-600">
+                      <span>Spare Parts Total ({formData.partsReplaced.length} items):</span>
+                      <span className="font-semibold text-gray-900">₹{partsTotal}</span>
+                    </div>
+                    <div className="flex justify-between text-gray-600">
+                      <span>Mechanic Labor Charges:</span>
+                      <span className="font-semibold text-gray-900">₹{laborTotal}</span>
+                    </div>
+                    <div className="flex justify-between font-bold text-gray-800 pt-1 border-t border-gray-200">
+                      <span>Overall Bill Subtotal:</span>
+                      <span>₹{billSubtotal}</span>
+                    </div>
+                    {overallDiscount > 0 && (
+                      <div className="flex justify-between font-bold text-emerald-700">
+                        <span>Overall Bill Discount:</span>
+                        <span>-₹{overallDiscount}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between text-sm font-black text-gray-900 pt-1.5 border-t border-gray-200">
+                      <span>FINAL AMOUNT PAYABLE:</span>
+                      <span className="text-xl text-emerald-700 font-extrabold">₹{grandTotal}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -714,7 +794,7 @@ Helpline: +91 7387448878 / 9503853143`;
                   }}
                   className="py-2.5 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-98"
                 >
-                  <MessageCircle className="w-4 h-4" />
+                  <WhatsAppIcon className="w-4 h-4" />
                   <span>WhatsApp Bill</span>
                 </a>
 

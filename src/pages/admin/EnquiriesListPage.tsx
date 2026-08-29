@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
   Search,
   Filter,
-  RefreshCw,
   Inbox,
   PlusCircle,
   Trash2,
   CheckSquare,
   Bike,
   Phone,
-  MessageCircle,
   Eye,
 } from 'lucide-react';
+import { WhatsAppIcon } from '../../components/common/WhatsAppIcon';
 import { enquiryService } from '../../services/enquiryService';
 import { Enquiry, EnquiryStatus, isRestorationEnquiry } from '../../types/enquiry';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { formatDate, formatPhone } from '../../utils/formatters';
 import { CreateEnquiryModal } from '../../components/admin/CreateEnquiryModal';
+import { EnquiryDetailsModal } from '../../components/admin/EnquiryDetailsModal';
 
 export const EnquiriesListPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -27,6 +27,7 @@ export const EnquiriesListPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | EnquiryStatus>(initialFilter);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [selectedEnquiryId, setSelectedEnquiryId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const typeFilter = searchParams.get('type') || 'all';
 
@@ -47,14 +48,6 @@ export const EnquiriesListPage: React.FC = () => {
     { key: 'completed', label: 'Completed' },
     { key: 'cancelled', label: 'Cancelled' },
   ] as const;
-
-  const handleResetDefaults = () => {
-    if (window.confirm('Reset demo enquiries database to default bike records?')) {
-      enquiryService.resetDefaults();
-      setSelectedIds([]);
-      loadData();
-    }
-  };
 
   // Filter and Search logic
   const filtered = enquiries.filter((e) => {
@@ -126,24 +119,13 @@ export const EnquiriesListPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={() => setIsCreateModalOpen(true)}
-            className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-sm transition-all active:scale-95"
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>New Enquiry</span>
-          </button>
-
-          <button
-            onClick={handleResetDefaults}
-            className="p-2.5 sm:px-3 sm:py-2.5 rounded-xl bg-gray-100 border border-gray-200 hover:bg-gray-200 text-gray-700 text-xs font-bold flex items-center gap-1.5 transition-colors"
-            title="Reset to demo state"
-          >
-            <RefreshCw className="w-4 h-4 text-gray-500" />
-            <span className="hidden sm:inline">Reset</span>
-          </button>
-        </div>
+        <button
+          onClick={() => setIsCreateModalOpen(true)}
+          className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-sm transition-all active:scale-95 shrink-0"
+        >
+          <PlusCircle className="w-4 h-4" />
+          <span>New Enquiry</span>
+        </button>
       </div>
 
       {/* Search & Filters Card */}
@@ -285,12 +267,13 @@ export const EnquiriesListPage: React.FC = () => {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                     <div>
-                      <Link
-                        to={`/garage/enquiries/${enq.id}`}
-                        className="font-bold text-gray-900 hover:text-amber-700 text-sm block truncate"
+                      <button
+                        type="button"
+                        onClick={() => setSelectedEnquiryId(enq.id)}
+                        className="font-bold text-gray-900 hover:text-amber-700 text-sm block truncate text-left cursor-pointer"
                       >
                         {enq.customer.name}
-                      </Link>
+                      </button>
                       <span className="text-[11px] text-gray-500 font-mono">
                         {formatPhone(enq.customer.mobile)}
                       </span>
@@ -343,18 +326,19 @@ export const EnquiriesListPage: React.FC = () => {
                     className="p-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white transition-colors shadow-2xs"
                     title="WhatsApp"
                   >
-                    <MessageCircle className="w-3.5 h-3.5" />
+                    <WhatsAppIcon className="w-3.5 h-3.5" />
                   </a>
                 </div>
 
                 <div className="flex items-center gap-1.5">
-                  <Link
-                    to={`/garage/enquiries/${enq.id}`}
-                    className="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-2xs"
+                  <button
+                    type="button"
+                    onClick={() => setSelectedEnquiryId(enq.id)}
+                    className="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-950 border border-amber-300 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-2xs cursor-pointer"
                   >
                     <Eye className="w-3.5 h-3.5 text-[#DFA500]" />
                     <span>Details</span>
-                  </Link>
+                  </button>
 
                   <button
                     type="button"
@@ -389,6 +373,14 @@ export const EnquiriesListPage: React.FC = () => {
           </button>
         </div>
       )}
+
+      {/* In-Page Enquiry Details Modal */}
+      <EnquiryDetailsModal
+        isOpen={!!selectedEnquiryId}
+        enquiryId={selectedEnquiryId}
+        onClose={() => setSelectedEnquiryId(null)}
+        onUpdated={loadData}
+      />
     </div>
   );
 };

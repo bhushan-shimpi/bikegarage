@@ -37,7 +37,7 @@ export const AdminLayout: React.FC = () => {
       const currentUser = authService.getCurrentUser();
       const perms = currentUser?.permissions || ['billing'];
 
-      const allowedPaths = ['/garage/billing', '/garage/repair-history'];
+      const allowedPaths = ['/garage/billing', '/garage/repair-history', '/garage/restorations'];
       if (perms.includes('parts')) allowedPaths.push('/garage/parts');
       if (perms.includes('customers')) allowedPaths.push('/garage/customers');
       if (perms.includes('enquiries')) allowedPaths.push('/garage/enquiries');

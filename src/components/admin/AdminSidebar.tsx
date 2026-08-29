@@ -51,6 +51,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
             ...(permissions.includes('enquiries')
               ? [{ name: 'Enquiries', path: '/garage/enquiries', icon: Inbox }]
               : []),
+            { name: 'Restorations', path: '/garage/restorations', icon: Sparkles },
           ],
         },
       ]

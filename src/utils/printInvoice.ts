@@ -1,4 +1,4 @@
-﻿import { RepairRecord } from '../types/customer';
+import { RepairRecord } from '../types/customer';
 import { formatPhone } from './formatters';
 
 export const printInvoice = (record: RepairRecord): void => {
@@ -214,20 +214,28 @@ export const printInvoice = (record: RepairRecord): void => {
     </tbody>
   </table>
 
-  <div class="summary-box">
+    ${
+      record.servicePrice && record.servicePrice > 0
+        ? `
+    <div class="summary-row">
+      <span>Service Rate (${record.serviceType}):</span>
+      <span style="font-family: monospace; font-weight: bold;">₹${record.servicePrice}</span>
+    </div>`
+        : ''
+    }
     <div class="summary-row">
       <span>Spare Parts Total:</span>
       <span style="font-family: monospace; font-weight: bold;">₹${partsTotal}</span>
     </div>
     <div class="summary-row">
-      <span>Labor / Service Charges:</span>
+      <span>Mechanic Labor Charges:</span>
       <span style="font-family: monospace; font-weight: bold;">₹${record.laborCharge}</span>
     </div>
     ${
       record.discount
         ? `
     <div class="summary-row" style="color: #15803d; font-weight: bold;">
-      <span>Special Discount:</span>
+      <span>Discount (Overall Bill):</span>
       <span style="font-family: monospace;">-₹${record.discount}</span>
     </div>`
         : ''

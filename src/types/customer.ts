@@ -28,6 +28,7 @@ export interface RepairRecord {
   registrationNumber?: string;
   currentKm?: string;
   serviceType: string;
+  servicePrice?: number;
   problemDetails?: string;
   partsReplaced: ReplacedPart[];
   laborCharge: number;

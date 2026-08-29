@@ -5,8 +5,8 @@ import { authService } from '../../services/authService';
 import { Button } from '../../components/common/Button';
 
 export const LoginPage: React.FC = () => {
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('admin123');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -35,13 +35,8 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  const handleDemoFill = () => {
-    setUsername('admin');
-    setPassword('admin123');
-  };
-
   return (
-    <div className="min-h-screen bg-[#F4F5F7] text-gray-900 flex flex-col justify-center items-center px-4 py-12 relative">
+    <div className="min-h-screen bg-[#F4F5F7] text-gray-900 flex flex-col justify-center items-center px-4 py-12 relative font-sans">
       {/* Login Card */}
       <div className="w-full max-w-md bg-white border border-gray-200 rounded-2xl p-8 sm:p-10 shadow-lg relative z-10">
         {/* Header Branding */}
@@ -52,32 +47,17 @@ export const LoginPage: React.FC = () => {
             className="h-16 w-auto object-contain mx-auto mb-3"
           />
 
-          <h1 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-gray-900 font-sans">
+          <h1 className="text-xl sm:text-2xl font-bold uppercase tracking-tight text-gray-900 font-sans">
             CHAUDHARI AUTO CENTRE
           </h1>
 
-          <div className="text-xs font-black tracking-[0.25em] text-[#DFA500] uppercase mt-0.5">
+          <div className="text-xs font-bold tracking-[0.25em] text-[#DFA500] uppercase mt-0.5">
             PAHUR • GARAGE PORTAL
           </div>
 
           <p className="text-xs text-gray-500 mt-2">
             Internal Staff & Workshop Management
           </p>
-        </div>
-
-        {/* Demo Credentials Helper */}
-        <div
-          onClick={handleDemoFill}
-          className="mb-6 p-3 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-between cursor-pointer hover:border-[#F5B900] transition-colors"
-          title="Click to pre-fill demo credentials"
-        >
-          <div className="text-xs">
-            <span className="font-bold text-gray-800 block">Demo Access:</span>
-            <span className="text-gray-500 font-mono">User: <strong>admin</strong> | Pass: <strong>admin123</strong></span>
-          </div>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-[#FFF9E6] px-2 py-1 rounded border border-[#FDE68A]">
-            Auto-fill
-          </span>
         </div>
 
         {error && (

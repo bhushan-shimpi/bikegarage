@@ -3,7 +3,6 @@ import {
   Receipt,
   Search,
   Phone,
-  MessageCircle,
   Eye,
   PlusCircle,
   CheckCircle2,
@@ -14,6 +13,7 @@ import {
   TrendingUp,
   Printer,
 } from 'lucide-react';
+import { WhatsAppIcon } from '../../components/common/WhatsAppIcon';
 import { repairService } from '../../services/repairService';
 import { RepairRecord } from '../../types/customer';
 import { formatPhone } from '../../utils/formatters';
@@ -431,7 +431,7 @@ export const DashboardPage: React.FC = () => {
                       className="p-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white transition-colors shadow-2xs"
                       title="WhatsApp Bill"
                     >
-                      <MessageCircle className="w-4 h-4" />
+                      <WhatsAppIcon className="w-4 h-4" />
                     </a>
                     <button
                       type="button"

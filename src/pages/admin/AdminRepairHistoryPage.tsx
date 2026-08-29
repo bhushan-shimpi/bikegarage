@@ -15,7 +15,6 @@ import {
   User,
   FileText,
   TrendingUp,
-  MessageCircle,
   Package,
   Phone,
   Filter,
@@ -23,6 +22,7 @@ import {
   RotateCcw,
   Printer,
 } from 'lucide-react';
+import { WhatsAppIcon } from '../../components/common/WhatsAppIcon';
 import { repairService } from '../../services/repairService';
 import { customerService } from '../../services/customerService';
 import { partService } from '../../services/partService';
@@ -48,8 +48,10 @@ export const getWhatsAppBillUrl = (record: RepairRecord): string => {
     record.partsTotal ||
     record.partsReplaced?.reduce((sum, p) => sum + (Number(p.cost) || 0), 0) ||
     0;
+  const servicePriceStr =
+    record.servicePrice && record.servicePrice > 0 ? `\n🏷️ *Base Service Rate:* ₹${record.servicePrice}` : '';
   const discountStr =
-    record.discount && record.discount > 0 ? `\n🎁 *Discount:* -₹${record.discount}` : '';
+    record.discount && record.discount > 0 ? `\n🎁 *Overall Bill Discount:* -₹${record.discount}` : '';
   const paymentModeStr = record.paymentMode || 'Cash';
 
   const message = `🏍️ *CHAUDHARI AUTO CENTRE, PAHUR*
@@ -62,8 +64,7 @@ export const getWhatsAppBillUrl = (record: RepairRecord): string => {
   }
 📅 *Date:* ${record.repairDate}
 
-🔧 *Service / Problem:*
-${record.serviceType}
+🔧 *Service:* ${record.serviceType}${servicePriceStr}
 ${record.problemDetails ? `Note: ${record.problemDetails}` : ''}
 
 📦 *Parts Replaced:*
@@ -687,7 +688,7 @@ export const AdminRepairHistoryPage: React.FC = () => {
                     className="p-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white transition-colors shadow-2xs"
                     title="Send Bill via WhatsApp"
                   >
-                    <MessageCircle className="w-4 h-4" />
+                    <WhatsAppIcon className="w-4 h-4" />
                   </a>
 
                   <button
@@ -1170,7 +1171,7 @@ export const AdminRepairHistoryPage: React.FC = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="bg-white rounded-2xl w-full max-w-md border border-gray-200 shadow-2xl p-6 text-center space-y-4">
             <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
-              <MessageCircle className="w-8 h-8" />
+              <WhatsAppIcon className="w-8 h-8" />
             </div>
 
             <div>
@@ -1199,7 +1200,7 @@ export const AdminRepairHistoryPage: React.FC = () => {
                 onClick={() => setShowWhatsAppModal(false)}
                 className="w-full py-3 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-black text-xs uppercase flex items-center justify-center gap-2 shadow-sm transition-all"
               >
-                <MessageCircle className="w-4 h-4" />
+                <WhatsAppIcon className="w-4 h-4" />
                 <span>Send Bill to Customer via WhatsApp</span>
               </a>
 
@@ -1329,7 +1330,7 @@ export const AdminRepairHistoryPage: React.FC = () => {
                 rel="noopener noreferrer"
                 className="px-4 py-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs flex items-center gap-2 shadow-sm transition-all"
               >
-                <MessageCircle className="w-4 h-4" />
+                <WhatsAppIcon className="w-4 h-4" />
                 <span>Send Bill via WhatsApp</span>
               </a>
 

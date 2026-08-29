@@ -18,8 +18,9 @@ import {
   Inbox,
   Copy,
   Check,
-  MessageCircle,
+  Sparkles,
 } from 'lucide-react';
+import { WhatsAppIcon } from '../../components/common/WhatsAppIcon';
 import { Button } from '../../components/common/Button';
 import { authService } from '../../services/authService';
 import { AdminUser } from '../../types/auth';
@@ -33,7 +34,7 @@ export const AdminSettingsPage: React.FC = () => {
   const [mechPassword, setMechPassword] = useState('');
   const [showModalPassword, setShowModalPassword] = useState(false);
   const [revealedPasswords, setRevealedPasswords] = useState<{ [id: string]: boolean }>({});
-  const [mechPermissions, setMechPermissions] = useState<string[]>(['billing', 'parts']);
+  const [mechPermissions, setMechPermissions] = useState<string[]>(['billing', 'parts', 'restorations']);
   const [mechError, setMechError] = useState<string | null>(null);
   const [mechSuccess, setMechSuccess] = useState<string | null>(null);
 
@@ -358,7 +359,7 @@ export const AdminSettingsPage: React.FC = () => {
                       className="p-2 text-emerald-700 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl transition-colors shadow-2xs"
                       title="Send Login via WhatsApp"
                     >
-                      <MessageCircle className="w-4 h-4" />
+                      <WhatsAppIcon className="w-4 h-4" />
                     </button>
 
                     <button
@@ -596,6 +597,35 @@ export const AdminSettingsPage: React.FC = () => {
                           setMechPermissions((prev) => [...prev, 'enquiries']);
                         } else {
                           setMechPermissions((prev) => prev.filter((p) => p !== 'enquiries'));
+                        }
+                      }}
+                      className="w-4 h-4 text-[#F5B900] accent-[#F5B900] rounded cursor-pointer"
+                    />
+                  </label>
+
+                  {/* Bike Restorations */}
+                  <label className="flex items-center justify-between p-2 rounded-lg bg-white border border-gray-200 hover:border-amber-300 cursor-pointer transition-colors">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-lg bg-[#FFF9E6] text-[#DFA500] flex items-center justify-center shrink-0">
+                        <Sparkles className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="font-bold text-gray-900 text-xs block">
+                          Bike Restorations
+                        </span>
+                        <span className="text-[10px] text-gray-500 block">
+                          Access vintage motorcycle restoration projects & job sheets
+                        </span>
+                      </div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={mechPermissions.includes('restorations')}
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setMechPermissions((prev) => [...prev, 'restorations']);
+                        } else {
+                          setMechPermissions((prev) => prev.filter((p) => p !== 'restorations'));
                         }
                       }}
                       className="w-4 h-4 text-[#F5B900] accent-[#F5B900] rounded cursor-pointer"

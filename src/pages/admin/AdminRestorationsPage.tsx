@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import {
   Sparkles,
   Search,
   Phone,
-  MessageCircle,
   Eye,
   Filter,
   CheckCircle2,
   Bike,
   Wrench,
 } from 'lucide-react';
+import { WhatsAppIcon } from '../../components/common/WhatsAppIcon';
+import { CreateRestorationModal } from '../../components/admin/CreateRestorationModal';
+import { EnquiryDetailsModal } from '../../components/admin/EnquiryDetailsModal';
 import { enquiryService } from '../../services/enquiryService';
 import { Enquiry, EnquiryStatus, isRestorationEnquiry } from '../../types/enquiry';
 import { formatDate, formatPhone } from '../../utils/formatters';
@@ -20,6 +21,8 @@ export const AdminRestorationsPage: React.FC = () => {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | EnquiryStatus>('all');
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [selectedJobSheetId, setSelectedJobSheetId] = useState<string | null>(null);
 
   const loadData = () => {
     setEnquiries(enquiryService.getAll());
@@ -70,14 +73,14 @@ export const AdminRestorationsPage: React.FC = () => {
           </p>
         </div>
 
-        <Link
-          to="/bike-restoration-form"
-          target="_blank"
-          className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-sm transition-all shrink-0 active:scale-95"
+        <button
+          type="button"
+          onClick={() => setIsCreateModalOpen(true)}
+          className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-sm transition-all shrink-0 active:scale-95 cursor-pointer"
         >
           <Wrench className="w-4 h-4" />
           <span>Restoration Form</span>
-        </Link>
+        </button>
       </div>
 
       {/* Success Notification */}
@@ -200,12 +203,13 @@ export const AdminRestorationsPage: React.FC = () => {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                   <div>
-                    <Link
-                      to={`/garage/enquiries/${item.id}`}
-                      className="font-bold text-gray-900 hover:text-amber-700 text-sm block truncate"
+                    <button
+                      type="button"
+                      onClick={() => setSelectedJobSheetId(item.id)}
+                      className="font-bold text-gray-900 hover:text-amber-700 text-sm block truncate text-left cursor-pointer"
                     >
                       {item.customer.name}
-                    </Link>
+                    </button>
                     <div className="text-[11px] text-gray-500 font-mono mt-0.5">
                       {formatPhone(item.customer.mobile)}
                       {item.customer.city && ` • 📍 ${item.customer.city}`}
@@ -276,22 +280,42 @@ export const AdminRestorationsPage: React.FC = () => {
                     className="p-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white transition-colors shadow-2xs"
                     title="WhatsApp Customer"
                   >
-                    <MessageCircle className="w-3.5 h-3.5" />
+                    <WhatsAppIcon className="w-3.5 h-3.5" />
                   </a>
 
-                  <Link
-                    to={`/garage/enquiries/${item.id}`}
-                    className="px-3 py-2 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-bold transition-colors shadow-2xs whitespace-nowrap flex items-center gap-1.5"
+                  <button
+                    type="button"
+                    onClick={() => setSelectedJobSheetId(item.id)}
+                    className="px-3 py-2 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-bold transition-colors shadow-2xs whitespace-nowrap flex items-center gap-1.5 cursor-pointer"
                   >
                     <Eye className="w-3.5 h-3.5" />
                     <span>Job Sheet</span>
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
       )}
+
+      {/* In-Page Create Restoration Modal */}
+      <CreateRestorationModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSuccess={(msg) => {
+          setSuccessMsg(msg || 'Restoration project saved');
+          loadData();
+          setTimeout(() => setSuccessMsg(null), 4000);
+        }}
+      />
+
+      {/* In-Page Job Sheet Details Modal */}
+      <EnquiryDetailsModal
+        isOpen={!!selectedJobSheetId}
+        enquiryId={selectedJobSheetId}
+        onClose={() => setSelectedJobSheetId(null)}
+        onUpdated={loadData}
+      />
     </div>
   );
 };

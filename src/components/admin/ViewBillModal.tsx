@@ -1,5 +1,6 @@
 import React from 'react';
-import { FileText, X, MessageCircle, Phone, Printer } from 'lucide-react';
+import { FileText, X, Phone, Printer } from 'lucide-react';
+import { WhatsAppIcon } from '../common/WhatsAppIcon';
 import { RepairRecord } from '../../types/customer';
 import { formatPhone } from '../../utils/formatters';
 import { getWhatsAppBillUrl } from '../../pages/admin/AdminRepairHistoryPage';
@@ -167,9 +168,9 @@ export const ViewBillModal: React.FC<ViewBillModalProps> = ({ isOpen, onClose, r
               href={getWhatsAppBillUrl(record)}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-4 py-2 rounded-xl bg-[#25D366] hover:bg-['#1EBE5D'] text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-colors"
+              className="px-4 py-2 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs flex items-center gap-1.5 shadow-xs transition-colors"
             >
-              <MessageCircle className="w-4 h-4" />
+              <WhatsAppIcon className="w-4 h-4" />
               <span>Send WhatsApp Bill</span>
             </a>
 
