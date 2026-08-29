@@ -3,17 +3,15 @@ import { Menu } from 'lucide-react';
 
 interface AdminHeaderProps {
   onToggleSidebar: () => void;
-  title: string;
+  title?: string;
   subtitle?: string;
 }
 
 export const AdminHeader: React.FC<AdminHeaderProps> = ({
   onToggleSidebar,
-  title,
-  subtitle,
 }) => {
   return (
-    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 px-4 sm:px-6 py-4 flex items-center justify-between shadow-xs">
+    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-gray-200 px-4 sm:px-6 py-3 flex items-center justify-between shadow-xs">
       <div className="flex items-center gap-3">
         {/* Mobile menu toggle */}
         <button
@@ -24,15 +22,11 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
           <Menu className="w-5 h-5" />
         </button>
 
-        <div>
-          <h1 className="text-lg sm:text-xl font-bold text-gray-900">
-            {title}
-          </h1>
-          {subtitle && (
-            <p className="text-xs text-gray-500 font-normal hidden sm:block">
-              {subtitle}
-            </p>
-          )}
+        {/* Brand breadcrumb */}
+        <div className="flex items-center gap-2 text-xs font-semibold">
+          <span className="font-extrabold text-gray-900 tracking-wide uppercase">Chaudhari Auto</span>
+          <span className="text-gray-300">/</span>
+          <span className="text-amber-700 font-medium">Garage Desk</span>
         </div>
       </div>
 
