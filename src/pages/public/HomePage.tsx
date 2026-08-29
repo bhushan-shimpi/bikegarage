@@ -9,7 +9,6 @@ import { GallerySection } from '../../components/home/GallerySection';
 import { HowItWorks } from '../../components/home/HowItWorks';
 import { InstagramHighlight } from '../../components/home/InstagramHighlight';
 import { TestimonialsSection } from '../../components/home/TestimonialsSection';
-import { ServiceAreaSection } from '../../components/home/ServiceAreaSection';
 import { WorkshopFAQSection, faqSchema } from '../../components/home/WorkshopFAQSection';
 import { HomeContactSnippet } from '../../components/home/HomeContactSnippet';
 import { CTASection } from '../../components/home/CTASection';
@@ -106,13 +105,10 @@ export const HomePage: React.FC = () => {
       {/* 9. Customer Reviews */}
       <TestimonialsSection />
 
-      {/* 10. Service Area & Regional Coverage */}
-      <ServiceAreaSection />
-
-      {/* 11. Frequently Asked Questions */}
+      {/* 10. Frequently Asked Questions */}
       <WorkshopFAQSection />
 
-      {/* 12. Location & Contact Information */}
+      {/* 11. Location & Contact Information */}
       <HomeContactSnippet />
 
       {/* 13. Final CTA Banner */}

@@ -93,8 +93,8 @@ export const HomeContactSnippet: React.FC = () => {
             <div className="rounded-2xl overflow-hidden border border-[#2B2B2B] shadow-2xl h-80 sm:h-96 w-full bg-[#1A1A1A] relative">
               <iframe
                 title="Chaudhari Auto Centre Pahur Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3729.878939768058!2d75.716!3d20.733!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjDCsDQzJzU4LjgiTiA3NcKwNDInNTcuNiJF!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"
-                className="w-full h-full border-0 grayscale contrast-125 opacity-90 hover:opacity-100 transition-opacity"
+                src="https://maps.google.com/maps?q=Pahur,%20Jalgaon,%20Maharashtra&t=&z=14&ie=UTF8&iwloc=&output=embed"
+                className="w-full h-full border-0"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
