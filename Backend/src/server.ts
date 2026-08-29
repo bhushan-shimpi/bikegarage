@@ -57,16 +57,7 @@ app.use('/api/dashboard', dashboardRoutes);
 // Error Handler Middleware
 app.use(errorHandler);
 
-// Start Server & Ensure DB Schema is Ready
-const server = app.listen(PORT, () => {
-  console.log(`====================================================`);
-  console.log(`🚀 Chaudhari Auto Backend listening on port ${PORT}`);
-  console.log(`📡 Health Check: http://localhost:${PORT}/api/health`);
-  console.log(`🗄️ Database: Connecting to Supabase PostgreSQL...`);
-  console.log(`====================================================`);
-});
-
-// Run schema initialization with retry
+// Start Server & Ensure DB Schema is Ready (when running standalone/local)
 async function initDbWithRetry(retries = 5, delayMs = 3000) {
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
@@ -84,6 +75,16 @@ async function initDbWithRetry(retries = 5, delayMs = 3000) {
   }
 }
 
-initDbWithRetry();
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`====================================================`);
+    console.log(`🚀 Chaudhari Auto Backend listening on port ${PORT}`);
+    console.log(`📡 Health Check: http://localhost:${PORT}/api/health`);
+    console.log(`🗄️ Database: Connecting to Supabase PostgreSQL...`);
+    console.log(`====================================================`);
+  });
+
+  initDbWithRetry();
+}
 
 export default app;
