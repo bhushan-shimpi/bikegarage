@@ -202,4 +202,38 @@ export const authService = {
     }
     return true;
   },
+
+  updateMechanicPermissions: async (id: string, permissions: string[]): Promise<AdminUser | null> => {
+    // 1. Local update
+    const existing = storage.get<LocalMechanicAccount[]>(MECHANICS_KEY, []);
+    let updatedAccount: LocalMechanicAccount | null = null;
+    const updated = existing.map((m) => {
+      if (m.id === id) {
+        updatedAccount = { ...m, permissions };
+        return updatedAccount;
+      }
+      return m;
+    });
+    storage.set(MECHANICS_KEY, updated);
+
+    // If current logged-in user is this mechanic, update active session
+    const current = authService.getCurrentUser();
+    if (current && current.id === id) {
+      storage.set(storage.keys.CURRENT_USER, { ...current, permissions });
+    }
+
+    // 2. Remote API update
+    try {
+      await apiClient.put(`/api/auth/mechanics/${id}`, { permissions });
+    } catch {
+      // Graceful fallback
+    }
+
+    if (updatedAccount) {
+      const acc = updatedAccount as LocalMechanicAccount;
+      const { passwordHash: _, ...user } = acc;
+      return user;
+    }
+    return null;
+  },
 };

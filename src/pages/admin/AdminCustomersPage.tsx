@@ -25,6 +25,7 @@ export const AdminCustomersPage: React.FC = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [isBillModalOpen, setIsBillModalOpen] = useState(false);
+  const [customerForJobCard, setCustomerForJobCard] = useState<Customer | null>(null);
   const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
   const [customerHistory, setCustomerHistory] = useState<RepairRecord[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
@@ -262,11 +263,14 @@ export const AdminCustomersPage: React.FC = () => {
 
                   <button
                     type="button"
-                    onClick={() => setIsBillModalOpen(true)}
-                    className="px-3 py-1.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-bold transition-colors shadow-2xs whitespace-nowrap cursor-pointer"
-                    title="Create Job Card / Bill"
+                    onClick={() => {
+                      setCustomerForJobCard(item);
+                      setIsBillModalOpen(true);
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-bold transition-colors shadow-2xs whitespace-nowrap cursor-pointer flex items-center gap-1 active:scale-95"
+                    title={`Create Job Card for ${item.name}`}
                   >
-                    + Bill
+                    <span>+ Job Card</span>
                   </button>
 
                   <button
@@ -575,12 +579,16 @@ export const AdminCustomersPage: React.FC = () => {
         </div>
       )}
 
-      {/* In-Page Quick Bill Modal */}
+      {/* In-Page Quick Job Card / Bill Modal */}
       <CreateBillModal
         isOpen={isBillModalOpen}
-        onClose={() => setIsBillModalOpen(false)}
+        prefillCustomer={customerForJobCard}
+        onClose={() => {
+          setIsBillModalOpen(false);
+          setCustomerForJobCard(null);
+        }}
         onSuccess={() => {
-          setSuccessMsg('Repair bill created successfully!');
+          setSuccessMsg('Job card created successfully!');
           customerService.getAll().then(setCustomers);
           setTimeout(() => setSuccessMsg(null), 4000);
         }}

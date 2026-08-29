@@ -31,12 +31,14 @@ interface CreateBillModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  prefillCustomer?: Customer | null;
 }
 
 export const CreateBillModal: React.FC<CreateBillModalProps> = ({
   isOpen,
   onClose,
   onSuccess,
+  prefillCustomer,
 }) => {
   const [allCustomers, setAllCustomers] = useState<Customer[]>([]);
   const [allParts, setAllParts] = useState<SparePart[]>([]);
@@ -90,20 +92,34 @@ export const CreateBillModal: React.FC<CreateBillModalProps> = ({
       partService.getAll().then(setAllParts);
       const services = bikeServicesService.getAll();
       setAvailableServices(services);
-      if (services.length > 0) {
-        const defaultSvc = services.find((s) => s.name === 'General Bike Service') || services[0];
-        const defaultPrice = defaultSvc.priceStartingAt
-          ? Number(defaultSvc.priceStartingAt.replace(/[^\d.]/g, '')) || 299
-          : 299;
-        setFormData((prev) => ({
-          ...prev,
-          serviceType: defaultSvc.name,
+
+      const defaultSvc = services.find((s) => s.name === 'General Bike Service') || services[0];
+      const defaultPrice = defaultSvc?.priceStartingAt
+        ? Number(defaultSvc.priceStartingAt.replace(/[^\d.]/g, '')) || 299
+        : 299;
+
+      if (prefillCustomer) {
+        setFormData({
+          ...initialFormData,
+          customerName: prefillCustomer.name || '',
+          customerMobile: prefillCustomer.mobile || '',
+          bikeBrand: prefillCustomer.bikeBrand || 'Bajaj',
+          bikeModel: prefillCustomer.bikeModel || '',
+          registrationNumber: prefillCustomer.registrationNumber || '',
+          currentKm: prefillCustomer.currentKm || '',
+          serviceType: defaultSvc?.name || 'General Bike Service',
           servicePrice: defaultPrice,
-        }));
+        });
+      } else {
+        setFormData({
+          ...initialFormData,
+          serviceType: defaultSvc?.name || 'General Bike Service',
+          servicePrice: defaultPrice,
+        });
       }
       setFormError(null);
     }
-  }, [isOpen]);
+  }, [isOpen, prefillCustomer]);
 
   if (!isOpen && !showWhatsAppModal) return null;
 

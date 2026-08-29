@@ -19,16 +19,27 @@ import {
   Copy,
   Check,
   Sparkles,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { WhatsAppIcon } from '../../components/common/WhatsAppIcon';
 import { Button } from '../../components/common/Button';
 import { authService } from '../../services/authService';
 import { AdminUser } from '../../types/auth';
 
+const MECHANIC_FEATURES = [
+  { id: 'billing', label: 'Billing', icon: Receipt, activeColor: 'bg-emerald-50 text-emerald-800 border-emerald-300' },
+  { id: 'parts', label: 'Parts Pricing', icon: Tag, activeColor: 'bg-amber-50 text-amber-900 border-amber-300' },
+  { id: 'customers', label: 'Customers', icon: Users, activeColor: 'bg-blue-50 text-blue-900 border-blue-300' },
+  { id: 'enquiries', label: 'Enquiries', icon: Inbox, activeColor: 'bg-purple-50 text-purple-900 border-purple-300' },
+  { id: 'restorations', label: 'Restorations', icon: Sparkles, activeColor: 'bg-[#FFF9E6] text-[#A67C00] border-amber-300' },
+];
+
 export const AdminSettingsPage: React.FC = () => {
   const [saved, setSaved] = useState(false);
   const [mechanics, setMechanics] = useState<AdminUser[]>([]);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [featureModalMech, setFeatureModalMech] = useState<AdminUser | null>(null);
+  const [editingFeatures, setEditingFeatures] = useState<string[]>([]);
   const [mechName, setMechName] = useState('');
   const [mechUserOrMobile, setMechUserOrMobile] = useState('');
   const [mechPassword, setMechPassword] = useState('');
@@ -46,6 +57,35 @@ export const AdminSettingsPage: React.FC = () => {
   useEffect(() => {
     loadMechanics();
   }, []);
+
+  const handleToggleFeature = async (mech: AdminUser, featureId: string) => {
+    const currentPerms = mech.permissions || ['billing'];
+    let newPerms: string[];
+    if (currentPerms.includes(featureId)) {
+      newPerms = currentPerms.filter((p) => p !== featureId);
+      if (newPerms.length === 0) newPerms = ['billing'];
+    } else {
+      newPerms = [...currentPerms, featureId];
+    }
+    await authService.updateMechanicPermissions(mech.id, newPerms);
+    setMechSuccess(`Updated features for ${mech.name}`);
+    loadMechanics();
+    setTimeout(() => setMechSuccess(null), 3000);
+  };
+
+  const handleOpenFeatureModal = (mech: AdminUser) => {
+    setFeatureModalMech(mech);
+    setEditingFeatures(mech.permissions || ['billing']);
+  };
+
+  const handleSaveFeatureModal = async () => {
+    if (!featureModalMech) return;
+    await authService.updateMechanicPermissions(featureModalMech.id, editingFeatures);
+    setMechSuccess(`Updated features for ${featureModalMech.name}`);
+    setFeatureModalMech(null);
+    loadMechanics();
+    setTimeout(() => setMechSuccess(null), 3000);
+  };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -308,34 +348,58 @@ export const AdminSettingsPage: React.FC = () => {
                           </button>
                         </span>
                       </div>
-                      <div className="flex flex-wrap items-center gap-1 pt-1">
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                          <Receipt className="w-2.5 h-2.5" />
-                          Billing
-                        </span>
-                        {mech.permissions?.includes('parts') && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-900 border border-amber-200">
-                            <Tag className="w-2.5 h-2.5" />
-                            Parts Pricing
+                      <div className="pt-2 border-t border-gray-100/80">
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="text-[11px] font-bold text-gray-500">
+                            Features & Permissions (Click to Add / Remove):
                           </span>
-                        )}
-                        {mech.permissions?.includes('customers') && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-50 text-blue-900 border border-blue-200">
-                            <Users className="w-2.5 h-2.5" />
-                            Customers
-                          </span>
-                        )}
-                        {mech.permissions?.includes('enquiries') && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-50 text-purple-900 border border-purple-200">
-                            <Inbox className="w-2.5 h-2.5" />
-                            Enquiries
-                          </span>
-                        )}
+                        </div>
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          {MECHANIC_FEATURES.map((feat) => {
+                            const Icon = feat.icon;
+                            const isGranted =
+                              mech.permissions?.includes(feat.id) ||
+                              (feat.id === 'billing' && (!mech.permissions || mech.permissions.includes('billing')));
+                            return (
+                              <button
+                                key={feat.id}
+                                type="button"
+                                onClick={() => handleToggleFeature(mech, feat.id)}
+                                className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold transition-all border cursor-pointer active:scale-95 ${
+                                  isGranted
+                                    ? `${feat.activeColor} shadow-2xs`
+                                    : 'bg-gray-50 text-gray-400 border-dashed border-gray-300 hover:border-amber-400 hover:text-gray-700'
+                                }`}
+                                title={
+                                  isGranted
+                                    ? `Click to remove feature: ${feat.label}`
+                                    : `Click to add feature: ${feat.label}`
+                                }
+                              >
+                                <Icon className="w-3 h-3" />
+                                <span>{isGranted ? feat.label : `+ ${feat.label}`}</span>
+                                {isGranted && feat.id !== 'billing' && (
+                                  <span className="text-[10px] text-gray-400 hover:text-red-600 ml-0.5 font-normal">✕</span>
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-end gap-1.5 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-gray-100">
+                    <button
+                      type="button"
+                      onClick={() => handleOpenFeatureModal(mech)}
+                      className="px-2.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 transition-colors shadow-2xs cursor-pointer flex items-center gap-1 text-xs font-bold"
+                      title="Manage features & permissions"
+                    >
+                      <SlidersHorizontal className="w-3.5 h-3.5 text-[#DFA500]" />
+                      <span className="hidden md:inline">Features</span>
+                    </button>
+
                     <button
                       type="button"
                       onClick={() => handleCopyCredentials(mech)}
@@ -657,6 +721,205 @@ export const AdminSettingsPage: React.FC = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ─── MANAGE MECHANIC FEATURES & PERMISSIONS MODAL ─── */}
+      {featureModalMech && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-gray-100 animate-scale-up space-y-4 max-h-[92vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-amber-50 text-[#DFA500] flex items-center justify-center">
+                  <SlidersHorizontal className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-gray-900 text-sm">
+                    Manage Features: {featureModalMech.name}
+                  </h3>
+                  <p className="text-[11px] text-gray-400 font-mono">
+                    Login: {featureModalMech.mobile || featureModalMech.username}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setFeatureModalMech(null)}
+                className="p-1 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-xs text-gray-600">
+                Check or uncheck features to grant or revoke access for this mechanic staff member:
+              </p>
+
+              {/* Billing */}
+              <label className="flex items-center justify-between p-3 rounded-xl bg-gray-50 border border-gray-200 hover:border-amber-300 cursor-pointer transition-colors">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                    <Receipt className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="font-bold text-gray-900 text-xs block">
+                      Billing & Job Cards
+                    </span>
+                    <span className="text-[10px] text-gray-500 block">
+                      Create customer bills, enter parts and print invoices
+                    </span>
+                  </div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={editingFeatures.includes('billing')}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setEditingFeatures((prev) => [...prev, 'billing']);
+                    } else {
+                      setEditingFeatures((prev) => prev.filter((p) => p !== 'billing'));
+                    }
+                  }}
+                  className="w-4 h-4 text-[#F5B900] accent-[#F5B900] rounded cursor-pointer"
+                />
+              </label>
+
+              {/* Parts Pricing */}
+              <label className="flex items-center justify-between p-3 rounded-xl bg-gray-50 border border-gray-200 hover:border-amber-300 cursor-pointer transition-colors">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                    <Tag className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="font-bold text-gray-900 text-xs block">
+                      Spare Parts Price List
+                    </span>
+                    <span className="text-[10px] text-gray-500 block">
+                      Lookup parts pricing catalog while repairing bikes
+                    </span>
+                  </div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={editingFeatures.includes('parts')}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setEditingFeatures((prev) => [...prev, 'parts']);
+                    } else {
+                      setEditingFeatures((prev) => prev.filter((p) => p !== 'parts'));
+                    }
+                  }}
+                  className="w-4 h-4 text-[#F5B900] accent-[#F5B900] rounded cursor-pointer"
+                />
+              </label>
+
+              {/* Customer Directory */}
+              <label className="flex items-center justify-between p-3 rounded-xl bg-gray-50 border border-gray-200 hover:border-amber-300 cursor-pointer transition-colors">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+                    <Users className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="font-bold text-gray-900 text-xs block">
+                      Customer Directory
+                    </span>
+                    <span className="text-[10px] text-gray-500 block">
+                      Search customer records, bike details & repair histories
+                    </span>
+                  </div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={editingFeatures.includes('customers')}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setEditingFeatures((prev) => [...prev, 'customers']);
+                    } else {
+                      setEditingFeatures((prev) => prev.filter((p) => p !== 'customers'));
+                    }
+                  }}
+                  className="w-4 h-4 text-[#F5B900] accent-[#F5B900] rounded cursor-pointer"
+                />
+              </label>
+
+              {/* Enquiries */}
+              <label className="flex items-center justify-between p-3 rounded-xl bg-gray-50 border border-gray-200 hover:border-amber-300 cursor-pointer transition-colors">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
+                    <Inbox className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="font-bold text-gray-900 text-xs block">
+                      Two-Wheeler Enquiries
+                    </span>
+                    <span className="text-[10px] text-gray-500 block">
+                      View incoming customer appointments and breakdown requests
+                    </span>
+                  </div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={editingFeatures.includes('enquiries')}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setEditingFeatures((prev) => [...prev, 'enquiries']);
+                    } else {
+                      setEditingFeatures((prev) => prev.filter((p) => p !== 'enquiries'));
+                    }
+                  }}
+                  className="w-4 h-4 text-[#F5B900] accent-[#F5B900] rounded cursor-pointer"
+                />
+              </label>
+
+              {/* Restorations */}
+              <label className="flex items-center justify-between p-3 rounded-xl bg-gray-50 border border-gray-200 hover:border-amber-300 cursor-pointer transition-colors">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-[#FFF9E6] text-[#DFA500] flex items-center justify-center shrink-0">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="font-bold text-gray-900 text-xs block">
+                      Bike Restorations
+                    </span>
+                    <span className="text-[10px] text-gray-500 block">
+                      Access vintage motorcycle restoration projects & job sheets
+                    </span>
+                  </div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={editingFeatures.includes('restorations')}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setEditingFeatures((prev) => [...prev, 'restorations']);
+                    } else {
+                      setEditingFeatures((prev) => prev.filter((p) => p !== 'restorations'));
+                    }
+                  }}
+                  className="w-4 h-4 text-[#F5B900] accent-[#F5B900] rounded cursor-pointer"
+                />
+              </label>
+            </div>
+
+            <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
+              <button
+                type="button"
+                onClick={() => setFeatureModalMech(null)}
+                className="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-700 font-bold hover:bg-gray-50 text-xs cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveFeatureModal}
+                className="px-5 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs shadow-xs cursor-pointer flex items-center gap-1.5"
+              >
+                <Check className="w-4 h-4" />
+                <span>Save Features</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
