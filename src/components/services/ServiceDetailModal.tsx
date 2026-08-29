@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { ServiceItem } from '../../types/service';
-import { WhatsAppIcon } from '../common/WhatsAppIcon';
 
 interface ServiceDetailModalProps {
   service: ServiceItem | null;
@@ -48,10 +47,6 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
 
   if (!isOpen || !service) return null;
   if (typeof document === 'undefined') return null;
-
-  const whatsappMessage = encodeURIComponent(
-    `Hello Chaudhary Auto! I want to enquire about the ${service.name} (${service.totalPackagePrice || service.priceStartingAt || '₹1,820'}) for my motorcycle. Please share appointment details.`
-  );
 
   return createPortal(
     <div
@@ -224,34 +219,23 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
         </div>
 
         {/* Modal Footer Actions */}
-        <div className="p-3.5 sm:p-4 bg-gray-50 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+        <div className="p-3.5 sm:p-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between gap-3">
           <button
+            type="button"
             onClick={onClose}
-            className="w-full sm:w-auto px-4 py-2 text-xs font-bold text-gray-600 hover:text-black hover:bg-gray-200 rounded-xl transition-colors order-2 sm:order-1 cursor-pointer"
+            className="px-4 py-2 text-xs font-bold text-gray-600 hover:text-black hover:bg-gray-200 rounded-xl transition-colors cursor-pointer"
           >
             Close
           </button>
 
-          <div className="w-full sm:w-auto flex items-center gap-2 order-1 sm:order-2">
-            <a
-              href={`https://wa.me/917387448878?text=${whatsappMessage}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-95"
-            >
-              <WhatsAppIcon className="w-4 h-4" />
-              <span>WhatsApp Booking</span>
-            </a>
-
-            <Link
-              to={`/inquiry?service=${encodeURIComponent(service.name)}`}
-              onClick={onClose}
-              className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-95"
-            >
-              <span>Book Service</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
+          <Link
+            to={`/inquiry?service=${encodeURIComponent(service.name)}`}
+            onClick={onClose}
+            className="px-5 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-xs transition-all active:scale-95 cursor-pointer"
+          >
+            <span>Book Service</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
     </div>,
