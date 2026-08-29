@@ -16,6 +16,9 @@ import {
   Receipt,
   Tag,
   Inbox,
+  Copy,
+  Check,
+  MessageCircle,
 } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { authService } from '../../services/authService';
@@ -83,6 +86,31 @@ export const AdminSettingsPage: React.FC = () => {
     } catch (err: any) {
       setMechError(err.message || 'Failed to create mechanic account.');
     }
+  };
+
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopyCredentials = (mech: AdminUser) => {
+    const passwordText = mech.passwordPreview || '••••••';
+    const text = `🏍️ Chaudhari Auto Centre - Staff Login Credentials\n\n👤 Staff Name: ${mech.name}\n📱 Login Mobile: ${mech.mobile || mech.username}\n🔑 Password: ${passwordText}\n🌐 Login URL: ${window.location.origin}/garage/login`;
+    navigator.clipboard.writeText(text);
+    setCopiedId(mech.id);
+    setMechSuccess(`Login credentials for ${mech.name} copied to clipboard!`);
+    setTimeout(() => {
+      setCopiedId(null);
+      setMechSuccess(null);
+    }, 2500);
+  };
+
+  const handleShareWhatsApp = (mech: AdminUser) => {
+    const passwordText = mech.passwordPreview || 'Contact Garage Owner';
+    const text = `🏍️ *Chaudhari Auto Centre - Staff Login Credentials*\n\n👤 *Staff Name:* ${mech.name}\n📱 *Login Mobile:* ${mech.mobile || mech.username}\n🔑 *Password:* ${passwordText}\n🌐 *Login URL:* ${window.location.origin}/garage/login\n\n_Please keep your password secure._`;
+    const mobileDigits = (mech.mobile || '').replace(/\D/g, '');
+    const targetMobile = mobileDigits.length === 10 ? `91${mobileDigits}` : mobileDigits;
+    const url = targetMobile
+      ? `https://wa.me/${targetMobile}?text=${encodeURIComponent(text)}`
+      : `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
   };
 
   const handleDeleteMechanic = async (id: string, name: string) => {
@@ -320,13 +348,42 @@ export const AdminSettingsPage: React.FC = () => {
                           </div>
                         </td>
                         <td className="py-3 px-4 text-right">
-                          <button
-                            onClick={() => handleDeleteMechanic(mech.id, mech.name)}
-                            className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Delete account"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => handleCopyCredentials(mech)}
+                              className={`p-1.5 rounded-lg border transition-all ${
+                                copiedId === mech.id
+                                  ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                                  : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                              }`}
+                              title="Copy Login Credentials"
+                            >
+                              {copiedId === mech.id ? (
+                                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                              ) : (
+                                <Copy className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => handleShareWhatsApp(mech)}
+                              className="p-1.5 text-emerald-700 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-lg transition-colors"
+                              title="Send Login via WhatsApp"
+                            >
+                              <MessageCircle className="w-3.5 h-3.5" />
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteMechanic(mech.id, mech.name)}
+                              className="p-1.5 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                              title="Delete account"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -419,6 +476,40 @@ export const AdminSettingsPage: React.FC = () => {
                           Enquiries
                         </span>
                       )}
+                    </div>
+
+                    {/* Share Credentials Action Buttons */}
+                    <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
+                      <button
+                        type="button"
+                        onClick={() => handleCopyCredentials(mech)}
+                        className={`flex-1 py-2 px-2.5 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 transition-all ${
+                          copiedId === mech.id
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                            : 'bg-gray-50 text-gray-700 border-gray-200'
+                        }`}
+                      >
+                        {copiedId === mech.id ? (
+                          <>
+                            <Check className="w-3.5 h-3.5 text-emerald-600" />
+                            <span>Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3.5 h-3.5" />
+                            <span>Copy Login</span>
+                          </>
+                        )}
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleShareWhatsApp(mech)}
+                        className="flex-1 py-2 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs transition-colors"
+                      >
+                        <MessageCircle className="w-3.5 h-3.5" />
+                        <span>WhatsApp</span>
+                      </button>
                     </div>
                   </div>
                 ))}

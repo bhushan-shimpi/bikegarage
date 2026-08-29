@@ -336,6 +336,7 @@ Helpline: +91 7387448878 / 9503853143`;
                     </label>
                     <input
                       type="tel"
+                      inputMode="tel"
                       value={formData.customerMobile}
                       onChange={(e) => handleCustomerInputChange('customerMobile', e.target.value)}
                       placeholder="10-digit mobile number"
@@ -426,6 +427,7 @@ Helpline: +91 7387448878 / 9503853143`;
                     <label className="block font-semibold text-gray-700 mb-1">Odometer (KM)</label>
                     <input
                       type="text"
+                      inputMode="numeric"
                       value={formData.currentKm}
                       onChange={(e) => setFormData({ ...formData, currentKm: e.target.value })}
                       placeholder="e.g. 24,500"
@@ -505,6 +507,7 @@ Helpline: +91 7387448878 / 9503853143`;
                     />
                     <input
                       type="number"
+                      inputMode="numeric"
                       value={customPartCost}
                       onChange={(e) => setCustomPartCost(e.target.value)}
                       placeholder="₹ Price"
@@ -554,15 +557,35 @@ Helpline: +91 7387448878 / 9503853143`;
               <div className="p-4 bg-gray-50 border border-gray-200 rounded-xl space-y-3">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   <div>
-                    <label className="block font-semibold text-gray-700 mb-1">Labor (₹)</label>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="font-semibold text-gray-700 text-xs">Labor (₹)</label>
+                    </div>
                     <input
                       type="number"
+                      inputMode="numeric"
                       value={formData.laborCharge}
                       onChange={(e) =>
                         setFormData({ ...formData, laborCharge: Number(e.target.value) || 0 })
                       }
                       className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-xs font-bold text-gray-900 focus:outline-none focus:border-[#F5B900]"
                     />
+                    {/* Quick 1-tap labor charge preset pills */}
+                    <div className="flex flex-wrap gap-1 mt-1.5">
+                      {[100, 150, 200, 250, 300, 500].map((amt) => (
+                        <button
+                          key={amt}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, laborCharge: amt })}
+                          className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition-all ${
+                            formData.laborCharge === amt
+                              ? 'bg-amber-400 text-black shadow-xs'
+                              : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                          }`}
+                        >
+                          ₹{amt}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   <div>

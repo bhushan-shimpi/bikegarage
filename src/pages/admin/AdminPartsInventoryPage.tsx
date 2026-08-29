@@ -11,6 +11,7 @@ import {
   X,
   Save,
   Wrench,
+  Check,
 } from 'lucide-react';
 import { partService } from '../../services/partService';
 import { SparePart } from '../../types/customer';
@@ -45,6 +46,35 @@ export const AdminPartsInventoryPage: React.FC = () => {
   });
   const [formError, setFormError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Quick inline price editing state
+  const [inlineEditId, setInlineEditId] = useState<string | null>(null);
+  const [inlinePrice, setInlinePrice] = useState<string>('');
+  const [isSavingInline, setIsSavingInline] = useState(false);
+
+  const handleStartInlineEdit = (part: SparePart) => {
+    setInlineEditId(part.id);
+    setInlinePrice(String(part.price));
+  };
+
+  const handleSaveInlinePrice = async (part: SparePart) => {
+    const parsed = parseFloat(inlinePrice);
+    if (isNaN(parsed) || parsed < 0) return;
+    setIsSavingInline(true);
+    try {
+      await partService.update(part.id, { price: parsed });
+      setParts((prev) =>
+        prev.map((p) => (p.id === part.id ? { ...p, price: parsed } : p))
+      );
+      setInlineEditId(null);
+      setSuccessMsg(`Updated rate for "${part.name}" to ₹${parsed}`);
+      setTimeout(() => setSuccessMsg(null), 2500);
+    } catch {
+      alert('Failed to update price');
+    } finally {
+      setIsSavingInline(false);
+    }
+  };
 
   const loadParts = async () => {
     setLoading(true);
@@ -282,19 +312,61 @@ export const AdminPartsInventoryPage: React.FC = () => {
                           {part.category}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 font-mono font-black text-sm text-emerald-800">
-                        ₹{part.price}
+                      <td className="py-3 px-4 font-mono">
+                        {inlineEditId === part.id ? (
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-gray-500 font-bold">₹</span>
+                            <input
+                              type="number"
+                              inputMode="numeric"
+                              value={inlinePrice}
+                              onChange={(e) => setInlinePrice(e.target.value)}
+                              onKeyDown={(e) => e.key === 'Enter' && handleSaveInlinePrice(part)}
+                              className="w-24 bg-white border-2 border-emerald-500 rounded-lg px-2 py-1 text-xs font-mono font-bold text-gray-900 focus:outline-none"
+                              autoFocus
+                            />
+                            <button
+                              type="button"
+                              onClick={() => handleSaveInlinePrice(part)}
+                              disabled={isSavingInline}
+                              className="p-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs"
+                              title="Save Rate (Enter)"
+                            >
+                              <Check className="w-3.5 h-3.5" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setInlineEditId(null)}
+                              className="p-1 rounded-lg bg-gray-200 hover:bg-gray-300 text-gray-700"
+                              title="Cancel"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => handleStartInlineEdit(part)}
+                            className="group/price flex items-center gap-1.5 font-mono font-black text-sm text-emerald-800 hover:text-emerald-950 hover:bg-emerald-50 px-2 py-1 rounded-lg transition-colors"
+                            title="Click to quickly edit price"
+                          >
+                            <span>₹{part.price}</span>
+                            <Edit2 className="w-3 h-3 text-gray-300 group-hover/price:text-amber-600 transition-colors" />
+                          </button>
+                        )}
                       </td>
-                      <td className="py-3.5 px-4 text-right">
+                      <td className="py-3 px-4 text-right">
                         <div className="flex items-center justify-end gap-1.5">
                           <button
+                            type="button"
                             onClick={() => handleOpenEdit(part)}
                             className="p-1.5 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-[#F5B900] hover:text-black transition-colors"
-                            title="Edit Price"
+                            title="Edit Full Part Details"
                           >
                             <Edit2 className="w-3.5 h-3.5" />
                           </button>
                           <button
+                            type="button"
                             onClick={() => handleDelete(part)}
                             className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
                             title="Delete Part"
@@ -324,22 +396,58 @@ export const AdminPartsInventoryPage: React.FC = () => {
                       <span className="px-2 py-0.2 rounded text-[9px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">
                         {part.category}
                       </span>
-                      <span className="font-mono font-black text-xs text-emerald-800">
-                        ₹{part.price}
-                      </span>
+                      {inlineEditId === part.id ? (
+                        <div className="flex items-center gap-1">
+                          <span className="text-gray-500 font-bold text-xs">₹</span>
+                          <input
+                            type="number"
+                            inputMode="numeric"
+                            value={inlinePrice}
+                            onChange={(e) => setInlinePrice(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSaveInlinePrice(part)}
+                            className="w-20 bg-white border-2 border-emerald-500 rounded px-1.5 py-0.5 text-xs font-mono font-bold text-gray-900 focus:outline-none"
+                            autoFocus
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleSaveInlinePrice(part)}
+                            disabled={isSavingInline}
+                            className="p-1 rounded bg-emerald-600 text-white"
+                          >
+                            <Check className="w-3 h-3" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setInlineEditId(null)}
+                            className="p-1 rounded bg-gray-200 text-gray-700"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => handleStartInlineEdit(part)}
+                          className="font-mono font-black text-xs text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60"
+                        >
+                          ₹{part.price} ✏️
+                        </button>
+                      )}
                     </div>
                   </div>
 
                   <div className="flex items-center gap-1.5 shrink-0">
                     <button
+                      type="button"
                       onClick={() => handleOpenEdit(part)}
                       className="px-2.5 py-1.5 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-[#F5B900] hover:text-black font-bold text-xs flex items-center gap-1 transition-colors"
-                      title="Edit Price"
+                      title="Edit Full Part Details"
                     >
                       <Edit2 className="w-3 h-3" />
                       <span>Edit</span>
                     </button>
                     <button
+                      type="button"
                       onClick={() => handleDelete(part)}
                       className="p-1.5 rounded-lg border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
                       title="Delete Part"

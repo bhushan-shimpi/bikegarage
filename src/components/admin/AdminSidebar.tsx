@@ -31,28 +31,53 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
 
   const permissions = currentUser?.permissions || ['billing'];
 
-  const navItems = isMechanic
+  interface NavSection {
+    title: string;
+    items: { name: string; path: string; icon: any }[];
+  }
+
+  const navSections: NavSection[] = isMechanic
     ? [
-        { name: 'Billing', path: '/garage/billing', icon: Receipt },
-        ...(permissions.includes('parts')
-          ? [{ name: 'Spare Part Pricing', path: '/garage/parts', icon: Tag }]
-          : []),
-        ...(permissions.includes('customers')
-          ? [{ name: 'Customers List', path: '/garage/customers', icon: Users }]
-          : []),
-        ...(permissions.includes('enquiries')
-          ? [{ name: 'Enquiries', path: '/garage/enquiries', icon: Inbox }]
-          : []),
+        {
+          title: 'Workshop Access',
+          items: [
+            { name: 'Billing', path: '/garage/billing', icon: Receipt },
+            ...(permissions.includes('customers')
+              ? [{ name: 'Customers List', path: '/garage/customers', icon: Users }]
+              : []),
+            ...(permissions.includes('parts')
+              ? [{ name: 'Spare Part Pricing', path: '/garage/parts', icon: Tag }]
+              : []),
+            ...(permissions.includes('enquiries')
+              ? [{ name: 'Enquiries', path: '/garage/enquiries', icon: Inbox }]
+              : []),
+          ],
+        },
       ]
     : [
-        { name: 'Dashboard', path: '/garage/dashboard', icon: LayoutDashboard },
-        { name: 'Enquiries', path: '/garage/enquiries', icon: Inbox },
-        { name: 'Billing', path: '/garage/billing', icon: Receipt },
-        { name: 'Restorations', path: '/garage/restorations', icon: Sparkles },
-        { name: 'Spare Part Pricing', path: '/garage/parts', icon: Tag },
-        { name: 'Customers List', path: '/garage/customers', icon: Users },
-        { name: 'Services Table', path: '/garage/services', icon: ClipboardList },
-        { name: 'Settings', path: '/garage/settings', icon: Settings },
+        {
+          title: 'Daily Operations',
+          items: [
+            { name: 'Dashboard', path: '/garage/dashboard', icon: LayoutDashboard },
+            { name: 'Billing & Job Cards', path: '/garage/billing', icon: Receipt },
+            { name: 'Customers Directory', path: '/garage/customers', icon: Users },
+          ],
+        },
+        {
+          title: 'Catalog & Inquiries',
+          items: [
+            { name: 'Spare Part Pricing', path: '/garage/parts', icon: Tag },
+            { name: 'Services Table', path: '/garage/services', icon: ClipboardList },
+            { name: 'Enquiries', path: '/garage/enquiries', icon: Inbox },
+            { name: 'Restorations', path: '/garage/restorations', icon: Sparkles },
+          ],
+        },
+        {
+          title: 'System',
+          items: [
+            { name: 'Settings & Staff', path: '/garage/settings', icon: Settings },
+          ],
+        },
       ];
 
   return (
@@ -71,9 +96,9 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div>
+        <div className="flex flex-col h-full min-h-0">
           {/* Brand Header */}
-          <div className="p-4 border-b border-gray-100 bg-white">
+          <div className="p-4 border-b border-gray-100 bg-white shrink-0">
             <div className="flex items-center gap-2.5">
               <img
                 src="/images/logo.png"
@@ -91,31 +116,40 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
             </div>
           </div>
 
-          {/* Navigation Links */}
-          <nav className="p-3 space-y-1.5">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <NavLink
-                  key={item.name}
-                  to={item.path}
-                  onClick={onClose}
-                  className={({ isActive }) =>
-                    `flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
-                      isActive
-                        ? 'bg-[#F5B900] text-black shadow-xs font-black'
-                        : 'text-gray-700 hover:text-black hover:bg-gray-100'
-                    }`
-                  }
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon className="w-4 h-4 shrink-0" />
-                    <span>{item.name}</span>
-                  </div>
-                  <ChevronRight className="w-3.5 h-3.5 opacity-40 shrink-0" />
-                </NavLink>
-              );
-            })}
+          {/* Navigation Grouped Sections */}
+          <nav className="p-3 space-y-3.5 overflow-y-auto flex-1">
+            {navSections.map((section, idx) => (
+              <div key={idx} className="space-y-1">
+                <span className="px-3 text-[10px] font-black tracking-wider text-gray-400 uppercase block">
+                  {section.title}
+                </span>
+                <div className="space-y-1 pt-0.5">
+                  {section.items.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <NavLink
+                        key={item.name}
+                        to={item.path}
+                        onClick={onClose}
+                        className={({ isActive }) =>
+                          `flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+                            isActive
+                              ? 'bg-[#F5B900] text-black shadow-xs font-black'
+                              : 'text-gray-700 hover:text-black hover:bg-gray-100'
+                          }`
+                        }
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Icon className="w-4 h-4 shrink-0" />
+                          <span>{item.name}</span>
+                        </div>
+                        <ChevronRight className="w-3.5 h-3.5 opacity-40 shrink-0" />
+                      </NavLink>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </nav>
         </div>
 
