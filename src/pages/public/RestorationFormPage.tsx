@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { PageBanner } from '../../components/common/PageBanner';
 import { ScrollReveal } from '../../components/common/ScrollReveal';
+import { RestorationQuotationCards } from '../../components/restoration/RestorationQuotationCards';
 import { enquiryService } from '../../services/enquiryService';
 
 interface RestorationFormData {
@@ -365,10 +366,40 @@ _Chaudhari Auto Centre, Jalgaon Road, Pahur_`;
             </div>
           </ScrollReveal>
         ) : (
+          <div className="space-y-8">
+            {/* ─── 100cc & 150cc RESTORATION QUOTATION MATRIX ─── */}
+            <ScrollReveal direction="up">
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-5 sm:p-7">
+                <RestorationQuotationCards
+                  theme="light"
+                  onSelectCCType={(cc) => {
+                    if (cc === '100cc') {
+                      setFormData((prev) => ({
+                        ...prev,
+                        bikeBrand: prev.bikeBrand || 'Hero',
+                        bikeName: prev.bikeName || 'Splendor Plus',
+                        specialRequirements: prev.specialRequirements
+                          ? prev.specialRequirements
+                          : '100cc Standard Restoration Quotation (₹18,850 Fixed Base / ₹20,000+ Showroom Condition)',
+                      }));
+                    } else {
+                      setFormData((prev) => ({
+                        ...prev,
+                        bikeBrand: prev.bikeBrand || 'Bajaj',
+                        bikeName: prev.bikeName || 'Pulsar 150',
+                        specialRequirements: prev.specialRequirements
+                          ? prev.specialRequirements
+                          : '150cc Standard Restoration Quotation (₹24,500 Fixed Base / ₹25,000+ Showroom Condition)',
+                      }));
+                    }
+                  }}
+                />
+              </div>
+            </ScrollReveal>
 
-          /* ─── MAIN RESTORATION FORM (WHITE ENQUIRY DESIGN) ─── */
-          <ScrollReveal direction="up">
-            <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8">
+            {/* ─── MAIN RESTORATION FORM (WHITE ENQUIRY DESIGN) ─── */}
+            <ScrollReveal direction="up">
+              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 sm:p-8">
               
               {/* Form Title Header */}
               <div className="text-center pb-6 mb-6 border-b border-gray-100">
@@ -888,7 +919,8 @@ _Chaudhari Auto Centre, Jalgaon Road, Pahur_`;
 
             </div>
           </ScrollReveal>
-        )}
+        </div>
+      )}
 
       </div>
     </div>

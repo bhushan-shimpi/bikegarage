@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { ScrollReveal } from '../common/ScrollReveal';
+import { RestorationQuotationCards } from '../restoration/RestorationQuotationCards';
 
 // ─── Individual Restoration Video Card (Clean: No text overlay) ───
 interface VideoCardProps {
@@ -332,6 +333,13 @@ export const RestorationHighlight: React.FC = () => {
             })}
           </div>
         </div>
+
+        {/* ─── 💰 100cc & 150cc RESTORATION QUOTATION MATRIX ─── */}
+        <ScrollReveal direction="up">
+          <div className="mb-14">
+            <RestorationQuotationCards theme="dark" />
+          </div>
+        </ScrollReveal>
 
         {/* ─── ⭐ OUR PROMISE CARD ─── */}
         <ScrollReveal direction="up" delay={200}>

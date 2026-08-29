@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 
 interface ModalProps {
@@ -35,6 +36,7 @@ export const Modal: React.FC<ModalProps> = ({
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
+  if (typeof document === 'undefined') return null;
 
   const maxWidthClasses = {
     sm: 'max-w-sm',
@@ -45,9 +47,9 @@ export const Modal: React.FC<ModalProps> = ({
     '4xl': 'max-w-4xl',
   };
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto bg-black/80 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-4 overflow-y-auto bg-black/80 backdrop-blur-sm animate-fade-in"
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
@@ -69,7 +71,7 @@ export const Modal: React.FC<ModalProps> = ({
           <button
             onClick={onClose}
             aria-label="Close modal"
-            className="p-1 text-neutral-400 hover:text-white rounded-lg hover:bg-neutral-800 transition-colors"
+            className="p-1 text-neutral-400 hover:text-white rounded-lg hover:bg-neutral-800 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -78,6 +80,7 @@ export const Modal: React.FC<ModalProps> = ({
         {/* Content */}
         <div className="p-6 max-h-[80vh] overflow-y-auto">{children}</div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

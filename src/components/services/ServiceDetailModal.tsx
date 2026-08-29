@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   X,
   CheckCircle2,
@@ -24,28 +25,41 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  // Lock body scroll when modal is open
+  // Lock body scroll and handle Escape key when modal is open
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      window.addEventListener('keydown', handleKeyDown);
     } else {
       document.body.style.overflow = 'unset';
     }
+
     return () => {
       document.body.style.overflow = 'unset';
+      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
   if (!isOpen || !service) return null;
+  if (typeof document === 'undefined') return null;
 
   const whatsappMessage = encodeURIComponent(
     `Hello Chaudhary Auto! I want to enquire about the ${service.name} (${service.totalPackagePrice || service.priceStartingAt || '₹1,820'}) for my motorcycle. Please share appointment details.`
   );
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-fade-in">
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[99999] overflow-y-auto bg-black/80 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 animate-fade-in"
+      onClick={onClose}
+    >
       <div
-        className="relative bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] border border-gray-200"
+        className="relative bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[92vh] border border-gray-200 my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top Header Banner */}
@@ -240,6 +254,7 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = ({
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

@@ -63,6 +63,17 @@ export const bikeServicesService = {
       }
     }
 
+    // Ensure cached s10 has latest 100cc & 150cc restoration quotations
+    const s10Cached = saved.find((s) => s.id === 's10');
+    if (s10Cached && (!s10Cached.packageBreakdown || s10Cached.priceStartingAt === 'Custom Quote')) {
+      const s10Fresh = servicesData.find((d) => d.id === 's10');
+      if (s10Fresh) {
+        const merged = saved.map((s) => (s.id === 's10' ? { ...s, ...s10Fresh } : s));
+        storageService.set(STORAGE_KEY, merged);
+        return merged;
+      }
+    }
+
     return saved;
   },
 
