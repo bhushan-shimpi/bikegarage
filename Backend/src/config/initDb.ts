@@ -495,6 +495,7 @@ export async function initDb() {
     await client.query(`
       ALTER TABLE repair_records ADD COLUMN IF NOT EXISTS discount NUMERIC(10,2) DEFAULT 0;
       ALTER TABLE repair_records ADD COLUMN IF NOT EXISTS payment_mode VARCHAR(50) DEFAULT 'Cash';
+      ALTER TABLE repair_records ADD COLUMN IF NOT EXISTS mechanic_name VARCHAR(128);
     `);
 
     // 8. Create Parts Inventory Table

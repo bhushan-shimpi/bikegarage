@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   Calendar,
   FileText,
+  Wrench,
 } from 'lucide-react';
 import { WhatsAppIcon } from '../../components/common/WhatsAppIcon';
 import { CreateBillModal } from '../../components/admin/CreateBillModal';
@@ -512,8 +513,16 @@ export const AdminCustomersPage: React.FC = () => {
                       </span>
                     </div>
 
-                    <div className="font-bold text-gray-900 text-xs">
-                      Service: <span className="text-amber-700">{rep.serviceType}</span>
+                    <div className="flex flex-wrap items-center gap-2 text-xs">
+                      <span className="font-bold text-gray-900">
+                        Service: <span className="text-amber-700">{rep.serviceType}</span>
+                      </span>
+                      {rep.mechanicName && (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200">
+                          <Wrench className="w-3 h-3 text-purple-500" />
+                          <span>Repaired by: {rep.mechanicName}</span>
+                        </span>
+                      )}
                     </div>
 
                     {rep.problemDetails && (

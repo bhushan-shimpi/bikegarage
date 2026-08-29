@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText, X, Phone, Printer } from 'lucide-react';
+import { FileText, X, Phone, Printer, Wrench } from 'lucide-react';
 import { WhatsAppIcon } from '../common/WhatsAppIcon';
 import { RepairRecord } from '../../types/customer';
 import { formatPhone } from '../../utils/formatters';
@@ -48,7 +48,7 @@ export const ViewBillModal: React.FC<ViewBillModalProps> = ({ isOpen, onClose, r
 
         {/* Modal Content */}
         <div className="p-6 space-y-4 overflow-y-auto flex-1 text-xs">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 rounded-xl bg-gray-50 border border-gray-200">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 rounded-xl bg-gray-50 border border-gray-200">
             <div>
               <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Customer</span>
               <div className="font-bold text-gray-900 text-sm">{record.customerName}</div>
@@ -70,6 +70,15 @@ export const ViewBillModal: React.FC<ViewBillModalProps> = ({ isOpen, onClose, r
                 {record.registrationNumber || 'No Plate Logged'}
                 {record.currentKm && <span className="text-gray-500 font-normal font-sans ml-2">• {record.currentKm} KM</span>}
               </div>
+            </div>
+
+            <div>
+              <span className="text-[10px] font-bold text-purple-700 uppercase tracking-wider block">Repaired By (Mechanic)</span>
+              <div className="font-bold text-gray-900 text-sm flex items-center gap-1.5 mt-0.5">
+                <Wrench className="w-3.5 h-3.5 text-purple-600 shrink-0" />
+                <span className="truncate">{record.mechanicName || 'Master Mechanic'}</span>
+              </div>
+              <span className="text-[10px] text-gray-500 font-medium">Chaudhari Auto Workshop</span>
             </div>
           </div>
 

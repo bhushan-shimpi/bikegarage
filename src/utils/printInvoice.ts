@@ -193,6 +193,7 @@ export const printInvoice = (record: RepairRecord): void => {
           <span>Number Plate: <strong style="font-family: monospace;">${record.registrationNumber || 'N/A'}</strong></span>
           ${record.currentKm ? ` &bull; <span>Odometer: <strong>${record.currentKm} KM</strong></span>` : ''}<br />
           <span>Service: <strong>${record.serviceType}</strong></span>
+          ${record.mechanicName ? ` &bull; <span>Repaired By: <strong style="color: #b45309;">${record.mechanicName}</strong></span>` : ''}
           ${record.problemDetails ? `<br /><span style="color: #4b5563; font-style: italic;">"${record.problemDetails}"</span>` : ''}
         </div>
       </td>
@@ -250,9 +251,10 @@ export const printInvoice = (record: RepairRecord): void => {
     <div>
       <div>Thank you for choosing Chaudhari Auto Centre!</div>
       <div>Visit again for periodic oil check & servicing.</div>
+      ${record.mechanicName ? `<div style="margin-top: 4px; font-weight: bold; color: #374151;">Serviced & Checked by: ${record.mechanicName}</div>` : ''}
     </div>
     <div class="stamp-box">
-      <div class="stamp-line">Authorized Signatory</div>
+      <div class="stamp-line">${record.mechanicName ? `${record.mechanicName} / Authorized` : 'Authorized Signatory'}</div>
     </div>
   </div>
 

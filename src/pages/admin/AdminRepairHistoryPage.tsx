@@ -15,6 +15,7 @@ import {
   Receipt,
   RotateCcw,
   Printer,
+  Wrench,
 } from 'lucide-react';
 import { WhatsAppIcon } from '../../components/common/WhatsAppIcon';
 import { CreateBillModal } from '../../components/admin/CreateBillModal';
@@ -54,7 +55,7 @@ export const getWhatsAppBillUrl = (record: RepairRecord): string => {
     record.registrationNumber ? `(${record.registrationNumber})` : ''
   }
 📅 *Date:* ${record.repairDate}
-
+${record.mechanicName ? `👨‍🔧 *Repaired By (Mechanic):* ${record.mechanicName}\n` : ''}
 🔧 *Service:* ${record.serviceType}${servicePriceStr}
 ${record.problemDetails ? `Note: ${record.problemDetails}` : ''}
 
@@ -140,7 +141,8 @@ export const AdminRepairHistoryPage: React.FC = () => {
       r.customerMobile.includes(q) ||
       (r.registrationNumber && r.registrationNumber.toLowerCase().includes(q)) ||
       (r.bikeModel && r.bikeModel.toLowerCase().includes(q)) ||
-      (r.bikeBrand && r.bikeBrand.toLowerCase().includes(q))
+      (r.bikeBrand && r.bikeBrand.toLowerCase().includes(q)) ||
+      (r.mechanicName && r.mechanicName.toLowerCase().includes(q))
     );
   });
 
@@ -461,6 +463,12 @@ export const AdminRepairHistoryPage: React.FC = () => {
                   <span className="bg-amber-50 text-amber-900 border border-amber-200 px-2 py-0.5 rounded text-[11px] font-medium">
                     {rep.serviceType}
                   </span>
+                  {rep.mechanicName && (
+                    <span className="inline-flex items-center gap-1 bg-purple-50 text-purple-700 border border-purple-200 px-2 py-0.5 rounded text-[11px] font-bold">
+                      <Wrench className="w-3 h-3 text-purple-500" />
+                      <span>Mech: {rep.mechanicName}</span>
+                    </span>
+                  )}
                   {rep.partsReplaced && rep.partsReplaced.length > 0 && (
                     <span className="text-gray-500 text-[11px]">
                       {rep.partsReplaced.length} part(s) replaced

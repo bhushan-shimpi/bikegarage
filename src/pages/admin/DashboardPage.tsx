@@ -12,6 +12,7 @@ import {
   RotateCcw,
   TrendingUp,
   Printer,
+  Wrench,
 } from 'lucide-react';
 import { WhatsAppIcon } from '../../components/common/WhatsAppIcon';
 import { repairService } from '../../services/repairService';
@@ -391,6 +392,13 @@ export const DashboardPage: React.FC = () => {
                     {rep.paymentMode && (
                       <span className="text-[10px] font-bold bg-gray-100 text-gray-700 px-2 py-0.5 rounded-md border border-gray-200">
                         {rep.paymentMode}
+                      </span>
+                    )}
+
+                    {rep.mechanicName && (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200">
+                        <Wrench className="w-2.5 h-2.5 text-purple-500" />
+                        <span>{rep.mechanicName}</span>
                       </span>
                     )}
                   </div>

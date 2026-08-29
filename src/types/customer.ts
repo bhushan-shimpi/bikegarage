@@ -27,6 +27,7 @@ export interface RepairRecord {
   bikeModel?: string;
   registrationNumber?: string;
   currentKm?: string;
+  mechanicName?: string;
   serviceType: string;
   servicePrice?: number;
   problemDetails?: string;

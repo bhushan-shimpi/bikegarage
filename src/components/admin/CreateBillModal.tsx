@@ -28,6 +28,9 @@ import { formatPhone } from '../../utils/formatters';
 import { getWhatsAppBillUrl } from '../../pages/admin/AdminRepairHistoryPage';
 import { printInvoice } from '../../utils/printInvoice';
 
+import { authService } from '../../services/authService';
+import { AdminUser } from '../../types/auth';
+
 interface CreateBillModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -44,6 +47,7 @@ export const CreateBillModal: React.FC<CreateBillModalProps> = ({
   const [allCustomers, setAllCustomers] = useState<Customer[]>([]);
   const [allParts, setAllParts] = useState<SparePart[]>([]);
   const [availableServices, setAvailableServices] = useState<ServiceItem[]>([]);
+  const [mechanicsList, setMechanicsList] = useState<AdminUser[]>([]);
 
   // Customer suggestions
   const [customerSuggestions, setCustomerSuggestions] = useState<Customer[]>([]);
@@ -72,6 +76,7 @@ export const CreateBillModal: React.FC<CreateBillModalProps> = ({
     bikeModel: '',
     registrationNumber: '',
     currentKm: '',
+    mechanicName: '',
     serviceType: 'General Bike Service',
     servicePrice: 299,
     problemDetails: '',
@@ -93,6 +98,10 @@ export const CreateBillModal: React.FC<CreateBillModalProps> = ({
       partService.getAll().then(setAllParts);
       const services = bikeServicesService.getAll();
       setAvailableServices(services);
+      authService.getMechanics().then(setMechanicsList);
+
+      const currentUser = authService.getCurrentUser();
+      const defaultMechanic = currentUser?.name || '';
 
       const defaultSvc = services.find((s) => s.name === 'General Bike Service') || services[0];
       const defaultPrice = defaultSvc?.priceStartingAt
@@ -108,12 +117,14 @@ export const CreateBillModal: React.FC<CreateBillModalProps> = ({
           bikeModel: prefillCustomer.bikeModel || '',
           registrationNumber: prefillCustomer.registrationNumber || '',
           currentKm: prefillCustomer.currentKm || '',
+          mechanicName: defaultMechanic,
           serviceType: defaultSvc?.name || 'General Bike Service',
           servicePrice: defaultPrice,
         });
       } else {
         setFormData({
           ...initialFormData,
+          mechanicName: defaultMechanic,
           serviceType: defaultSvc?.name || 'General Bike Service',
           servicePrice: defaultPrice,
         });
@@ -257,7 +268,7 @@ Vehicle: ${createdBillRecord.bikeBrand || ''} ${createdBillRecord.bikeModel || '
       createdBillRecord.registrationNumber ? `(${createdBillRecord.registrationNumber})` : ''
     }
 Date: ${createdBillRecord.repairDate}
-
+${createdBillRecord.mechanicName ? `Repaired By / Mechanic: ${createdBillRecord.mechanicName}\n` : ''}
 Service: ${createdBillRecord.serviceType}${sPrice > 0 ? ` (₹${sPrice})` : ''}
 
 Parts Replaced:
@@ -491,16 +502,45 @@ Helpline: +91 7387448878 / 9503853143`;
                   </div>
                 </div>
 
-                <div className="max-w-xs">
-                  <label className="block font-semibold text-gray-700 mb-1">Odometer (KM)</label>
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    value={formData.currentKm}
-                    onChange={(e) => setFormData({ ...formData, currentKm: e.target.value })}
-                    placeholder="e.g. 24,500"
-                    className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
-                  />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-semibold text-gray-700 mb-1">Odometer (KM)</label>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={formData.currentKm}
+                      onChange={(e) => setFormData({ ...formData, currentKm: e.target.value })}
+                      placeholder="e.g. 24,500"
+                      className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-gray-700 mb-1 flex items-center justify-between">
+                      <span className="flex items-center gap-1">
+                        <Wrench className="w-3.5 h-3.5 text-[#DFA500]" />
+                        Repaired By (Mechanic Name)
+                      </span>
+                      {mechanicsList.length > 0 && (
+                        <span className="text-[10px] text-gray-400 font-normal">Choose or type</span>
+                      )}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        list="mechanic-name-suggestions"
+                        value={formData.mechanicName}
+                        onChange={(e) => setFormData({ ...formData, mechanicName: e.target.value })}
+                        placeholder="e.g. Bhushan Chaudhari or Rahul"
+                        className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs font-semibold text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
+                      />
+                      <datalist id="mechanic-name-suggestions">
+                        {mechanicsList.map((m) => (
+                          <option key={m.id || m.username} value={m.name} />
+                        ))}
+                      </datalist>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Live Spare Part Autocomplete Search Bar */}

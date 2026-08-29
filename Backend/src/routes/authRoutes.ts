@@ -7,7 +7,7 @@ const router = Router();
 router.post('/login', login);
 router.get('/me', requireAuth, getMe);
 router.post('/mechanics', requireAuth, createMechanic);
-router.get('/mechanics', requireAuth, getMechanics);
+router.get('/mechanics', getMechanics);
 router.delete('/mechanics/:id', requireAuth, deleteMechanic);
 
 export default router;

@@ -159,6 +159,7 @@ export const getCustomerRepairs = async (req: Request, res: Response): Promise<v
       photos: row.photos || [],
       repairDate: row.repair_date,
       createdAt: row.created_at,
+      mechanicName: row.mechanic_name || '',
     }));
 
     res.json({ success: true, data: formatted });

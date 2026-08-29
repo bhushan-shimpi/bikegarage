@@ -50,6 +50,7 @@ export const getAllRepairs = async (req: Request, res: Response): Promise<void> 
       photos: row.photos || [],
       repairDate: row.repair_date,
       createdAt: row.created_at,
+      mechanicName: row.mechanic_name || '',
     }));
 
     res.json({ success: true, data: formatted });
@@ -98,6 +99,7 @@ export const getRepairById = async (req: Request, res: Response): Promise<void> 
         photos: row.photos || [],
         repairDate: row.repair_date,
         createdAt: row.created_at,
+        mechanicName: row.mechanic_name || '',
       },
     });
   } catch (error) {
@@ -127,6 +129,7 @@ export const createRepair = async (req: Request, res: Response): Promise<void> =
       status,
       photos,
       repairDate,
+      mechanicName,
     } = req.body;
 
     if (!customerName || !customerMobile) {
@@ -165,8 +168,8 @@ export const createRepair = async (req: Request, res: Response): Promise<void> =
         bike_brand, bike_model, registration_number, current_km,
         service_type, problem_details, parts_replaced, labor_charge,
         parts_total, discount, total_amount, payment_mode, payment_status,
-        status, photos, repair_date
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)
+        status, photos, repair_date, mechanic_name
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22)
       RETURNING *`,
       [
         id,
@@ -190,6 +193,7 @@ export const createRepair = async (req: Request, res: Response): Promise<void> =
         status || 'Completed',
         JSON.stringify(photos || []),
         dateStr,
+        mechanicName?.trim() || null,
       ]
     );
 
@@ -236,6 +240,7 @@ export const createRepair = async (req: Request, res: Response): Promise<void> =
         status: row.status,
         repairDate: row.repair_date,
         createdAt: row.created_at,
+        mechanicName: row.mechanic_name || '',
       },
     });
     memoryCache.del('repair_daily_stats');
@@ -259,6 +264,7 @@ export const updateRepair = async (req: Request, res: Response): Promise<void> =
       totalAmount,
       problemDetails,
       photos,
+      mechanicName,
     } = req.body;
 
     const result = await query(
@@ -272,6 +278,7 @@ export const updateRepair = async (req: Request, res: Response): Promise<void> =
         total_amount = COALESCE($7, total_amount),
         problem_details = COALESCE($8, problem_details),
         photos = COALESCE($9, photos),
+        mechanic_name = COALESCE($11, mechanic_name),
         updated_at = NOW()
       WHERE id = $10 OR job_number = $10
       RETURNING *`,
@@ -286,6 +293,7 @@ export const updateRepair = async (req: Request, res: Response): Promise<void> =
         problemDetails !== undefined ? problemDetails.trim() : null,
         photos !== undefined ? JSON.stringify(photos) : null,
         id,
+        mechanicName !== undefined ? mechanicName?.trim() || null : null,
       ]
     );
 
