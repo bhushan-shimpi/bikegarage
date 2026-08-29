@@ -11,6 +11,7 @@ import {
   RotateCcw,
   CheckCircle2,
   Receipt,
+  ChevronRight,
 } from 'lucide-react';
 import { enquiryService } from '../../services/enquiryService';
 import { Enquiry, EnquiryStatus, isRestorationEnquiry } from '../../types/enquiry';
@@ -88,11 +89,20 @@ export const DashboardPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Action Buttons: Create Bill & New Enquiry */}
-        <div className="flex items-center gap-2.5 self-stretch sm:self-auto">
+        {/* Action Buttons: Billing Shortcut, Create Bill & New Enquiry */}
+        <div className="flex flex-wrap items-center gap-2 self-stretch sm:self-auto">
+          <Link
+            to="/garage/billing"
+            className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition-all active:scale-98"
+            title="Open Billing & Invoices"
+          >
+            <Receipt className="w-4 h-4 text-amber-700" />
+            <span>Billing Records →</span>
+          </Link>
+
           <button
             onClick={() => setIsCreateBillModalOpen(true)}
-            className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-gray-900 hover:bg-black text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all active:scale-98"
+            className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-gray-900 hover:bg-black text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-98"
           >
             <Receipt className="w-4 h-4 text-[#F5B900]" />
             <span>+ Create Bill</span>
@@ -100,7 +110,7 @@ export const DashboardPage: React.FC = () => {
 
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all active:scale-98"
+            className="flex-1 sm:flex-none px-3.5 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-98"
           >
             <PlusCircle className="w-4 h-4" />
             <span>+ New Enquiry</span>
@@ -208,6 +218,46 @@ export const DashboardPage: React.FC = () => {
             <CheckCircle2 className="w-4 h-4 sm:w-6 sm:h-6" />
           </div>
         </button>
+      </div>
+
+      {/* ─── QUICK SHORTCUT: BILLING & INVOICES ─── */}
+      <div className="bg-gradient-to-r from-gray-900 via-neutral-900 to-gray-900 border border-gray-800 text-white rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xs">
+        <div className="flex items-center gap-3.5">
+          <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[#F5B900] text-black flex items-center justify-center shrink-0 shadow-xs">
+            <Receipt className="w-5 h-5 sm:w-6 sm:h-6" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-sm sm:text-base text-white">
+                Billing & Customer Invoices
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-wider bg-[#F5B900] text-black px-2 py-0.5 rounded-full">
+                Quick Shortcut
+              </span>
+            </div>
+            <p className="text-xs text-gray-300 mt-0.5">
+              Access all repair bills, paid/pending payments, parts costs & one-click WhatsApp invoices
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2.5 w-full sm:w-auto">
+          <button
+            onClick={() => setIsCreateBillModalOpen(true)}
+            className="flex-1 sm:flex-none px-3.5 py-2 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-98"
+          >
+            <Receipt className="w-3.5 h-3.5" />
+            <span>+ Create Bill</span>
+          </button>
+
+          <Link
+            to="/garage/billing"
+            className="flex-1 sm:flex-none px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
+          >
+            <span>Open Billing</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
       </div>
 
       {/* ─── SIMPLIFIED ENQUIRIES LAYOUT ─── */}

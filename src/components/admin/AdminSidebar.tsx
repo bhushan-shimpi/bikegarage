@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   Inbox,
-  Wrench,
+  Receipt,
   Sparkles,
   Tag,
   Users,
@@ -32,7 +32,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
   const navItems = [
     { name: 'Dashboard', path: '/garage/dashboard', icon: LayoutDashboard },
     { name: 'Enquiries', path: '/garage/enquiries', icon: Inbox },
-    { name: 'Bike History', path: '/garage/repair-history', icon: Wrench },
+    { name: 'Billing', path: '/garage/billing', icon: Receipt },
     { name: 'Restorations', path: '/garage/restorations', icon: Sparkles },
     { name: 'Spare Part Pricing', path: '/garage/parts', icon: Tag },
     { name: 'Customers List', path: '/garage/customers', icon: Users },

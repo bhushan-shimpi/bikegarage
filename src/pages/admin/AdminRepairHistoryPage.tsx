@@ -19,6 +19,7 @@ import {
   Package,
   Phone,
   Filter,
+  Receipt,
 } from 'lucide-react';
 import { repairService } from '../../services/repairService';
 import { customerService } from '../../services/customerService';
@@ -322,11 +323,11 @@ export const AdminRepairHistoryPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2.5">
-            <Wrench className="w-6 h-6 text-[#DFA500]" />
-            <span>Bike Repair History & Bills</span>
+            <Receipt className="w-6 h-6 text-[#DFA500]" />
+            <span>Billing & Invoices</span>
           </h1>
           <p className="text-xs text-gray-500 mt-0.5">
-            Workshop repair log, parts replaced, labor billing, and daily revenue tracker
+            Workshop repair log, customer invoices, parts billing, and daily revenue tracker
           </p>
         </div>
 
@@ -335,7 +336,7 @@ export const AdminRepairHistoryPage: React.FC = () => {
           className="px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs font-bold flex items-center gap-2 shadow-sm transition-all self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
-          <span>+ Log New Bike Repair</span>
+          <span>+ Create New Bill</span>
         </button>
       </div>
 
