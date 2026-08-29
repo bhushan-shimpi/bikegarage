@@ -5,18 +5,16 @@ dotenv.config();
 
 const { Pool } = pg;
 
-const connectionString = process.env.DATABASE_URL;
-
-if (!connectionString) {
-  console.error('DATABASE_URL is not set in environment variables.');
-}
+const connectionString =
+  process.env.DATABASE_URL ||
+  'postgresql://postgres.itjidjypbdkhgduerqvn:Bhush%402503%23%40@aws-0-ap-south-1.pooler.supabase.com:6543/postgres';
 
 export const pool = new Pool({
   connectionString,
   ssl: {
     rejectUnauthorized: false,
   },
-  max: 10,
+  max: process.env.VERCEL ? 2 : 10,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 10000,
 });

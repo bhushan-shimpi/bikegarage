@@ -42,17 +42,22 @@ app.get('/', (req, res) => {
   });
 });
 
-// API Routes
-app.use('/api/health', healthRoutes);
-app.use('/api/services', serviceRoutes);
-app.use('/api/customers', customerRoutes);
-app.use('/api/repairs', repairRoutes);
-app.use('/api/parts', partRoutes);
-app.use('/api/appointments', appointmentRoutes);
-app.use('/api/enquiries', enquiryRoutes);
-app.use('/api/restorations', restorationRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/dashboard', dashboardRoutes);
+// API Routes (mounted with /api and directly to support all deployment proxies & rewrites)
+const registerRoutes = (prefix: string) => {
+  app.use(`${prefix}/health`, healthRoutes);
+  app.use(`${prefix}/services`, serviceRoutes);
+  app.use(`${prefix}/customers`, customerRoutes);
+  app.use(`${prefix}/repairs`, repairRoutes);
+  app.use(`${prefix}/parts`, partRoutes);
+  app.use(`${prefix}/appointments`, appointmentRoutes);
+  app.use(`${prefix}/enquiries`, enquiryRoutes);
+  app.use(`${prefix}/restorations`, restorationRoutes);
+  app.use(`${prefix}/auth`, authRoutes);
+  app.use(`${prefix}/dashboard`, dashboardRoutes);
+};
+
+registerRoutes('/api');
+registerRoutes('');
 
 // Error Handler Middleware
 app.use(errorHandler);
