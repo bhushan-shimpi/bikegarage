@@ -21,6 +21,7 @@ import {
   Filter,
   Receipt,
   RotateCcw,
+  Printer,
 } from 'lucide-react';
 import { repairService } from '../../services/repairService';
 import { customerService } from '../../services/customerService';
@@ -34,6 +35,7 @@ import {
 } from '../../types/customer';
 import { formatPhone } from '../../utils/formatters';
 import { filterRecordByDate, DateFilterType } from '../../utils/dateFilters';
+import { printInvoice } from '../../utils/printInvoice';
 
 export const getWhatsAppBillUrl = (record: RepairRecord): string => {
   const cleanMobile = record.customerMobile.replace(/\D/g, '').slice(-10);
@@ -658,6 +660,13 @@ export const AdminRepairHistoryPage: React.FC = () => {
                     <td className="py-3.5 px-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">
                         <button
+                          onClick={() => printInvoice(rep)}
+                          className="p-1.5 rounded-lg border border-gray-200 bg-gray-50 text-gray-700 hover:bg-amber-50 hover:border-amber-300 transition-colors"
+                          title="Print Bill / Invoice"
+                        >
+                          <Printer className="w-3.5 h-3.5 text-amber-700" />
+                        </button>
+                        <button
                           onClick={() => {
                             setSelectedRecord(rep);
                             setIsViewModalOpen(true);
@@ -759,6 +768,13 @@ export const AdminRepairHistoryPage: React.FC = () => {
                       <MessageCircle className="w-3.5 h-3.5" />
                       <span>WhatsApp Bill</span>
                     </a>
+                    <button
+                      onClick={() => printInvoice(rep)}
+                      className="p-1.5 rounded-lg bg-amber-50 text-amber-900 border border-amber-200 hover:bg-amber-100 transition-colors"
+                      title="Print Bill / Invoice"
+                    >
+                      <Printer className="w-3.5 h-3.5" />
+                    </button>
                     <button
                       onClick={() => {
                         setSelectedRecord(rep);

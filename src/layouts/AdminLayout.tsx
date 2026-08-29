@@ -31,10 +31,19 @@ export const AdminLayout: React.FC = () => {
       return;
     }
 
-    // Role guard: Mechanic accounts only have access to Billing & Job Cards
+    // Role guard: Mechanic accounts only have access to permitted sections
     if (authService.isMechanic()) {
       const p = location.pathname;
-      if (!p.includes('/garage/billing') && !p.includes('/garage/repair-history')) {
+      const currentUser = authService.getCurrentUser();
+      const perms = currentUser?.permissions || ['billing'];
+
+      const allowedPaths = ['/garage/billing', '/garage/repair-history'];
+      if (perms.includes('parts')) allowedPaths.push('/garage/parts');
+      if (perms.includes('customers')) allowedPaths.push('/garage/customers');
+      if (perms.includes('enquiries')) allowedPaths.push('/garage/enquiries');
+
+      const isAllowed = allowedPaths.some((ap) => p.startsWith(ap));
+      if (!isAllowed) {
         navigate('/garage/billing', { replace: true });
       }
     }

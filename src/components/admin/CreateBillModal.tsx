@@ -11,6 +11,7 @@ import {
   Receipt,
   Copy,
   Check,
+  Printer,
 } from 'lucide-react';
 import { repairService } from '../../services/repairService';
 import { customerService } from '../../services/customerService';
@@ -22,6 +23,7 @@ import {
 } from '../../types/customer';
 import { formatPhone } from '../../utils/formatters';
 import { getWhatsAppBillUrl } from '../../pages/admin/AdminRepairHistoryPage';
+import { printInvoice } from '../../utils/printInvoice';
 
 interface CreateBillModalProps {
   isOpen: boolean;
@@ -678,19 +680,30 @@ Helpline: +91 7387448878 / 9503853143`;
             </div>
 
             <div className="space-y-2 pt-2">
-              <a
-                href={getWhatsAppBillUrl(createdBillRecord)}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => {
-                  setShowWhatsAppModal(false);
-                  onClose();
-                }}
-                className="w-full py-3 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-md transition-all active:scale-98"
-              >
-                <MessageCircle className="w-5 h-5" />
-                <span>Send Bill on WhatsApp</span>
-              </a>
+              <div className="grid grid-cols-2 gap-2">
+                <a
+                  href={getWhatsAppBillUrl(createdBillRecord)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => {
+                    setShowWhatsAppModal(false);
+                    onClose();
+                  }}
+                  className="py-2.5 rounded-xl bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-98"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  <span>WhatsApp Bill</span>
+                </a>
+
+                <button
+                  type="button"
+                  onClick={() => printInvoice(createdBillRecord)}
+                  className="py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-98"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Print Invoice</span>
+                </button>
+              </div>
 
               <div className="flex items-center gap-2">
                 <button

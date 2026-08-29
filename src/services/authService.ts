@@ -66,6 +66,7 @@ export const authService = {
         name: matchingMech.name,
         mobile: matchingMech.mobile,
         role: 'mechanic',
+        permissions: matchingMech.permissions || ['billing'],
         garageLocation: 'Pahur Workshop',
       };
       storage.set(storage.keys.AUTH_TOKEN, `jwt-mech-${user.id}`);
@@ -78,18 +79,14 @@ export const authService = {
     const validSuperPass = ['admin', 'admin123', 'garage1994', '123456', 'chaudhari1994'];
 
     if (validSuperUsers.includes(cleanUser) && validSuperPass.includes(cleanPass)) {
-      const user: AdminUser = {
-        ...DEFAULT_ADMIN,
-        username: cleanUser,
-      };
-      storage.set(storage.keys.AUTH_TOKEN, 'jwt-cac-session-token');
-      storage.set(storage.keys.CURRENT_USER, user);
-      return { success: true, user };
+      storage.set(storage.keys.AUTH_TOKEN, 'jwt-token-superadmin');
+      storage.set(storage.keys.CURRENT_USER, DEFAULT_ADMIN);
+      return { success: true, user: DEFAULT_ADMIN };
     }
 
     return {
       success: false,
-      error: 'Invalid credentials. Super Admin: "admin" / "admin123" (or mobile 7387448878). Or use your registered mechanic username/password.',
+      error: 'Invalid username/mobile or password. Please check your credentials.',
     };
   },
 
@@ -98,8 +95,7 @@ export const authService = {
   },
 
   isAuthenticated: (): boolean => {
-    const token = storage.get<string | null>(storage.keys.AUTH_TOKEN, null);
-    return Boolean(token);
+    return !!storage.get<string | null>(storage.keys.AUTH_TOKEN, null);
   },
 
   isSuperAdmin: (): boolean => {
@@ -124,24 +120,29 @@ export const authService = {
     try {
       const res = await apiClient.get<{ success: boolean; data: AdminUser[] }>('/api/auth/mechanics');
       if (res.success && Array.isArray(res.data)) {
-        // Sync with local cache
         const localList = storage.get<LocalMechanicAccount[]>(MECHANICS_KEY, []);
         const merged: LocalMechanicAccount[] = res.data.map((d) => {
           const found = localList.find((l) => l.id === d.id);
           return {
             ...d,
             role: 'mechanic',
+            passwordPreview: found?.passwordPreview || found?.passwordHash || '',
+            permissions: found?.permissions || ['billing'],
             passwordHash: found?.passwordHash || '******',
           };
         });
         storage.set(MECHANICS_KEY, merged);
-        return res.data;
+        return merged.map(({ passwordHash: _, ...rest }) => rest);
       }
     } catch {
       // Fallback to local
     }
     const local = storage.get<LocalMechanicAccount[]>(MECHANICS_KEY, []);
-    return local.map(({ passwordHash: _, ...rest }) => rest);
+    return local.map(({ passwordHash, ...rest }) => ({
+      ...rest,
+      passwordPreview: rest.passwordPreview || passwordHash,
+      permissions: rest.permissions || ['billing'],
+    }));
   },
 
   createMechanic: async (data: CreateMechanicInput): Promise<AdminUser> => {
@@ -150,6 +151,7 @@ export const authService = {
     const cleanPass = data.password.trim();
     const mobile = cleanUser.match(/^\d{10}$/) ? cleanUser : undefined;
     const newId = `usr-mech-${Date.now()}`;
+    const permissions = data.permissions && data.permissions.length > 0 ? data.permissions : ['billing'];
 
     const newAccount: LocalMechanicAccount = {
       id: newId,
@@ -158,6 +160,8 @@ export const authService = {
       name: cleanName,
       role: 'mechanic',
       passwordHash: cleanPass,
+      passwordPreview: cleanPass,
+      permissions,
       garageLocation: 'Pahur Workshop',
       createdAt: new Date().toISOString(),
     };

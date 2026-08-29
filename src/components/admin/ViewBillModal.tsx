@@ -3,6 +3,7 @@ import { FileText, X, MessageCircle, Phone, Printer } from 'lucide-react';
 import { RepairRecord } from '../../types/customer';
 import { formatPhone } from '../../utils/formatters';
 import { getWhatsAppBillUrl } from '../../pages/admin/AdminRepairHistoryPage';
+import { printInvoice } from '../../utils/printInvoice';
 
 interface ViewBillModalProps {
   isOpen: boolean;
@@ -154,10 +155,10 @@ export const ViewBillModal: React.FC<ViewBillModalProps> = ({ isOpen, onClose, r
         {/* Modal Footer Actions */}
         <div className="p-4 border-t border-gray-100 bg-gray-50 flex flex-wrap items-center justify-between gap-2">
           <button
-            onClick={() => window.print()}
+            onClick={() => printInvoice(record)}
             className="px-3.5 py-2 rounded-xl bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 font-bold text-xs flex items-center gap-1.5 transition-colors"
           >
-            <Printer className="w-3.5 h-3.5" />
+            <Printer className="w-3.5 h-3.5 text-amber-700" />
             <span>Print Invoice</span>
           </button>
 

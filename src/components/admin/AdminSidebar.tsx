@@ -29,8 +29,21 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
     navigate('/garage/login');
   };
 
+  const permissions = currentUser?.permissions || ['billing'];
+
   const navItems = isMechanic
-    ? [{ name: 'Billing', path: '/garage/billing', icon: Receipt }]
+    ? [
+        { name: 'Billing', path: '/garage/billing', icon: Receipt },
+        ...(permissions.includes('parts')
+          ? [{ name: 'Spare Part Pricing', path: '/garage/parts', icon: Tag }]
+          : []),
+        ...(permissions.includes('customers')
+          ? [{ name: 'Customers List', path: '/garage/customers', icon: Users }]
+          : []),
+        ...(permissions.includes('enquiries')
+          ? [{ name: 'Enquiries', path: '/garage/enquiries', icon: Inbox }]
+          : []),
+      ]
     : [
         { name: 'Dashboard', path: '/garage/dashboard', icon: LayoutDashboard },
         { name: 'Enquiries', path: '/garage/enquiries', icon: Inbox },
