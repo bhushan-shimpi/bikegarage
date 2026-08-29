@@ -11,7 +11,7 @@ import {
   IndianRupee,
   Clock,
   RotateCcw,
-  Check,
+  TrendingUp,
 } from 'lucide-react';
 import { repairService } from '../../services/repairService';
 import { RepairRecord } from '../../types/customer';
@@ -53,9 +53,13 @@ export const DashboardPage: React.FC = () => {
     (r) => filterRecordByDate(r.repairDate || r.createdAt, 'today') && r.paymentStatus === 'Paid'
   );
   const todayRevenue = todayPaidRecords.reduce((sum, r) => sum + (Number(r.totalAmount) || 0), 0);
+
+  const overallPaidRecords = repairs.filter((r) => r.paymentStatus === 'Paid');
+  const overallRevenue = overallPaidRecords.reduce((sum, r) => sum + (Number(r.totalAmount) || 0), 0);
+
+  const pendingRecords = repairs.filter((r) => r.paymentStatus === 'Pending');
+  const pendingDueAmount = pendingRecords.reduce((sum, r) => sum + (Number(r.totalAmount) || 0), 0);
   const totalBillsCount = repairs.length;
-  const paidBillsCount = repairs.filter((r) => r.paymentStatus === 'Paid').length;
-  const pendingBillsCount = repairs.filter((r) => r.paymentStatus === 'Pending').length;
 
   // ─── Filtered Billing Records ───
   const filtered = repairs.filter((r) => {
@@ -75,6 +79,9 @@ export const DashboardPage: React.FC = () => {
       (r.registrationNumber && r.registrationNumber.toLowerCase().includes(q))
     );
   });
+
+  const filteredPaidRecords = filtered.filter((r) => r.paymentStatus === 'Paid');
+  const filteredRevenue = filteredPaidRecords.reduce((sum, r) => sum + (Number(r.totalAmount) || 0), 0);
 
   const dateFilterTabs: { key: DateFilterType; label: string }[] = [
     { key: 'all', label: 'All Time' },
@@ -134,17 +141,17 @@ export const DashboardPage: React.FC = () => {
 
       {/* ─── 4 MAIN BILLING STATS (2 COLUMNS ON MOBILE, 4 ON DESKTOP) ─── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
-        {/* Stat 1: Today Revenue */}
+        {/* Stat 1: Today's Revenue */}
         <div className="p-3 sm:p-4 rounded-2xl border border-emerald-200 bg-emerald-50/70 shadow-xs flex items-center justify-between">
           <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1 pr-1">
-            <span className="text-[11px] sm:text-xs font-semibold text-emerald-800 block truncate">
+            <span className="text-[11px] sm:text-xs font-bold text-emerald-800 block truncate uppercase tracking-wider">
               Today's Revenue
             </span>
-            <span className="text-xl sm:text-2xl font-bold text-emerald-950 block font-mono">
+            <span className="text-xl sm:text-2xl font-black text-emerald-950 block font-mono">
               ₹{todayRevenue.toLocaleString('en-IN')}
             </span>
-            <span className="text-[10px] sm:text-[11px] text-emerald-700 font-medium block truncate">
-              {todayPaidRecords.length} paid jobs today
+            <span className="text-[10px] sm:text-[11px] text-emerald-700 font-semibold block truncate">
+              {todayPaidRecords.length} paid today
             </span>
           </div>
           <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0">
@@ -152,70 +159,70 @@ export const DashboardPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Stat 2: Total Bills */}
-        <div className="p-3 sm:p-4 rounded-2xl border border-gray-200 bg-white shadow-xs flex items-center justify-between">
+        {/* Stat 2: Overall Revenue (Lifetime Collections) */}
+        <div className="p-3 sm:p-4 rounded-2xl border border-amber-200 bg-[#FFF9E6] shadow-xs flex items-center justify-between">
           <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1 pr-1">
-            <span className="text-[11px] sm:text-xs font-semibold text-gray-500 block truncate">
+            <span className="text-[11px] sm:text-xs font-bold text-amber-900 block truncate uppercase tracking-wider">
+              Overall Revenue
+            </span>
+            <span className="text-xl sm:text-2xl font-black text-amber-950 block font-mono">
+              ₹{overallRevenue.toLocaleString('en-IN')}
+            </span>
+            <span className="text-[10px] sm:text-[11px] text-amber-700 font-semibold block truncate">
+              Lifetime ({overallPaidRecords.length} paid)
+            </span>
+          </div>
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+            <TrendingUp className="w-5 h-5" />
+          </div>
+        </div>
+
+        {/* Stat 3: Total Invoices */}
+        <button
+          onClick={() => setPaymentFilter('all')}
+          className={`p-3 sm:p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs ${
+            paymentFilter === 'all'
+              ? 'bg-white border-gray-200 hover:border-gray-400'
+              : 'bg-gray-50 border-gray-200 hover:bg-white'
+          }`}
+        >
+          <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1 pr-1">
+            <span className="text-[11px] sm:text-xs font-bold text-gray-600 block truncate uppercase tracking-wider">
               Total Invoices
             </span>
-            <span className="text-xl sm:text-2xl font-bold text-gray-900 block font-mono">
+            <span className="text-xl sm:text-2xl font-black text-gray-900 block font-mono">
               {totalBillsCount}
             </span>
-            <span className="text-[10px] sm:text-[11px] text-gray-500 font-medium block truncate">
-              Lifetime workshop records
+            <span className="text-[10px] sm:text-[11px] text-gray-500 font-semibold block truncate">
+              {overallPaidRecords.length} paid • {pendingRecords.length} pending
             </span>
           </div>
           <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gray-100 text-gray-700 flex items-center justify-center shrink-0">
             <Receipt className="w-5 h-5" />
           </div>
-        </div>
-
-        {/* Stat 3: Paid Bills */}
-        <button
-          onClick={() => setPaymentFilter(paymentFilter === 'Paid' ? 'all' : 'Paid')}
-          className={`p-3 sm:p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs ${
-            paymentFilter === 'Paid'
-              ? 'bg-blue-50/80 border-blue-500 ring-2 ring-blue-500/50'
-              : 'bg-white border-gray-200 hover:border-blue-300'
-          }`}
-        >
-          <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1 pr-1">
-            <span className="text-[11px] sm:text-xs font-semibold text-blue-800 block truncate">
-              Paid Bills
-            </span>
-            <span className="text-xl sm:text-2xl font-bold text-blue-950 block font-mono">
-              {paidBillsCount}
-            </span>
-            <span className="text-[10px] sm:text-[11px] text-blue-700 font-medium block truncate">
-              Settled payments
-            </span>
-          </div>
-          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center shrink-0">
-            <Check className="w-5 h-5" />
-          </div>
         </button>
 
-        {/* Stat 4: Pending Payment */}
+        {/* Stat 4: Pending Dues */}
         <button
           onClick={() => setPaymentFilter(paymentFilter === 'Pending' ? 'all' : 'Pending')}
           className={`p-3 sm:p-4 rounded-2xl border text-left transition-all flex items-center justify-between shadow-xs ${
             paymentFilter === 'Pending'
-              ? 'bg-amber-50/80 border-amber-500 ring-2 ring-amber-500/50'
-              : 'bg-white border-gray-200 hover:border-amber-300'
+              ? 'bg-red-50/80 border-red-500 ring-2 ring-red-500/50'
+              : 'bg-white border-gray-200 hover:border-red-300'
           }`}
         >
           <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1 pr-1">
-            <span className="text-[11px] sm:text-xs font-semibold text-amber-800 block truncate">
-              Pending Payment
+            <span className="text-[11px] sm:text-xs font-bold text-red-800 block truncate uppercase tracking-wider">
+              Pending Dues
             </span>
-            <span className="text-xl sm:text-2xl font-bold text-amber-950 block font-mono">
-              {pendingBillsCount}
+            <span className="text-xl sm:text-2xl font-black text-red-950 block font-mono">
+              ₹{pendingDueAmount.toLocaleString('en-IN')}
             </span>
-            <span className="text-[10px] sm:text-[11px] text-amber-700 font-medium block truncate">
-              Due from customers
+            <span className="text-[10px] sm:text-[11px] text-red-700 font-semibold block truncate">
+              {pendingRecords.length} unpaid bill(s)
             </span>
           </div>
-          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-red-100 text-red-800 flex items-center justify-center shrink-0">
             <Clock className="w-5 h-5" />
           </div>
         </button>
@@ -296,6 +303,18 @@ export const DashboardPage: React.FC = () => {
                   className="text-xs bg-white border border-gray-300 rounded px-2 py-0.5 text-gray-900 focus:outline-none focus:border-[#F5B900]"
                 />
               </div>
+            )}
+
+            {dateFilter !== 'all' && (
+              <span className="text-xs bg-amber-50 text-amber-900 border border-amber-200 px-2.5 py-1 rounded-lg font-bold flex items-center gap-1.5 animate-fade-in">
+                <span>Period Revenue:</span>
+                <strong className="text-emerald-800 font-mono text-xs">
+                  ₹{filteredRevenue.toLocaleString('en-IN')}
+                </strong>
+                <span className="text-[10px] text-amber-700 font-normal">
+                  ({filteredPaidRecords.length} paid)
+                </span>
+              </span>
             )}
 
             {(dateFilter !== 'all' || paymentFilter !== 'all' || searchQuery) && (
