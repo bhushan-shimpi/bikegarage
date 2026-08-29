@@ -1,5 +1,30 @@
+const isDev = (import.meta as any).env?.DEV;
 const API_BASE_URL =
-  (import.meta as any).env?.VITE_API_URL || 'http://localhost:5000';
+  (import.meta as any).env?.VITE_API_URL ||
+  (isDev ? 'http://localhost:5000' : 'https://bikegarage-yr7m.vercel.app');
+
+// Automatic Keep-Alive: Calls /api/health every 5 minutes so server and Supabase never sleep
+const KEEP_ALIVE_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
+
+export const pingServerHealth = async (): Promise<boolean> => {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/health`);
+    if (res.ok) {
+      const data = await res.json().catch(() => ({}));
+      console.log('💚 [Keep-Alive 5-min Ping] Health check OK:', data.timestamp || new Date().toISOString());
+      return true;
+    }
+  } catch (err: any) {
+    console.warn('⚠️ [Keep-Alive Ping] Notice:', err.message);
+  }
+  return false;
+};
+
+// Start automatic 5-minute heartbeat in the browser
+if (typeof window !== 'undefined') {
+  pingServerHealth();
+  setInterval(pingServerHealth, KEEP_ALIVE_INTERVAL_MS);
+}
 
 class ApiClient {
   private getHeaders(): HeadersInit {
