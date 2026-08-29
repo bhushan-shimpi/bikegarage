@@ -13,12 +13,54 @@ import {
   ClipboardList,
   AlertTriangle,
 } from 'lucide-react';
+import { SEO } from '../../components/common/SEO';
 import { PageBanner } from '../../components/common/PageBanner';
 import { ScrollReveal } from '../../components/common/ScrollReveal';
 import { Button } from '../../components/common/Button';
 import { RestorationQuotationCards } from '../../components/restoration/RestorationQuotationCards';
 
 export const RestorationServiceDetailPage: React.FC = () => {
+  const restorationSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Bike Restoration Service (100cc & 150cc)',
+    provider: {
+      '@type': 'MotorcycleRepairShop',
+      name: 'Chaudhary Auto',
+      telephone: '+91-7387448878',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Main Road, Near Bus Stand',
+        addressLocality: 'Pahur',
+        addressRegion: 'Maharashtra',
+        postalCode: '424205',
+        addressCountry: 'IN',
+      },
+    },
+    serviceType: 'Motorcycle Restoration and Overhaul',
+    areaServed: ['Pahur', 'Jamner', 'Jalgaon'],
+    description:
+      'Complete bike restoration for 100cc and 150cc motorcycles: bhatti oven paint, ceramic coating, OEM fiber kit fitting, genuine stickers, and showroom condition rebuilding.',
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Restoration Quotations',
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          name: '100cc Bike Restoration Standard Package',
+          price: '18850',
+          priceCurrency: 'INR',
+        },
+        {
+          '@type': 'Offer',
+          name: '150cc Bike Restoration Standard Package',
+          price: '24500',
+          priceCurrency: 'INR',
+        },
+      ],
+    },
+  };
+
   const restorationPillars = [
     {
       icon: Search,
@@ -87,7 +129,14 @@ export const RestorationServiceDetailPage: React.FC = () => {
 
   return (
     <div className="bg-[#0A0A0A] text-white min-h-screen">
-      {/* Top Banner */}
+      <SEO
+        title="Bike Restoration Service (100cc & 150cc) in Pahur, Jamner"
+        description="Comprehensive motorcycle restoration in Pahur, Jalgaon: 100cc & 150cc quotations, oven paint process, ceramic coating, genuine fiber kits, and complete showroom rebuilds."
+        canonicalPath="/services/bike-restoration"
+        jsonLd={restorationSchema}
+      />
+
+      {/* Top Banner with semantic H1 */}
       <PageBanner
         title="BIKE RESTORATION SERVICE DETAILS"
         breadcrumb="Services / Bike Restoration"
@@ -111,9 +160,9 @@ export const RestorationServiceDetailPage: React.FC = () => {
                 </span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl font-black uppercase tracking-tight text-white font-sans">
+              <h2 className="text-2xl sm:text-4xl font-black uppercase tracking-tight text-white font-sans">
                 Bike Restoration (100cc & 150cc)
-              </h1>
+              </h2>
               <p className="text-sm font-semibold text-[#F5B900]">
                 बाईक रिस्टोरेशन — १००सीसी व १५०सीसी मोटरसायकल शोरूम कंडिशन सर्व्हिस
               </p>

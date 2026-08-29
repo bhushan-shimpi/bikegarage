@@ -1,0 +1,11 @@
+# robots.txt for https://chaudhariauto.com/
+# Chaudhary Auto Centre - Pahur, Taluka Jamner, Dist. Jalgaon
+
+User-agent: *
+Allow: /
+Disallow: /garage/
+Disallow: /garage/*
+Disallow: /api/
+
+# Explicit XML Sitemap Location
+Sitemap: https://chaudhariauto.com/sitemap.xml

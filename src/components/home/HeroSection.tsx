@@ -12,7 +12,7 @@ export const HeroSection: React.FC = () => {
         <div className="relative w-full aspect-[16/9] overflow-hidden bg-[#0B0B0B]">
           <img
             src="/images/hero-bike-mobile.jpg"
-            alt="Bajaj Pulsar 125 Red and Black at Chaudhari Auto Centre"
+            alt="Premium bike servicing and motorcycle repair at Chaudhary Auto in Pahur"
             fetchPriority="high"
             decoding="async"
             className="w-full h-full object-cover object-center"
@@ -25,25 +25,27 @@ export const HeroSection: React.FC = () => {
         <div className="px-5 xs:px-6 pt-1 pb-4 flex flex-col">
           {/* Eyebrow */}
           <p className="text-[#F5B900] text-xs font-bold uppercase tracking-[0.2em] mb-1.5 animate-fade-in-up">
-            TRUSTED BIKE SERVICE SINCE 1994
+            CHAUDHARY AUTO • TRUSTED SINCE 1994
           </p>
 
-          {/* Main Heading */}
-          <h1
+          {/* Mobile Display Heading */}
+          <div
+            role="heading"
+            aria-level={1}
             className="font-black uppercase tracking-tight text-white font-sans mb-2 animate-fade-in-up"
             style={{
-              fontSize: 'clamp(2.2rem, 10.5vw, 3rem)',
+              fontSize: 'clamp(2rem, 9.5vw, 2.8rem)',
               lineHeight: 0.96,
               letterSpacing: '-0.03em',
               animationDelay: '100ms',
             }}
           >
-            EXPERT CARE<br />FOR YOUR BIKE
-          </h1>
+            PREMIUM BIKE SERVICING<br /><span className="text-[#F5B900]">&amp; REPAIR IN PAHUR</span>
+          </div>
 
           {/* Supporting Text with Marathi line */}
           <p className="text-neutral-200 text-sm font-medium leading-relaxed mb-1 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-            Professional motorcycle &amp; bike service, repair &amp; restoration in Pahur.
+            Professional motorcycle &amp; bike service, repair &amp; restoration in Pahur, Jamner, Jalgaon.
           </p>
           <p className="text-neutral-400 text-xs xs:text-[13px] leading-relaxed mb-3.5 animate-fade-in-up" style={{ animationDelay: '250ms' }}>
             फक्त मोटरसायकल व बाईक सर्व्हिसिंग (स्कूटर/मोपेड नाही) — Regular Servicing पासून Complete Bike Restoration पर्यंत.
@@ -80,7 +82,7 @@ export const HeroSection: React.FC = () => {
         <div className="absolute inset-0 z-0 overflow-hidden">
           <img
             src="/images/hero-bike.jpg"
-            alt="Bajaj Pulsar 125 Red and Black at Chaudhari Auto Centre"
+            alt="Chaudhary Auto motorcycle servicing and repair workshop in Pahur, Jamner"
             fetchPriority="high"
             decoding="async"
             className="w-full h-full object-cover object-right brightness-105 contrast-105"
@@ -105,25 +107,25 @@ export const HeroSection: React.FC = () => {
           <div className="max-w-lg lg:max-w-xl">
             {/* Eyebrow */}
             <p className="text-[#F5B900] text-xs lg:text-sm font-bold uppercase tracking-[0.22em] mb-2 animate-fade-in-up">
-              TRUSTED BIKE SERVICE SINCE 1994
+              CHAUDHARY AUTO • TRUSTED SINCE 1994
             </p>
 
-            {/* Main Heading */}
+            {/* Semantic Main Heading */}
             <h1
               className="font-black uppercase tracking-tight text-white font-sans mb-3 animate-fade-in-up"
               style={{
-                fontSize: 'clamp(2.8rem, 4.8vw, 4.5rem)',
+                fontSize: 'clamp(2.5rem, 4.4vw, 4.2rem)',
                 lineHeight: 0.95,
                 letterSpacing: '-0.03em',
                 animationDelay: '100ms',
               }}
             >
-              EXPERT CARE<br />FOR YOUR BIKE
+              PREMIUM BIKE SERVICING<br /><span className="text-[#F5B900]">&amp; REPAIR IN PAHUR</span>
             </h1>
 
             {/* Supporting Text with Marathi line */}
             <p className="text-neutral-200 text-base lg:text-lg font-medium leading-relaxed mb-1 max-w-md animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-              Professional motorcycle &amp; bike service, repair &amp; restoration in Pahur.
+              Professional motorcycle &amp; bike service, repair &amp; restoration in Pahur, Jamner, Jalgaon.
             </p>
             <p className="text-neutral-400 text-xs lg:text-sm leading-relaxed mb-5 max-w-md animate-fade-in-up" style={{ animationDelay: '250ms' }}>
               फक्त मोटरसायकल व बाईक सर्व्हिसिंग (स्कूटर/मोपेड नाही) — Regular Servicing पासून Complete Bike Restoration पर्यंत.

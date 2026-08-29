@@ -50,12 +50,20 @@ export const ServicesOverview: React.FC = () => {
 
         {/* Bottom Booking CTA */}
         <ScrollReveal direction="up" delay={200}>
-          <div className="mt-10 sm:mt-12 text-center">
+          <div className="mt-10 sm:mt-12 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
             <Link
-              to="/book-appointment"
+              to="/services"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#0B0B0B] text-white hover:bg-[#F5B900] hover:text-black font-extrabold text-xs uppercase tracking-wider transition-all shadow-md active:scale-95"
             >
-              <span>Book A Service Slot</span>
+              <span>Explore All 12 Services &amp; Pricing</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+
+            <Link
+              to="/book-appointment"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-[#F5B900] text-black hover:bg-[#E5AC00] font-extrabold text-xs uppercase tracking-wider transition-all shadow-md active:scale-95"
+            >
+              <span>Book Bike Service in Pahur</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

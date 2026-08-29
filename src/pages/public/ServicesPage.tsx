@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { SEO } from '../../components/common/SEO';
 import { PageBanner } from '../../components/common/PageBanner';
 import { ServiceCard } from '../../components/services/ServiceCard';
 import { ServiceDetailModal } from '../../components/services/ServiceDetailModal';
@@ -27,8 +28,35 @@ export const ServicesPage: React.FC = () => {
     (s) => s.id === 's2' || s.slug === 'premium-bike-service'
   );
 
+  const servicesSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: 'Bike Services & Pricing — Chaudhary Auto Pahur',
+    description:
+      'Complete catalog of motorcycle maintenance, engine repair, oil replacement, and bike restoration services in Pahur, Jamner, Jalgaon.',
+    itemListElement: services.map((s, idx) => ({
+      '@type': 'ListItem',
+      position: idx + 1,
+      item: {
+        '@type': 'Service',
+        name: s.name,
+        description: s.shortDescription,
+        provider: {
+          '@type': 'MotorcycleRepairShop',
+          name: 'Chaudhary Auto',
+        },
+      },
+    })),
+  };
+
   return (
     <div className="bg-[#F8F9FA] min-h-screen flex flex-col justify-between">
+      <SEO
+        title="Bike Services & Pricing in Pahur, Jamner"
+        description="Explore Chaudhary Auto's comprehensive two-wheeler service packages in Pahur, Jalgaon: General Service, Premium Package (₹1,820), Engine Overhaul, Oil Change, and Brake Service."
+        canonicalPath="/services"
+        jsonLd={servicesSchema}
+      />
       <div>
         {/* Top Dark Banner */}
         <PageBanner title="OUR BIKE SERVICES & PRICING" breadcrumb="Services" />

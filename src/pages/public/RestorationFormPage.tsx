@@ -16,6 +16,7 @@ import {
   Check,
   Copy
 } from 'lucide-react';
+import { SEO } from '../../components/common/SEO';
 import { PageBanner } from '../../components/common/PageBanner';
 import { ScrollReveal } from '../../components/common/ScrollReveal';
 import { enquiryService } from '../../services/enquiryService';
@@ -273,6 +274,11 @@ _Chaudhari Auto Centre, Jalgaon Road, Pahur_`;
 
   return (
     <div className="bg-[#F8F9FA] min-h-screen text-gray-900 pb-16">
+      <SEO
+        title="Bike Restoration Job Sheet Form in Pahur"
+        description="Register your motorcycle for complete restoration at Chaudhary Auto Pahur. Choose your tasks: engine rebuild, oven paint, ceramic coating, and genuine parts."
+        canonicalPath="/restoration-form"
+      />
       {/* Top Banner */}
       <PageBanner
         title="BIKE RESTORATION FORM"

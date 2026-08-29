@@ -50,7 +50,15 @@ export const Footer: React.FC = () => {
                   to="/services"
                   className="hover:text-[#F5B900] transition-colors"
                 >
-                  Bike Services
+                  Bike Services &amp; Pricing
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/services/bike-restoration"
+                  className="hover:text-[#F5B900] transition-colors"
+                >
+                  Bike Restoration Details
                 </Link>
               </li>
               <li>
@@ -60,7 +68,7 @@ export const Footer: React.FC = () => {
                 >
                   <span>🏍️ Bike Restoration Form</span>
                   <span className="px-1.5 py-0.5 text-[9px] bg-[#F5B900]/20 text-[#F5B900] rounded font-bold">
-                    New
+                    Job Sheet
                   </span>
                 </Link>
               </li>

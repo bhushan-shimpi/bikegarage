@@ -1,5 +1,6 @@
 import React from 'react';
 import { Check, Bike, Award, Users, Wrench } from 'lucide-react';
+import { SEO } from '../../components/common/SEO';
 import { PageBanner } from '../../components/common/PageBanner';
 import { OptimizedImage } from '../../components/common/OptimizedImage';
 import { AnimatedNumber } from '../../components/common/AnimatedNumber';
@@ -16,19 +17,19 @@ export const AboutPage: React.FC = () => {
   const workshopGallery = [
     {
       img: '/images/about/bay1-ramp.jpg',
-      alt: 'Bay 1 - Motorcycle periodic servicing & ramp',
+      alt: 'Two-wheeler periodic servicing and maintenance ramp at Chaudhary Auto in Pahur',
     },
     {
       img: '/images/about/bay2-engine.jpg',
-      alt: 'Bay 2 - Engine rebuild & cylinder boring',
+      alt: 'Engine overhaul and cylinder boring workbench at Chaudhary Auto workshop in Jamner',
     },
     {
       img: '/images/about/bay3-restoration.jpg',
-      alt: 'Bay 3 - Classic bike & 2-stroke restoration',
+      alt: 'Motorcycle restoration bay for 100cc and vintage 2-stroke bikes in Pahur',
     },
     {
       img: '/images/about/bay4-wash.jpg',
-      alt: 'Bay 4 - Foam washing & high gloss polish',
+      alt: 'High-pressure foam wash and detailing bay at Chaudhary Auto',
     },
   ];
 
@@ -39,8 +40,36 @@ export const AboutPage: React.FC = () => {
     { value: 100, suffix: '%', label: 'Genuine Two-Wheeler Parts', icon: Wrench },
   ];
 
+  const aboutSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: 'About Chaudhary Auto Centre — Pahur, Jamner, Jalgaon',
+    description:
+      'Serving riders in Pahur, Jamner, and Jalgaon since 1994. Chaudhary Auto specializes exclusively in motorcycle maintenance, engine repairs, and vintage two-stroke bike restoration.',
+    mainEntity: {
+      '@type': 'MotorcycleRepairShop',
+      name: 'Chaudhary Auto',
+      foundingDate: '1994',
+      telephone: '+91-7387448878',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Main Road, Near Bus Stand',
+        addressLocality: 'Pahur',
+        addressRegion: 'Maharashtra',
+        postalCode: '424205',
+        addressCountry: 'IN',
+      },
+    },
+  };
+
   return (
     <div className="bg-[#F8F9FA] min-h-screen flex flex-col justify-between">
+      <SEO
+        title="About Our Bike Garage & 30-Year Legacy in Pahur"
+        description="Learn about Chaudhary Auto: Pahur's premier two-wheeler workshop founded in 1994. Over 30 years of trusted motorcycle servicing, engine rebuilds, and restoration craftsmanship."
+        canonicalPath="/about"
+        jsonLd={aboutSchema}
+      />
       <div>
         {/* Top Banner */}
         <PageBanner title="ABOUT CHAUDHARI AUTO CENTRE" breadcrumb="About Us" />

@@ -13,18 +13,18 @@ export const GallerySection: React.FC = () => {
   const [activeLightboxIndex, setActiveLightboxIndex] = useState<number | null>(null);
 
   const galleryImages: GalleryItem[] = [
-    { id: 'gal-1', src: '/images/Gallary/IMG_5148.JPG', alt: 'Chaudhari Auto Workshop Bay' },
-    { id: 'gal-2', src: '/images/Gallary/IMG_5150.JPG', alt: 'Chaudhari Auto Workshop Bay' },
-    { id: 'gal-3', src: '/images/Gallary/IMG_5153.JPG', alt: 'Chaudhari Auto Workshop Bay' },
-    { id: 'gal-4', src: '/images/Gallary/IMG_5154.JPG', alt: 'Chaudhari Auto Workshop Bay' },
-    { id: 'gal-5', src: '/images/Gallary/IMG_5156.JPG', alt: 'Chaudhari Auto Workshop Bay' },
-    { id: 'gal-6', src: '/images/Gallary/SaveClip.App_763561185_17960641896175433_1354440259135450971_n.jpg', alt: 'Chaudhari Auto Workshop Bay' },
-    { id: 'gal-7', src: '/images/Gallary/SaveClip.App_763684648_17960641551175433_1288108473921684178_n.jpg', alt: 'Chaudhari Auto Workshop Bay' },
-    { id: 'gal-8', src: '/images/Gallary/SaveClip.App_764116120_17960641887175433_663142152934308415_n.jpg', alt: 'Chaudhari Auto Workshop Bay' },
-    { id: 'gal-9', src: '/images/Gallary/SaveClip.App_764676210_17960641563175433_2615807174010287203_n.jpg', alt: 'Chaudhari Auto Workshop Bay' },
-    { id: 'gal-10', src: '/images/Gallary/SaveClip.App_764694001_17960641872175433_1259823115832174628_n.jpg', alt: 'Chaudhari Auto Workshop Bay' },
-    { id: 'gal-11', src: '/images/Gallary/SaveClip.App_764975447_17960641848175433_9031705044490108474_n.jpg', alt: 'Chaudhari Auto Workshop Bay' },
-    { id: 'gal-12', src: '/images/Gallary/SaveClip.App_765619840_17960641572175433_3593156307828676883_n.jpg', alt: 'Chaudhari Auto Workshop Bay' },
+    { id: 'gal-1', src: '/images/Gallary/IMG_5148.JPG', alt: 'Two-wheeler periodic servicing in progress at Chaudhary Auto Pahur' },
+    { id: 'gal-2', src: '/images/Gallary/IMG_5150.JPG', alt: 'Motorcycle engine repair and valve adjustments at Pahur workshop' },
+    { id: 'gal-3', src: '/images/Gallary/IMG_5153.JPG', alt: 'Complete bike disassembly on service ramp at Chaudhary Auto' },
+    { id: 'gal-4', src: '/images/Gallary/IMG_5154.JPG', alt: 'Motorcycle paint baking and finishing at Chaudhary Auto workshop' },
+    { id: 'gal-5', src: '/images/Gallary/IMG_5156.JPG', alt: 'Hero Splendor chassis and engine overhaul in progress' },
+    { id: 'gal-6', src: '/images/Gallary/SaveClip.App_763561185_17960641896175433_1354440259135450971_n.jpg', alt: 'Bajaj Pulsar 150 restoration detailing at Chaudhary Auto Pahur' },
+    { id: 'gal-7', src: '/images/Gallary/SaveClip.App_763684648_17960641551175433_1288108473921684178_n.jpg', alt: 'Two-stroke Yamaha RX100 engine restoration workbench' },
+    { id: 'gal-8', src: '/images/Gallary/SaveClip.App_764116120_17960641887175433_663142152934308415_n.jpg', alt: 'Motorcycle chain cleaning and lubrication service in Jamner' },
+    { id: 'gal-9', src: '/images/Gallary/SaveClip.App_764676210_17960641563175433_2615807174010287203_n.jpg', alt: 'High-gloss ceramic coating applied on restored motorcycle fuel tank' },
+    { id: 'gal-10', src: '/images/Gallary/SaveClip.App_764694001_17960641872175433_1259823115832174628_n.jpg', alt: 'Original factory fiber panels and visor assembly at Chaudhary Auto' },
+    { id: 'gal-11', src: '/images/Gallary/SaveClip.App_764975447_17960641848175433_9031705044490108474_n.jpg', alt: 'Front fork suspension servicing and oil replacement' },
+    { id: 'gal-12', src: '/images/Gallary/SaveClip.App_765619840_17960641572175433_3593156307828676883_n.jpg', alt: 'Final road test inspection of restored motorcycle at Chaudhary Auto' },
   ];
 
   const prevLightbox = () => {

@@ -70,7 +70,7 @@ export const WhyChooseUs: React.FC = () => {
             <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-[#222222] group">
               <OptimizedImage
                 src="/images/why-choose-us.jpg"
-                alt="Motorcycle repair and engine assembly at Chaudhari Auto"
+                alt="Motorcycle technician performing engine repair and assembly at Chaudhary Auto Pahur"
                 className="w-full h-80 sm:h-[420px] object-cover object-center group-hover:scale-105 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent pointer-events-none" />

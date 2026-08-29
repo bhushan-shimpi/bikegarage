@@ -1,11 +1,61 @@
 import React from 'react';
 import { Phone, Mail, MapPin, Clock, MessageCircle, Navigation } from 'lucide-react';
+import { SEO } from '../../components/common/SEO';
 import { PageBanner } from '../../components/common/PageBanner';
 import { ScrollReveal } from '../../components/common/ScrollReveal';
 
 export const ContactPage: React.FC = () => {
+  const contactSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: 'Contact Chaudhary Auto — Pahur, Jamner, Jalgaon',
+    description:
+      'Get in touch with Chaudhary Auto Centre in Pahur for two-wheeler servicing, repairs, and bike restoration consultations. Phone: +91 7387448878.',
+    mainEntity: {
+      '@type': 'MotorcycleRepairShop',
+      name: 'Chaudhary Auto',
+      telephone: '+91-7387448878',
+      email: 'chaudhariautopahur@gmail.com',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Main Road, Near Bus Stand',
+        addressLocality: 'Pahur',
+        addressRegion: 'Maharashtra',
+        postalCode: '424205',
+        addressCountry: 'IN',
+      },
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: 20.7078,
+        longitude: 75.7196,
+      },
+      openingHoursSpecification: [
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday',
+          ],
+          opens: '09:00',
+          closes: '20:00',
+        },
+      ],
+    },
+  };
+
   return (
     <div className="bg-[#F8F9FA] min-h-screen flex flex-col justify-between">
+      <SEO
+        title="Contact Us & Workshop Location in Pahur, Jamner"
+        description="Visit Chaudhary Auto at Main Road, Near Bus Stand, Pahur, Taluka Jamner, Dist. Jalgaon. Call +91 73874 48878 or message us on WhatsApp for bike servicing appointments."
+        canonicalPath="/contact"
+        jsonLd={contactSchema}
+      />
       <div>
         {/* Top Banner */}
         <PageBanner title="CONTACT CHAUDHARI AUTO CENTRE" breadcrumb="Contact Us" />

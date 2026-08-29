@@ -14,6 +14,7 @@ import {
   Copy,
   Check,
 } from 'lucide-react';
+import { SEO } from '../../components/common/SEO';
 import { PageBanner } from '../../components/common/PageBanner';
 import { ScrollReveal } from '../../components/common/ScrollReveal';
 import { inquirySchema, InquirySchemaType } from '../../utils/validators';
@@ -111,6 +112,11 @@ export const InquiryPage: React.FC = () => {
 
   return (
     <div className="bg-[#F8F9FA] min-h-screen pb-16">
+      <SEO
+        title="Book Bike Service & Workshop Appointment in Pahur"
+        description="Book your two-wheeler service appointment at Chaudhary Auto in Pahur, Jamner. Fast scheduling, transparent pricing, and genuine spare parts."
+        canonicalPath="/inquiry"
+      />
       {/* Top Banner */}
       <PageBanner title="BOOK SERVICE / ENQUIRY" breadcrumb="Book & Enquire" />
 
