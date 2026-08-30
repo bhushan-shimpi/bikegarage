@@ -389,11 +389,6 @@ export const DashboardPage: React.FC = () => {
                       {rep.paymentStatus === 'Paid' ? 'PAID' : 'PENDING'}
                     </span>
 
-                    {rep.paymentMode && (
-                      <span className="text-[10px] font-bold bg-gray-100 text-gray-700 px-2 py-0.5 rounded-md border border-gray-200">
-                        {rep.paymentMode}
-                      </span>
-                    )}
 
                     {rep.mechanicName && (
                       <span className="inline-flex items-center gap-1 text-[10px] font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md border border-purple-200">

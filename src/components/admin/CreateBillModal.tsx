@@ -702,23 +702,6 @@ Helpline: +91 7387448878 / 9503853143`;
                       }
                       className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-xs font-bold text-gray-900 focus:outline-none focus:border-[#F5B900]"
                     />
-                    {/* Quick 1-tap labor charge preset pills */}
-                    <div className="flex flex-wrap gap-1 mt-1.5">
-                      {[100, 150, 200, 250, 300, 500].map((amt) => (
-                        <button
-                          key={amt}
-                          type="button"
-                          onClick={() => setFormData({ ...formData, laborCharge: amt })}
-                          className={`px-1.5 py-0.5 rounded text-[10px] font-bold transition-all ${
-                            formData.laborCharge === amt
-                              ? 'bg-amber-400 text-black shadow-xs'
-                              : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-                          }`}
-                        >
-                          ₹{amt}
-                        </button>
-                      ))}
-                    </div>
                   </div>
 
                   <div>

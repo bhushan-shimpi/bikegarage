@@ -403,11 +403,6 @@ export const AdminRepairHistoryPage: React.FC = () => {
                     {rep.paymentStatus === 'Paid' ? 'PAID' : 'PENDING'}
                   </span>
 
-                  {rep.paymentMode && (
-                    <span className="text-[10px] font-bold bg-gray-100 text-gray-700 px-2 py-0.5 rounded-md border border-gray-200">
-                      {rep.paymentMode}
-                    </span>
-                  )}
 
                   <span
                     className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
