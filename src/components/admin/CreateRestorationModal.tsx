@@ -235,15 +235,16 @@ ${otherNotes ? `\nSpecial Notes: ${otherNotes}` : ''}
                   onChange={(e) => setBikeBrand(e.target.value)}
                   className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white cursor-pointer"
                 >
-                  <option value="Yamaha">Yamaha</option>
-                  <option value="Royal Enfield">Royal Enfield</option>
+                  <option value="Hero">Hero</option>
                   <option value="Hero Honda">Hero Honda</option>
-                  <option value="Bajaj">Bajaj</option>
                   <option value="Honda">Honda</option>
+                  <option value="Bajaj">Bajaj</option>
+                  <option value="Yamaha">Yamaha</option>
+                  <option value="TVS">TVS</option>
+                  <option value="Royal Enfield">Royal Enfield</option>
                   <option value="Suzuki">Suzuki</option>
                   <option value="Jawa / Yezdi">Jawa / Yezdi</option>
                   <option value="Rajdoot">Rajdoot</option>
-                  <option value="TVS">TVS</option>
                   <option value="Other">Other</option>
                 </select>
               </div>

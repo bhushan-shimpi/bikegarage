@@ -415,8 +415,8 @@ Helpline: +91 7387448878 / 9503853143`;
                       className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
                     >
                       <option value="Hero">Hero</option>
-                      <option value="Bajaj">Bajaj</option>
                       <option value="Honda">Honda</option>
+                      <option value="Bajaj">Bajaj</option>
                       <option value="Yamaha">Yamaha</option>
                       <option value="TVS">TVS</option>
                       <option value="Royal Enfield">Royal Enfield</option>
