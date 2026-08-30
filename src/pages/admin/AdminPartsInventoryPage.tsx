@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Tag,
   Plus,
@@ -12,26 +12,35 @@ import {
   Save,
   Wrench,
   Check,
+  RotateCw,
 } from 'lucide-react';
 import { partService } from '../../services/partService';
 import { SparePart } from '../../types/customer';
 
-const CATEGORIES = [
-  'All',
-  'Lubricants',
-  'Brakes',
-  'Electrical',
+const ALL_MASTER_CATEGORIES = [
   'Engine',
   'Transmission',
-  'Controls',
+  'Chain & Drive',
+  'Brakes',
+  'Wheels & Tyres',
   'Suspension',
+  'Electrical',
+  'Lighting',
+  'Fuel System',
+  'Cooling',
+  'Exhaust',
+  'Cables & Controls',
   'Body',
+  'Bearings & Seals',
+  'Consumables',
+  'Hardware',
   'General',
 ];
 
 export const AdminPartsInventoryPage: React.FC = () => {
   const [parts, setParts] = useState<SparePart[]>(() => partService.getCached());
   const [loading, setLoading] = useState(() => partService.getCached().length === 0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [search, setSearch] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -76,11 +85,25 @@ export const AdminPartsInventoryPage: React.FC = () => {
     }
   };
 
-  const loadParts = async () => {
-    if (parts.length === 0) setLoading(true);
-    const data = await partService.getAll();
+  const loadParts = async (force = false) => {
+    if (parts.length === 0 || force) setLoading(true);
+    const data = await partService.getAll(force);
     setParts(data);
     setLoading(false);
+  };
+
+  const handleRefreshFromDb = async () => {
+    setIsRefreshing(true);
+    try {
+      const data = await partService.getAll(true);
+      setParts(data);
+      setSuccessMsg(`Synced ${data.length} parts from database!`);
+      setTimeout(() => setSuccessMsg(null), 3000);
+    } catch {
+      alert('Failed to refresh parts from database');
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   useEffect(() => {
@@ -151,14 +174,20 @@ export const AdminPartsInventoryPage: React.FC = () => {
     }
   };
 
+  const categoriesList = useMemo(() => {
+    const raw = Array.from(new Set(parts.map((p) => p.category || 'General'))).filter(Boolean);
+    const sorted = raw.sort((a, b) => a.localeCompare(b));
+    return ['All', ...sorted];
+  }, [parts]);
+
   const filtered = parts.filter((p) => {
     const matchesCategory =
-      categoryFilter === 'All' || p.category.toLowerCase() === categoryFilter.toLowerCase();
+      categoryFilter === 'All' || p.category?.toLowerCase() === categoryFilter.toLowerCase();
     const query = search.trim().toLowerCase();
     const matchesSearch =
       !query ||
       p.name.toLowerCase().includes(query) ||
-      p.category.toLowerCase().includes(query);
+      p.category?.toLowerCase().includes(query);
     return matchesCategory && matchesSearch;
   });
 
@@ -171,7 +200,7 @@ export const AdminPartsInventoryPage: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Header */}
-      <div className="flex items-start sm:items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2.5">
             <Tag className="w-6 h-6 text-[#DFA500] shrink-0" />
@@ -182,13 +211,25 @@ export const AdminPartsInventoryPage: React.FC = () => {
           </p>
         </div>
 
-        <button
-          onClick={handleOpenAdd}
-          className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-sm transition-all shrink-0 active:scale-95"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add Part</span>
-        </button>
+        <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={handleRefreshFromDb}
+            disabled={isRefreshing}
+            className="px-3 py-2.5 rounded-xl border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all active:scale-95 disabled:opacity-60 cursor-pointer"
+            title="Sync latest parts list from database"
+          >
+            <RotateCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin text-[#DFA500]' : ''}`} />
+            <span>{isRefreshing ? 'Syncing...' : 'Sync DB'}</span>
+          </button>
+
+          <button
+            onClick={handleOpenAdd}
+            className="px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#F5B900] hover:bg-[#DFA500] text-black text-xs sm:text-sm font-bold flex items-center gap-1.5 shadow-sm transition-all shrink-0 active:scale-95"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Part</span>
+          </button>
+        </div>
       </div>
 
       {/* Success Notification */}
@@ -257,9 +298,9 @@ export const AdminPartsInventoryPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Category Pills */}
+        {/* Dynamic Category Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 text-xs">
-          {CATEGORIES.map((cat) => (
+          {categoriesList.map((cat) => (
             <button
               key={cat}
               onClick={() => setCategoryFilter(cat)}
@@ -426,7 +467,7 @@ export const AdminPartsInventoryPage: React.FC = () => {
                   onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                   className="w-full bg-gray-50 border border-gray-300 rounded-lg px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white"
                 >
-                  {CATEGORIES.filter((c) => c !== 'All').map((cat) => (
+                  {ALL_MASTER_CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
                       {cat}
                     </option>

@@ -234,10 +234,14 @@ const defaultParts: SparePart[] = [
 
 export const partService = {
   getCached: (): SparePart[] => {
-    return storageService.get<SparePart[]>(STORAGE_KEY, defaultParts);
+    const cached = storageService.get<SparePart[]>(STORAGE_KEY, []);
+    if (cached && cached.length >= defaultParts.length) {
+      return cached;
+    }
+    return defaultParts;
   },
 
-  getAll: async (): Promise<SparePart[]> => {
+  getAll: async (forceRefresh = false): Promise<SparePart[]> => {
     try {
       const res = await apiClient.get<{ success: boolean; data: any[] }>('/api/parts');
       if (res.success && Array.isArray(res.data) && res.data.length > 0) {
@@ -252,10 +256,27 @@ export const partService = {
     } catch (err) {
       console.warn('Failed to fetch parts from API, checking local storage:', err);
     }
-    return storageService.get<SparePart[]>(STORAGE_KEY, defaultParts);
+    const cached = storageService.get<SparePart[]>(STORAGE_KEY, []);
+    if (!forceRefresh && cached && cached.length >= defaultParts.length) {
+      return cached;
+    }
+    storageService.set(STORAGE_KEY, defaultParts);
+    return defaultParts;
   },
 
   create: async (data: Omit<SparePart, 'id'>): Promise<SparePart> => {
+    const existing = storageService.get<SparePart[]>(STORAGE_KEY, defaultParts);
+    const newId = `prt-${Date.now()}`;
+    const newPart: SparePart = {
+      id: newId,
+      ...data,
+      price: Number(data.price) || 0,
+      stockQuantity: Number(data.stockQuantity) || 0,
+    };
+
+    // Optimistically update local storage
+    storageService.set(STORAGE_KEY, [...existing, newPart]);
+
     try {
       const res = await apiClient.post<{ success: boolean; data: any }>('/api/parts', data);
       if (res.success && res.data) {
@@ -264,26 +285,27 @@ export const partService = {
           price: Number(res.data.price) || 0,
           stockQuantity: Number(res.data.stockQuantity) || 0,
         };
-        const existing = await partService.getAll();
-        storageService.set(STORAGE_KEY, [...existing, created]);
+        const current = storageService.get<SparePart[]>(STORAGE_KEY, defaultParts);
+        storageService.set(
+          STORAGE_KEY,
+          current.map((p) => (p.id === newId ? created : p))
+        );
         return created;
       }
     } catch (err) {
       console.error('Failed to create part via API:', err);
     }
 
-    const fallback: SparePart = {
-      id: `prt-${Date.now()}`,
-      ...data,
-      price: Number(data.price) || 0,
-      stockQuantity: Number(data.stockQuantity) || 0,
-    };
-    const existing = await partService.getAll();
-    storageService.set(STORAGE_KEY, [...existing, fallback]);
-    return fallback;
+    return newPart;
   },
 
   update: async (id: string, data: Partial<SparePart>): Promise<SparePart> => {
+    // 1. Optimistically update local cache
+    const existing = storageService.get<SparePart[]>(STORAGE_KEY, defaultParts);
+    const updatedLocal = existing.map((p) => (p.id === id ? { ...p, ...data } : p));
+    storageService.set(STORAGE_KEY, updatedLocal);
+
+    // 2. Persist to API
     try {
       const res = await apiClient.put<{ success: boolean; data: any }>(`/api/parts/${id}`, data);
       if (res.success && res.data) {
@@ -292,10 +314,10 @@ export const partService = {
           price: Number(res.data.price) || 0,
           stockQuantity: Number(res.data.stockQuantity) || 0,
         };
-        const existing = await partService.getAll();
+        const current = storageService.get<SparePart[]>(STORAGE_KEY, defaultParts);
         storageService.set(
           STORAGE_KEY,
-          existing.map((p) => (p.id === id ? updated : p))
+          current.map((p) => (p.id === id ? updated : p))
         );
         return updated;
       }
@@ -303,14 +325,11 @@ export const partService = {
       console.error('Failed to update part via API:', err);
     }
 
-    const existing = await partService.getAll();
-    const updated = existing.map((p) => (p.id === id ? { ...p, ...data } : p));
-    storageService.set(STORAGE_KEY, updated);
-    return updated.find((p) => p.id === id)!;
+    return updatedLocal.find((p) => p.id === id) || ({ id, ...data } as SparePart);
   },
 
   delete: async (id: string): Promise<boolean> => {
-    const existing = await partService.getAll();
+    const existing = storageService.get<SparePart[]>(STORAGE_KEY, defaultParts);
     storageService.set(
       STORAGE_KEY,
       existing.filter((p) => p.id !== id)
