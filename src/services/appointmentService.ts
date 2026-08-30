@@ -10,9 +10,9 @@ const SYNC_COOLDOWN = 60 * 1000;
 
 export const appointmentService = {
   // Syncs from Supabase PostgreSQL API, updates local cache
-  syncWithBackend: async (): Promise<Appointment[]> => {
+  syncWithBackend: async (force = false): Promise<Appointment[]> => {
     const now = Date.now();
-    if (isSyncingAppointments || now - lastAppointmentsSync < SYNC_COOLDOWN) {
+    if (!force && (isSyncingAppointments || now - lastAppointmentsSync < SYNC_COOLDOWN)) {
       return appointmentService.getCached();
     }
 
@@ -25,6 +25,7 @@ export const appointmentService = {
         // Filter out any legacy dummy records
         const realData = res.data.filter((a) => !['APT-101', 'APT-102'].includes(a.id));
         storageService.set(STORAGE_KEY, realData);
+        window.dispatchEvent(new Event('chaudhari_appointments_updated'));
         return realData;
       }
     } catch {

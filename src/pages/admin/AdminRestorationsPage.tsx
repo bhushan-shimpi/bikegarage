@@ -24,12 +24,16 @@ export const AdminRestorationsPage: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedJobSheetId, setSelectedJobSheetId] = useState<string | null>(null);
 
-  const loadData = () => {
-    setEnquiries(enquiryService.getAll());
+  const loadData = async (force = false) => {
+    const all = await enquiryService.syncWithBackend(force);
+    setEnquiries(all);
   };
 
   useEffect(() => {
-    loadData();
+    loadData(true);
+    const handleUpdate = () => loadData(false);
+    window.addEventListener('chaudhari_enquiries_updated', handleUpdate);
+    return () => window.removeEventListener('chaudhari_enquiries_updated', handleUpdate);
   }, []);
 
   // Filter restoration inquiries

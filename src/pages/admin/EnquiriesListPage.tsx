@@ -31,13 +31,16 @@ export const EnquiriesListPage: React.FC = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const typeFilter = searchParams.get('type') || 'all';
 
-  const loadData = () => {
-    const all = enquiryService.getAll();
+  const loadData = async (force = false) => {
+    const all = await enquiryService.syncWithBackend(force);
     setEnquiries(all.filter((e) => !isRestorationEnquiry(e)));
   };
 
   useEffect(() => {
-    loadData();
+    loadData(true);
+    const handleUpdate = () => loadData(false);
+    window.addEventListener('chaudhari_enquiries_updated', handleUpdate);
+    return () => window.removeEventListener('chaudhari_enquiries_updated', handleUpdate);
   }, []);
 
   const filterTabs = [

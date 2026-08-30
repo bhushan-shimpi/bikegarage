@@ -9,9 +9,9 @@ const SYNC_COOLDOWN = 60 * 1000;
 
 export const enquiryService = {
   // Syncs with Supabase PostgreSQL API, updates local cache
-  syncWithBackend: async (): Promise<Enquiry[]> => {
+  syncWithBackend: async (force = false): Promise<Enquiry[]> => {
     const now = Date.now();
-    if (isSyncingEnquiries || now - lastEnquiriesSync < SYNC_COOLDOWN) {
+    if (!force && (isSyncingEnquiries || now - lastEnquiriesSync < SYNC_COOLDOWN)) {
       return enquiryService.getCached();
     }
 
@@ -23,6 +23,7 @@ export const enquiryService = {
       if (res.success && Array.isArray(res.data)) {
         const realData = res.data.filter((e) => !['enq-001', 'enq-002', 'enq-003', 'enq-004', 'enq-005'].includes(e.id));
         storage.set(storage.keys.ENQUIRIES, realData);
+        window.dispatchEvent(new Event('chaudhari_enquiries_updated'));
         return realData;
       }
     } catch {
