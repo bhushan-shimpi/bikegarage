@@ -89,8 +89,8 @@ export const RestorationFormPage: React.FC = () => {
     cityVillage: '',
     referralSource: 'Walk-in',
     referralOther: '',
-    bikeBrand: 'Yamaha',
-    bikeName: 'RX100',
+    bikeBrand: 'Hero',
+    bikeName: '',
     bikeModel: '',
     modelYear: '',
     registrationNumber: '',
@@ -521,11 +521,12 @@ _Chaudhari Auto, Jalgaon Road, Pahur_`;
                         onChange={(e) => setFormData({ ...formData, bikeBrand: e.target.value })}
                         className="w-full bg-gray-50 border border-gray-200 rounded-lg py-2.5 px-3 text-sm text-gray-900 focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#F5B900]"
                       >
-                        <option value="Yamaha">Yamaha</option>
-                                                <option value="Bajaj">Bajaj</option>
-                        <option value="Honda">Honda</option>
                         <option value="Hero">Hero / Hero Honda</option>
+                        <option value="Honda">Honda</option>
+                        <option value="Bajaj">Bajaj</option>
+                        <option value="Yamaha">Yamaha</option>
                         <option value="TVS">TVS</option>
+                        <option value="Royal Enfield">Royal Enfield</option>
                         <option value="Suzuki">Suzuki</option>
                         <option value="Jawa / Yezdi">Jawa / Yezdi</option>
                         <option value="Rajdoot">Rajdoot</option>
