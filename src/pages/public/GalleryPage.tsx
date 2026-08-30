@@ -6,7 +6,6 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
-  ArrowRight,
   Wrench,
   Sparkles,
   Calendar,
@@ -235,49 +234,24 @@ export const GalleryPage: React.FC = () => {
             <span className="hidden sm:inline">Chaudhari Auto Centre • Pahur Workshop</span>
           </div>
 
-          {/* Photos Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+          {/* Photos Grid - Images Only */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
             {filteredPhotos.map((photo, idx) => (
-              <ScrollReveal key={photo.id} direction="up" delay={(idx % 4) * 60}>
+              <ScrollReveal key={photo.id} direction="up" delay={(idx % 4) * 50}>
                 <div
                   onClick={() => setActiveLightboxIndex(idx)}
-                  className="group bg-[#141414] rounded-2xl overflow-hidden border border-[#242424] hover:border-[#F5B900]/60 cursor-pointer shadow-lg transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-[#F5B900]/15 flex flex-col justify-between"
+                  className="group relative aspect-[4/3] rounded-2xl overflow-hidden bg-[#141414] border border-[#242424] hover:border-[#F5B900]/80 cursor-pointer shadow-lg transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#F5B900]/20"
                 >
-                  {/* Photo Container */}
-                  <div className="relative h-56 sm:h-60 w-full overflow-hidden bg-black">
-                    <img
-                      src={photo.src}
-                      alt={photo.alt}
-                      loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
-                    />
+                  <img
+                    src={photo.src}
+                    alt={photo.alt}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
+                  />
 
-                    {/* Category Badge */}
-                    <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-sm border border-white/20 text-[#F5B900] text-[10px] font-black uppercase px-2.5 py-1 rounded-md tracking-wider">
-                      {photo.category}
-                    </div>
-
-                    {/* Maximize Icon on Hover */}
-                    <div className="absolute top-3 right-3 w-8 h-8 rounded-lg bg-black/75 backdrop-blur-sm border border-white/20 text-[#F5B900] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Maximize2 className="w-4 h-4" />
-                    </div>
-                  </div>
-
-                  {/* Caption info */}
-                  <div className="p-4 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h3 className="font-bold text-sm text-white group-hover:text-[#F5B900] transition-colors line-clamp-1">
-                        {photo.title}
-                      </h3>
-                      <p className="text-xs text-neutral-400 mt-1 line-clamp-2 leading-relaxed">
-                        {photo.description}
-                      </p>
-                    </div>
-
-                    <div className="mt-3 pt-3 border-t border-[#222] flex items-center justify-between text-[11px] text-[#F5B900] font-bold">
-                      <span>View Full Resolution</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                    </div>
+                  {/* Subtle Maximize Icon on Hover */}
+                  <div className="absolute top-2.5 right-2.5 w-8 h-8 rounded-lg bg-black/75 backdrop-blur-sm border border-white/20 text-[#F5B900] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md">
+                    <Maximize2 className="w-4 h-4" />
                   </div>
                 </div>
               </ScrollReveal>
