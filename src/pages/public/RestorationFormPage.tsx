@@ -528,8 +528,6 @@ _Chaudhari Auto, Jalgaon Road, Pahur_`;
                         <option value="TVS">TVS</option>
                         <option value="Royal Enfield">Royal Enfield</option>
                         <option value="Suzuki">Suzuki</option>
-                        <option value="Jawa / Yezdi">Jawa / Yezdi</option>
-                        <option value="Rajdoot">Rajdoot</option>
                         <option value="Other">Other Brand</option>
                       </select>
                     </div>
