@@ -231,7 +231,7 @@ export const ContactPage: React.FC = () => {
                 <div className="relative w-full h-80 sm:h-full min-h-[380px] rounded-xl overflow-hidden border border-gray-300 shadow-inner bg-gray-100 group">
                   <iframe
                     title="Chaudhari Auto Pahur Location Map"
-                    src="https://maps.google.com/maps?q=Chaudhari%20Auto%20Centre,%20Pahur,%20Pahur%20Peth,%20Maharashtra%20424205&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                    src="https://maps.google.com/maps?q=20.713726,75.682441&t=&z=17&ie=UTF8&iwloc=&output=embed"
                     className="w-full h-full border-0"
                     loading="lazy"
                   />

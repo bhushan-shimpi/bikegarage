@@ -43,7 +43,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service }) => {
 
   return (
     <>
-      <div className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-[#F5B900] hover:shadow-md transition-all duration-200 flex flex-col justify-between">
+      <div className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-[#F5B900] hover:shadow-md transition-all duration-200 flex flex-col justify-between h-full">
         <div>
           {/* Top Image */}
           <div

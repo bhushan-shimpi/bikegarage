@@ -40,9 +40,9 @@ export const ServicesOverview: React.FC = () => {
         </ScrollReveal>
 
         {/* 12 Services Grid — 2 columns on mobile device */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 items-stretch">
           {services.map((service, idx) => (
-            <ScrollReveal key={service.id} direction="up" delay={(idx % 4) * 80}>
+            <ScrollReveal key={service.id} direction="up" delay={(idx % 4) * 80} className="h-full">
               <ServiceCard service={service} />
             </ScrollReveal>
           ))}
