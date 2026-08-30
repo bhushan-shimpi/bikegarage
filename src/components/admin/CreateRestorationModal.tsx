@@ -236,7 +236,6 @@ ${otherNotes ? `\nSpecial Notes: ${otherNotes}` : ''}
                   className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-xs text-gray-900 focus:outline-none focus:border-[#F5B900] focus:bg-white cursor-pointer"
                 >
                   <option value="Hero">Hero</option>
-                  <option value="Hero Honda">Hero Honda</option>
                   <option value="Honda">Honda</option>
                   <option value="Bajaj">Bajaj</option>
                   <option value="Yamaha">Yamaha</option>
