@@ -511,37 +511,249 @@ export async function initDb() {
       );
     `);
 
-    // Seed default common motorcycle spare parts if empty
-    const partsCheck = await client.query('SELECT COUNT(*) FROM parts_inventory');
-    if (parseInt(partsCheck.rows[0].count, 10) === 0) {
-      console.log('Seeding initial motorcycle spare parts inventory...');
-      const defaultParts = [
-        ['prt-1', '4T Engine Oil 10W-30 (1L)', 'Lubricants', 350, 25],
-        ['prt-2', '4T Engine Oil 20W-40 (1L)', 'Lubricants', 320, 20],
-        ['prt-3', 'Front Brake Shoe Set', 'Brakes', 180, 15],
-        ['prt-4', 'Rear Brake Shoe Set', 'Brakes', 180, 15],
-        ['prt-5', 'Front Disc Brake Pads', 'Brakes', 220, 12],
-        ['prt-6', 'Spark Plug (Champion / Bosch)', 'Electrical', 120, 30],
-        ['prt-7', 'Chain & Sprocket Kit', 'Transmission', 850, 8],
-        ['prt-8', 'Clutch Cable Assembly', 'Controls', 110, 15],
-        ['prt-9', 'Throttle / Accelerator Cable', 'Controls', 90, 12],
-        ['prt-10', 'OEM Air Filter Element', 'Engine', 150, 18],
-        ['prt-11', 'Halogen Headlight Bulb (12V 35W)', 'Electrical', 120, 25],
-        ['prt-12', '12V 4Ah Maintenance-Free Battery', 'Electrical', 1150, 6],
-        ['prt-13', 'Front Fork Oil Seal & Fork Oil', 'Suspension', 250, 10],
-        ['prt-14', 'Rear View Mirror Set (Pair)', 'Body', 180, 8],
-        ['prt-15', 'Drive Chain Lube & Cleaner Spray', 'General', 190, 14],
-      ];
+    // Seed/Update master motorcycle spare parts inventory
+    console.log('Seeding / updating complete motorcycle spare parts inventory...');
+    const masterParts = [
+      // 🔧 Engine Parts
+      ['prt-e01', 'Engine Oil (4T 10W-30, 1L)', 'Engine', 350, 25],
+      ['prt-e02', 'Engine Oil (4T 20W-40, 1L)', 'Engine', 320, 20],
+      ['prt-e03', 'Oil Filter', 'Engine', 120, 20],
+      ['prt-e04', 'Air Filter', 'Engine', 150, 18],
+      ['prt-e05', 'Spark Plug', 'Engine', 120, 30],
+      ['prt-e06', 'Spark Plug Cap', 'Engine', 80, 15],
+      ['prt-e07', 'Clutch Plate Set', 'Engine', 550, 10],
+      ['prt-e08', 'Clutch Spring Set', 'Engine', 120, 12],
+      ['prt-e09', 'Clutch Cable', 'Engine', 110, 15],
+      ['prt-e10', 'Clutch Bearing', 'Engine', 180, 8],
+      ['prt-e11', 'Clutch Housing', 'Engine', 450, 5],
+      ['prt-e12', 'Piston', 'Engine', 850, 6],
+      ['prt-e13', 'Piston Ring Set', 'Engine', 350, 8],
+      ['prt-e14', 'Cylinder Block', 'Engine', 2200, 3],
+      ['prt-e15', 'Cylinder Head', 'Engine', 1800, 3],
+      ['prt-e16', 'Head Gasket', 'Engine', 180, 12],
+      ['prt-e17', 'Valve (Intake / Exhaust)', 'Engine', 220, 10],
+      ['prt-e18', 'Valve Seal', 'Engine', 80, 15],
+      ['prt-e19', 'Valve Spring', 'Engine', 90, 12],
+      ['prt-e20', 'Camshaft', 'Engine', 1200, 4],
+      ['prt-e21', 'Cam Chain', 'Engine', 350, 8],
+      ['prt-e22', 'Cam Chain Tensioner', 'Engine', 180, 8],
+      ['prt-e23', 'Crankshaft', 'Engine', 3500, 2],
+      ['prt-e24', 'Crank Bearing', 'Engine', 280, 6],
+      ['prt-e25', 'Connecting Rod', 'Engine', 950, 4],
+      ['prt-e26', 'Rocker Arm', 'Engine', 320, 6],
+      ['prt-e27', 'Engine Gasket Set (Full)', 'Engine', 450, 8],
+      ['prt-e28', 'Crankcase Gasket', 'Engine', 120, 10],
+      ['prt-e29', 'Oil Seal', 'Engine', 60, 20],
+      ['prt-e30', 'Timing Chain', 'Engine', 280, 8],
+      ['prt-e31', 'Timing Gear', 'Engine', 350, 6],
 
-      for (const p of defaultParts) {
-        await client.query(
-          `INSERT INTO parts_inventory (id, name, category, price, stock_quantity)
-           VALUES ($1, $2, $3, $4, $5) ON CONFLICT (id) DO NOTHING`,
-          p
-        );
-      }
-      console.log('✅ Initial spare parts seeded successfully!');
+      // ⚙️ Transmission / Gearbox
+      ['prt-g01', 'Gear Lever', 'Transmission', 180, 10],
+      ['prt-g02', 'Gear Shaft', 'Transmission', 450, 5],
+      ['prt-g03', 'Gear Selector Fork', 'Transmission', 320, 5],
+      ['prt-g04', 'Gear Bearing', 'Transmission', 150, 8],
+      ['prt-g05', 'Gear Sprocket', 'Transmission', 280, 8],
+      ['prt-g06', 'Primary Gear', 'Transmission', 550, 4],
+      ['prt-g07', 'Secondary Gear', 'Transmission', 550, 4],
+      ['prt-g08', 'Gearbox Gasket', 'Transmission', 90, 10],
+      ['prt-g09', 'Gear Oil (80W-90, 100ml)', 'Transmission', 60, 20],
+
+      // 🛞 Chain & Drive System
+      ['prt-c01', 'Drive Chain', 'Chain & Drive', 450, 12],
+      ['prt-c02', 'Front Sprocket', 'Chain & Drive', 180, 12],
+      ['prt-c03', 'Rear Sprocket', 'Chain & Drive', 320, 10],
+      ['prt-c04', 'Chain & Sprocket Kit', 'Chain & Drive', 850, 8],
+      ['prt-c05', 'Chain Adjuster', 'Chain & Drive', 80, 15],
+      ['prt-c06', 'Chain Slider', 'Chain & Drive', 120, 10],
+      ['prt-c07', 'Chain Cover', 'Chain & Drive', 150, 8],
+
+      // 🛑 Brake System — Front
+      ['prt-b01', 'Front Brake Pads', 'Brakes', 220, 12],
+      ['prt-b02', 'Front Brake Disc', 'Brakes', 650, 6],
+      ['prt-b03', 'Front Brake Caliper', 'Brakes', 1200, 4],
+      ['prt-b04', 'Caliper Piston', 'Brakes', 180, 8],
+      ['prt-b05', 'Brake Hose', 'Brakes', 220, 8],
+      ['prt-b06', 'Master Cylinder', 'Brakes', 480, 5],
+      ['prt-b07', 'Brake Lever (Front)', 'Brakes', 150, 10],
+      ['prt-b08', 'Brake Fluid (DOT 4)', 'Brakes', 120, 15],
+      ['prt-b09', 'Brake Shoe Set (Drum — Front)', 'Brakes', 180, 15],
+      // Rear
+      ['prt-b10', 'Rear Brake Pads', 'Brakes', 200, 12],
+      ['prt-b11', 'Rear Brake Disc', 'Brakes', 620, 6],
+      ['prt-b12', 'Rear Brake Caliper', 'Brakes', 1100, 4],
+      ['prt-b13', 'Rear Brake Shoe Set (Drum)', 'Brakes', 180, 15],
+      ['prt-b14', 'Brake Drum (Rear)', 'Brakes', 380, 5],
+      ['prt-b15', 'Rear Brake Cable', 'Brakes', 110, 12],
+      ['prt-b16', 'Brake Rod', 'Brakes', 90, 10],
+      ['prt-b17', 'Brake Spring', 'Brakes', 40, 20],
+
+      // 🛞 Wheel & Tyre Parts
+      ['prt-w01', 'Front Tyre', 'Wheels & Tyres', 900, 8],
+      ['prt-w02', 'Rear Tyre', 'Wheels & Tyres', 1100, 8],
+      ['prt-w03', 'Tube (Front / Rear)', 'Wheels & Tyres', 150, 20],
+      ['prt-w04', 'Tubeless Valve', 'Wheels & Tyres', 30, 30],
+      ['prt-w05', 'Wheel Rim', 'Wheels & Tyres', 1200, 4],
+      ['prt-w06', 'Wheel Bearing', 'Wheels & Tyres', 120, 15],
+      ['prt-w07', 'Wheel Spacer', 'Wheels & Tyres', 60, 15],
+      ['prt-w08', 'Axle', 'Wheels & Tyres', 280, 8],
+      ['prt-w09', 'Axle Nut', 'Wheels & Tyres', 40, 20],
+      ['prt-w10', 'Rim Tape', 'Wheels & Tyres', 50, 20],
+      ['prt-w11', 'Wheel Spoke', 'Wheels & Tyres', 25, 50],
+
+      // 🏍️ Suspension & Steering
+      ['prt-s01', 'Front Fork Assembly', 'Suspension', 2800, 3],
+      ['prt-s02', 'Fork Oil', 'Suspension', 180, 12],
+      ['prt-s03', 'Fork Oil Seal', 'Suspension', 120, 12],
+      ['prt-s04', 'Fork Dust Seal', 'Suspension', 80, 12],
+      ['prt-s05', 'Fork Bush', 'Suspension', 90, 10],
+      ['prt-s06', 'Fork Tube', 'Suspension', 650, 4],
+      ['prt-s07', 'Rear Shock Absorber', 'Suspension', 1200, 5],
+      ['prt-s08', 'Rear Suspension Bush', 'Suspension', 80, 12],
+      ['prt-s09', 'Steering Cone Set', 'Suspension', 220, 8],
+      ['prt-s10', 'Steering Bearing', 'Suspension', 180, 8],
+      ['prt-s11', 'Handlebar', 'Suspension', 450, 6],
+      ['prt-s12', 'Handlebar Grip (Pair)', 'Suspension', 120, 15],
+      ['prt-s13', 'Handlebar Clamp', 'Suspension', 150, 8],
+
+      // 🔌 Electrical Parts
+      ['prt-el01', 'Battery (12V 4Ah MF)', 'Electrical', 1150, 6],
+      ['prt-el02', 'Battery Terminal', 'Electrical', 40, 20],
+      ['prt-el03', 'Fuse Set', 'Electrical', 30, 25],
+      ['prt-el04', 'Main Fuse', 'Electrical', 50, 20],
+      ['prt-el05', 'Headlight Bulb (12V 35W Halogen)', 'Electrical', 120, 25],
+      ['prt-el06', 'LED Headlight', 'Electrical', 650, 8],
+      ['prt-el07', 'Tail Light Bulb', 'Electrical', 40, 25],
+      ['prt-el08', 'Indicator Bulb', 'Electrical', 30, 30],
+      ['prt-el09', 'Indicator Assembly (Front / Rear)', 'Electrical', 180, 10],
+      ['prt-el10', 'Horn', 'Electrical', 150, 10],
+      ['prt-el11', 'Starter Motor', 'Electrical', 1800, 3],
+      ['prt-el12', 'Starter Relay', 'Electrical', 180, 8],
+      ['prt-el13', 'Ignition Coil', 'Electrical', 380, 6],
+      ['prt-el14', 'CDI Unit', 'Electrical', 650, 5],
+      ['prt-el15', 'ECU', 'Electrical', 2800, 2],
+      ['prt-el16', 'Rectifier / Regulator', 'Electrical', 480, 6],
+      ['prt-el17', 'Stator Coil', 'Electrical', 850, 4],
+      ['prt-el18', 'Pickup Coil', 'Electrical', 350, 5],
+      ['prt-el19', 'Wiring Harness', 'Electrical', 950, 4],
+      ['prt-el20', 'Ignition Switch', 'Electrical', 280, 8],
+      ['prt-el21', 'Side Stand Switch', 'Electrical', 120, 10],
+      ['prt-el22', 'Neutral Switch', 'Electrical', 90, 10],
+      ['prt-el23', 'Brake Switch', 'Electrical', 80, 12],
+
+      // 💡 Lighting & Indicators
+      ['prt-l01', 'Headlight Assembly', 'Lighting', 850, 5],
+      ['prt-l02', 'DRL (Daytime Running Light)', 'Lighting', 350, 6],
+      ['prt-l03', 'Tail Light Assembly', 'Lighting', 420, 6],
+      ['prt-l04', 'Front Indicator (Pair)', 'Lighting', 220, 8],
+      ['prt-l05', 'Rear Indicator (Pair)', 'Lighting', 200, 8],
+      ['prt-l06', 'Indicator Relay', 'Lighting', 80, 12],
+      ['prt-l07', 'Number Plate Light', 'Lighting', 80, 12],
+      ['prt-l08', 'Speedometer / Meter Console', 'Lighting', 1200, 3],
+
+      // ⛽ Fuel System
+      ['prt-f01', 'Fuel Filter', 'Fuel System', 120, 15],
+      ['prt-f02', 'Fuel Pump', 'Fuel System', 850, 5],
+      ['prt-f03', 'Fuel Injector', 'Fuel System', 1800, 3],
+      ['prt-f04', 'Carburetor Assembly', 'Fuel System', 1200, 4],
+      ['prt-f05', 'Carburetor Repair Kit', 'Fuel System', 180, 10],
+      ['prt-f06', 'Throttle Cable', 'Fuel System', 90, 12],
+      ['prt-f07', 'Fuel Pipe / Hose', 'Fuel System', 80, 12],
+      ['prt-f08', 'Fuel Tank Cap', 'Fuel System', 150, 8],
+      ['prt-f09', 'Fuel Tap / Petcock', 'Fuel System', 180, 8],
+      ['prt-f10', 'Injector O-ring', 'Fuel System', 50, 20],
+
+      // 🌬️ Cooling System
+      ['prt-cool01', 'Radiator', 'Cooling', 2800, 2],
+      ['prt-cool02', 'Radiator Fan', 'Cooling', 650, 4],
+      ['prt-cool03', 'Coolant (1L)', 'Cooling', 180, 15],
+      ['prt-cool04', 'Water Pump', 'Cooling', 950, 3],
+      ['prt-cool05', 'Thermostat', 'Cooling', 280, 5],
+      ['prt-cool06', 'Radiator Hose', 'Cooling', 180, 8],
+      ['prt-cool07', 'Oil Cooler', 'Cooling', 1200, 3],
+
+      // 🔊 Exhaust System
+      ['prt-ex01', 'Exhaust Muffler', 'Exhaust', 1500, 4],
+      ['prt-ex02', 'Exhaust Gasket', 'Exhaust', 80, 15],
+      ['prt-ex03', 'Exhaust Pipe', 'Exhaust', 950, 4],
+      ['prt-ex04', 'Exhaust Mounting Rubber', 'Exhaust', 60, 20],
+      ['prt-ex05', 'Exhaust Clamp', 'Exhaust', 50, 20],
+      ['prt-ex06', 'Heat Shield', 'Exhaust', 180, 8],
+
+      // 🧰 Cables & Controls
+      ['prt-cab01', 'Clutch Cable Assembly', 'Cables & Controls', 110, 15],
+      ['prt-cab02', 'Front Brake Cable', 'Cables & Controls', 100, 12],
+      ['prt-cab03', 'Rear Brake Cable', 'Cables & Controls', 110, 12],
+      ['prt-cab04', 'Speedometer Cable', 'Cables & Controls', 120, 10],
+      ['prt-cab05', 'Choke Cable', 'Cables & Controls', 80, 10],
+      ['prt-cab06', 'Clutch Lever', 'Cables & Controls', 120, 12],
+      ['prt-cab07', 'Brake Lever (Front)', 'Cables & Controls', 150, 12],
+
+      // 🪑 Body & Exterior
+      ['prt-body01', 'Front Mudguard', 'Body', 380, 6],
+      ['prt-body02', 'Rear Mudguard', 'Body', 350, 6],
+      ['prt-body03', 'Side Panels (Pair)', 'Body', 520, 5],
+      ['prt-body04', 'Tank Cover', 'Body', 380, 5],
+      ['prt-body05', 'Seat Assembly', 'Body', 1200, 3],
+      ['prt-body06', 'Seat Lock', 'Body', 150, 8],
+      ['prt-body07', 'Grab Rail', 'Body', 320, 5],
+      ['prt-body08', 'Crash Guard', 'Body', 850, 4],
+      ['prt-body09', 'Rider Footrest (Pair)', 'Body', 280, 8],
+      ['prt-body10', 'Pillion Footrest (Pair)', 'Body', 220, 8],
+      ['prt-body11', 'Main Stand', 'Body', 450, 5],
+      ['prt-body12', 'Side Stand', 'Body', 280, 8],
+      ['prt-body13', 'Stand Spring', 'Body', 40, 20],
+      ['prt-body14', 'Number Plate Holder', 'Body', 80, 12],
+      ['prt-body15', 'Rear View Mirror Set (Pair)', 'Body', 180, 8],
+
+      // 🛠️ Bearings, Bushes & Seals
+      ['prt-bear01', 'Wheel Bearing (Front / Rear)', 'Bearings & Seals', 120, 15],
+      ['prt-bear02', 'Steering Bearing Set', 'Bearings & Seals', 180, 10],
+      ['prt-bear03', 'Swingarm Bearing', 'Bearings & Seals', 150, 10],
+      ['prt-bear04', 'Engine Bearing', 'Bearings & Seals', 280, 8],
+      ['prt-bear05', 'Suspension Bush (Rear)', 'Bearings & Seals', 80, 15],
+      ['prt-bear06', 'Rubber Bush', 'Bearings & Seals', 50, 20],
+      ['prt-bear07', 'Oil Seal Set', 'Bearings & Seals', 60, 20],
+      ['prt-bear08', 'Dust Seal', 'Bearings & Seals', 50, 20],
+      ['prt-bear09', 'O-Ring Set', 'Bearings & Seals', 40, 25],
+      ['prt-bear10', 'Gasket (General)', 'Bearings & Seals', 60, 20],
+
+      // 🧴 Service Consumables
+      ['prt-con01', 'Chain Lubricant Spray', 'Consumables', 190, 14],
+      ['prt-con02', 'Chain Cleaner Spray', 'Consumables', 160, 12],
+      ['prt-con03', 'Grease (Multi-purpose)', 'Consumables', 80, 15],
+      ['prt-con04', 'Contact Cleaner Spray', 'Consumables', 220, 10],
+      ['prt-con05', 'Carburetor Cleaner Spray', 'Consumables', 200, 10],
+      ['prt-con06', 'Thread Locker (Loctite)', 'Consumables', 120, 10],
+      ['prt-con07', 'Gasket Sealant (RTV)', 'Consumables', 150, 10],
+      ['prt-con08', 'Brake Fluid (DOT 4, 100ml)', 'Consumables', 120, 15],
+      ['prt-con09', 'Multipurpose Lubricant (WD-40)', 'Consumables', 180, 12],
+      ['prt-con10', 'Distilled Water (Battery)', 'Consumables', 30, 20],
+
+      // 🔩 Small Hardware
+      ['prt-hw01', 'Nuts & Bolts Set (Assorted)', 'Hardware', 80, 20],
+      ['prt-hw02', 'Washers (Pack)', 'Hardware', 30, 30],
+      ['prt-hw03', 'Lock Nuts (Pack)', 'Hardware', 40, 25],
+      ['prt-hw04', 'Circlip Set', 'Hardware', 50, 20],
+      ['prt-hw05', 'Cotter Pins (Pack)', 'Hardware', 30, 25],
+      ['prt-hw06', 'Cable Ties (Pack)', 'Hardware', 40, 20],
+      ['prt-hw07', 'Hose Clamps (Pack)', 'Hardware', 60, 15],
+      ['prt-hw08', 'Rubber Caps / Grommets (Pack)', 'Hardware', 40, 20],
+      ['prt-hw09', 'Springs (Assorted)', 'Hardware', 50, 20],
+    ];
+
+    for (const p of masterParts) {
+      await client.query(
+        `INSERT INTO parts_inventory (id, name, category, price, stock_quantity)
+         VALUES ($1, $2, $3, $4, $5)
+         ON CONFLICT (id) DO UPDATE SET
+           name = EXCLUDED.name,
+           category = EXCLUDED.category,
+           price = EXCLUDED.price,
+           stock_quantity = EXCLUDED.stock_quantity`,
+        p
+      );
     }
+    console.log('✅ Motorcycle spare parts inventory seeded/updated successfully!');
 
     // 9. Seed default admin users if none exist
     const adminCheck = await client.query('SELECT COUNT(*) FROM staff_users');
