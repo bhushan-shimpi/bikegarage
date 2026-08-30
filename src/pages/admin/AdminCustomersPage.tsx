@@ -236,7 +236,7 @@ export const AdminCustomersPage: React.FC = () => {
                     title="Call Customer"
                   >
                     <Phone className="w-3.5 h-3.5 text-[#DFA500]" />
-                    <span>{formatPhone(item.mobile)}</span>
+                    <span className="whitespace-nowrap">{formatPhone(item.mobile)}</span>
                   </a>
 
                   <a

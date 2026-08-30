@@ -201,6 +201,15 @@ export const CreateBillModal: React.FC<CreateBillModalProps> = ({
     }));
   };
 
+  const handleUpdatePartCost = (index: number, newCost: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      partsReplaced: prev.partsReplaced.map((p, i) =>
+        i === index ? { ...p, cost: Number(newCost) || 0 } : p
+      ),
+    }));
+  };
+
   const partsTotal = formData.partsReplaced.reduce((sum, p) => sum + (Number(p.cost) || 0), 0);
   const serviceTotal = Number(formData.servicePrice) || 0;
   const laborTotal = Number(formData.laborCharge) || 0;
@@ -646,10 +655,19 @@ Helpline: +91 7387448878 / 9503853143`;
                       <span>Rate (₹)</span>
                     </div>
                     {formData.partsReplaced.map((part, idx) => (
-                      <div key={idx} className="px-3 py-2 flex items-center justify-between text-xs">
-                        <span className="font-medium text-gray-900">{part.name}</span>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-gray-900">₹{part.cost}</span>
+                      <div key={idx} className="px-3 py-2 flex items-center justify-between text-xs gap-2">
+                        <span className="font-medium text-gray-900 flex-1 min-w-0 truncate">{part.name}</span>
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          <span className="text-gray-500 text-[11px]">₹</span>
+                          <input
+                            type="number"
+                            inputMode="numeric"
+                            value={part.cost}
+                            onChange={(e) => handleUpdatePartCost(idx, e.target.value)}
+                            className="w-20 text-right font-bold text-gray-900 bg-amber-50 border border-amber-200 rounded-md px-2 py-0.5 text-xs focus:outline-none focus:border-[#F5B900] focus:bg-white transition-colors"
+                            title="Edit price for this model/company"
+                            min="0"
+                          />
                           <button
                             type="button"
                             onClick={() => handleRemovePart(idx)}
