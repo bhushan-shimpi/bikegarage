@@ -35,6 +35,7 @@ export const Navbar: React.FC = () => {
       badge: "New",
     },
     { name: "About Us", path: "/about", emoji: "🏆" },
+    { name: "Gallery", path: "/gallery", emoji: "📷" },
     { name: "Enquire", path: "/book-appointment", emoji: "📅" },
     { name: "Contact Us", path: "/contact", emoji: "📍" },
   ];

@@ -13,6 +13,7 @@ import { InquiryPage } from './pages/public/InquiryPage';
 import { ContactPage } from './pages/public/ContactPage';
 import { RestorationFormPage } from './pages/public/RestorationFormPage';
 import { RestorationServiceDetailPage } from './pages/public/RestorationServiceDetailPage';
+import { GalleryPage } from './pages/public/GalleryPage';
 import { NotFoundPage } from './pages/public/NotFoundPage';
 
 // Admin Pages
@@ -51,6 +52,7 @@ export const App: React.FC = () => {
           <Route path="book-appointment" element={<InquiryPage />} />
           <Route path="restoration-form" element={<RestorationFormPage />} />
           <Route path="bike-restoration-form" element={<RestorationFormPage />} />
+          <Route path="gallery" element={<GalleryPage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>

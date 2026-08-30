@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Camera, Maximize2, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Camera, Maximize2, ChevronLeft, ChevronRight, X, ArrowRight } from 'lucide-react';
 import { ScrollReveal } from '../common/ScrollReveal';
 
 interface GalleryItem {
@@ -9,7 +10,6 @@ interface GalleryItem {
 }
 
 export const GallerySection: React.FC = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [activeLightboxIndex, setActiveLightboxIndex] = useState<number | null>(null);
 
   const galleryImages: GalleryItem[] = [
@@ -23,8 +23,6 @@ export const GallerySection: React.FC = () => {
     { id: 'gal-8', src: '/images/Gallary/SaveClip.App_764116120_17960641887175433_663142152934308415_n.jpg', alt: 'Motorcycle chain cleaning and lubrication service in Jamner' },
     { id: 'gal-9', src: '/images/Gallary/SaveClip.App_764676210_17960641563175433_2615807174010287203_n.jpg', alt: 'High-gloss ceramic coating applied on restored motorcycle fuel tank' },
     { id: 'gal-10', src: '/images/Gallary/SaveClip.App_764694001_17960641872175433_1259823115832174628_n.jpg', alt: 'Original factory fiber panels and visor assembly at Chaudhari Auto' },
-    { id: 'gal-11', src: '/images/Gallary/SaveClip.App_764975447_17960641848175433_9031705044490108474_n.jpg', alt: 'Front fork suspension servicing and oil replacement' },
-    { id: 'gal-12', src: '/images/Gallary/SaveClip.App_765619840_17960641572175433_3593156307828676883_n.jpg', alt: 'Final road test inspection of restored motorcycle at Chaudhari Auto' },
   ];
 
   const prevLightbox = () => {
@@ -68,16 +66,10 @@ export const GallerySection: React.FC = () => {
           </div>
         </ScrollReveal>
 
-        {/* Gallery Grid (Mobile: 6 images by default; Desktop: 10 images by default) */}
+        {/* Gallery Grid (Mobile: 6 images; Desktop: 10 images) */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
           {galleryImages.map((img, idx) => {
-            // idx 0..5: always visible
-            // idx 6..9: hidden on mobile (<sm), visible on desktop (sm+)
-            // idx 10..11: hidden everywhere until expanded
-            const isHiddenMobileOnly = !isExpanded && idx >= 6 && idx < 10;
-            const isHiddenUntilExpanded = !isExpanded && idx >= 10;
-
-            if (isHiddenUntilExpanded) return null;
+            const isHiddenMobileOnly = idx >= 6;
 
             return (
               <div
@@ -107,25 +99,15 @@ export const GallerySection: React.FC = () => {
           })}
         </div>
 
-        {/* View All / Show Less Button */}
+        {/* View All Button -> Dedicated /gallery Page */}
         <div className="mt-8 sm:mt-10 text-center">
-          <button
-            type="button"
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#1A1A1A] hover:bg-[#242424] border border-[#333] hover:border-[#F5B900] text-white hover:text-[#F5B900] font-black text-xs uppercase tracking-wider transition-all active:scale-95 shadow-md shadow-black/50 cursor-pointer"
+          <Link
+            to="/gallery"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-[#1A1A1A] hover:bg-[#F5B900] border border-[#333] hover:border-[#F5B900] text-white hover:text-black font-black text-xs uppercase tracking-wider transition-all active:scale-95 shadow-md shadow-black/50 cursor-pointer group"
           >
-            {isExpanded ? (
-              <>
-                <span>Show Less (कमी फोटो दाखवा)</span>
-                <ChevronUp className="w-4 h-4 text-[#F5B900]" />
-              </>
-            ) : (
-              <>
-                <span>View All Photos ({galleryImages.length}) • सर्व फोटो पहा</span>
-                <ChevronDown className="w-4 h-4 text-[#F5B900]" />
-              </>
-            )}
-          </button>
+            <span>View All Gallery Photos • सर्व फोटो पहा</span>
+            <ArrowRight className="w-4 h-4 text-[#F5B900] group-hover:text-black group-hover:translate-x-1 transition-all" />
+          </Link>
         </div>
 
       </div>
