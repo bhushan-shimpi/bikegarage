@@ -56,6 +56,15 @@ export const AdminSettingsPage: React.FC = () => {
 
   useEffect(() => {
     loadMechanics();
+
+    const handleUpdate = () => {
+      loadMechanics();
+    };
+
+    window.addEventListener('chaudhari_mechanics_updated', handleUpdate);
+    return () => {
+      window.removeEventListener('chaudhari_mechanics_updated', handleUpdate);
+    };
   }, []);
 
   const handleToggleFeature = async (mech: AdminUser, featureId: string) => {

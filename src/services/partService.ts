@@ -251,6 +251,9 @@ export const partService = {
           stockQuantity: Number(p.stockQuantity) || 0,
         }));
         storageService.set(STORAGE_KEY, list);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new Event('chaudhari_parts_updated'));
+        }
         return list;
       }
     } catch (err) {
@@ -261,6 +264,9 @@ export const partService = {
       return cached;
     }
     storageService.set(STORAGE_KEY, defaultParts);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('chaudhari_parts_updated'));
+    }
     return defaultParts;
   },
 
@@ -276,6 +282,9 @@ export const partService = {
 
     // Optimistically update local storage
     storageService.set(STORAGE_KEY, [...existing, newPart]);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('chaudhari_parts_updated'));
+    }
 
     try {
       const res = await apiClient.post<{ success: boolean; data: any }>('/api/parts', data);
@@ -290,6 +299,9 @@ export const partService = {
           STORAGE_KEY,
           current.map((p) => (p.id === newId ? created : p))
         );
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new Event('chaudhari_parts_updated'));
+        }
         return created;
       }
     } catch (err) {
@@ -304,6 +316,9 @@ export const partService = {
     const existing = storageService.get<SparePart[]>(STORAGE_KEY, defaultParts);
     const updatedLocal = existing.map((p) => (p.id === id ? { ...p, ...data } : p));
     storageService.set(STORAGE_KEY, updatedLocal);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('chaudhari_parts_updated'));
+    }
 
     // 2. Persist to API
     try {
@@ -319,6 +334,9 @@ export const partService = {
           STORAGE_KEY,
           current.map((p) => (p.id === id ? updated : p))
         );
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new Event('chaudhari_parts_updated'));
+        }
         return updated;
       }
     } catch (err) {
@@ -334,6 +352,9 @@ export const partService = {
       STORAGE_KEY,
       existing.filter((p) => p.id !== id)
     );
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('chaudhari_parts_updated'));
+    }
     try {
       await apiClient.delete(`/api/parts/${id}`);
       return true;

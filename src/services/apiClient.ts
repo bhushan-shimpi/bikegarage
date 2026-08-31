@@ -35,13 +35,25 @@ if (typeof window !== 'undefined') {
 
 class ApiClient {
   private getHeaders(): HeadersInit {
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
     };
 
-    const token = localStorage.getItem('chaudhari_auto_auth_token');
+    let token =
+      localStorage.getItem('chaudhari_auto_auth_token') ||
+      localStorage.getItem('cac_auth_token');
+
     if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
+      // Remove JSON quotes if stored with JSON.stringify
+      try {
+        if (token.startsWith('"') && token.endsWith('"')) {
+          token = JSON.parse(token);
+        }
+      } catch {}
+      token = (token || '').replace(/^"(.*)"$/, '$1').trim();
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
     }
 
     return headers;

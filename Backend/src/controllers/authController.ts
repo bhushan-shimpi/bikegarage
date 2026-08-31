@@ -195,3 +195,46 @@ export const deleteMechanic = async (req: Request, res: Response): Promise<void>
     res.status(500).json({ success: false, error: 'Failed to delete mechanic' });
   }
 };
+
+export const updateMechanic = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const { name, permissions, password, mobile } = req.body;
+
+    const updates: string[] = [];
+    const values: any[] = [];
+    let paramIndex = 1;
+
+    if (name && typeof name === 'string') {
+      updates.push(`name = $${paramIndex++}`);
+      values.push(name.trim());
+    }
+    if (mobile && typeof mobile === 'string') {
+      updates.push(`mobile = $${paramIndex++}`);
+      values.push(mobile.trim());
+    }
+    if (password && typeof password === 'string' && password.trim().length >= 4) {
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(password.trim(), salt);
+      updates.push(`password_hash = $${paramIndex++}`);
+      values.push(hash);
+    }
+
+    if (updates.length > 0) {
+      values.push(id);
+      const queryStr = `UPDATE staff_users SET ${updates.join(', ')} WHERE id = $${paramIndex} RETURNING id, username, name, mobile, role`;
+      const result = await query(queryStr, values);
+      if (result.rows.length === 0) {
+        res.status(404).json({ success: false, error: 'Mechanic account not found' });
+        return;
+      }
+      res.json({ success: true, data: result.rows[0], permissions });
+      return;
+    }
+
+    res.json({ success: true, message: 'Mechanic updated', permissions });
+  } catch (error) {
+    console.error('Error updating mechanic:', error);
+    res.status(500).json({ success: false, error: 'Failed to update mechanic' });
+  }
+};

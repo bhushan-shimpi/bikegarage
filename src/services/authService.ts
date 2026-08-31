@@ -43,6 +43,10 @@ export const authService = {
             ? 'mechanic'
             : 'super_admin';
         const userObj: AdminUser = { ...res.user, role: normalizedRole };
+        
+        // Save plain token string and synced session
+        localStorage.setItem('cac_auth_token', res.token);
+        localStorage.setItem('chaudhari_auto_auth_token', res.token);
         storage.set(storage.keys.AUTH_TOKEN, res.token);
         storage.set(storage.keys.CURRENT_USER, userObj);
         return { success: true, user: userObj };
@@ -69,7 +73,10 @@ export const authService = {
         permissions: matchingMech.permissions || ['billing'],
         garageLocation: 'Pahur Workshop',
       };
-      storage.set(storage.keys.AUTH_TOKEN, `jwt-mech-${user.id}`);
+      const mechToken = `jwt-mech-${user.id}`;
+      localStorage.setItem('cac_auth_token', mechToken);
+      localStorage.setItem('chaudhari_auto_auth_token', mechToken);
+      storage.set(storage.keys.AUTH_TOKEN, mechToken);
       storage.set(storage.keys.CURRENT_USER, user);
       return { success: true, user };
     }
@@ -79,7 +86,10 @@ export const authService = {
     const validSuperPass = ['admin', 'admin123', 'garage1994', '123456', 'chaudhari1994'];
 
     if (validSuperUsers.includes(cleanUser) && validSuperPass.includes(cleanPass)) {
-      storage.set(storage.keys.AUTH_TOKEN, 'jwt-token-superadmin');
+      const adminToken = 'jwt-token-superadmin';
+      localStorage.setItem('cac_auth_token', adminToken);
+      localStorage.setItem('chaudhari_auto_auth_token', adminToken);
+      storage.set(storage.keys.AUTH_TOKEN, adminToken);
       storage.set(storage.keys.CURRENT_USER, DEFAULT_ADMIN);
       return { success: true, user: DEFAULT_ADMIN };
     }
@@ -95,7 +105,11 @@ export const authService = {
   },
 
   isAuthenticated: (): boolean => {
-    return !!storage.get<string | null>(storage.keys.AUTH_TOKEN, null);
+    const token =
+      localStorage.getItem('chaudhari_auto_auth_token') ||
+      localStorage.getItem('cac_auth_token') ||
+      storage.get<string | null>(storage.keys.AUTH_TOKEN, null);
+    return !!token;
   },
 
   isSuperAdmin: (): boolean => {
@@ -111,6 +125,8 @@ export const authService = {
   },
 
   logout: (): void => {
+    localStorage.removeItem('cac_auth_token');
+    localStorage.removeItem('chaudhari_auto_auth_token');
     storage.remove(storage.keys.AUTH_TOKEN);
     storage.remove(storage.keys.CURRENT_USER);
   },
@@ -122,7 +138,7 @@ export const authService = {
       if (res.success && Array.isArray(res.data)) {
         const localList = storage.get<LocalMechanicAccount[]>(MECHANICS_KEY, []);
         const merged: LocalMechanicAccount[] = res.data.map((d) => {
-          const found = localList.find((l) => l.id === d.id);
+          const found = localList.find((l) => l.id === d.id || l.username === d.username);
           return {
             ...d,
             role: 'mechanic',
@@ -134,8 +150,8 @@ export const authService = {
         storage.set(MECHANICS_KEY, merged);
         return merged.map(({ passwordHash: _, ...rest }) => rest);
       }
-    } catch {
-      // Fallback to local
+    } catch (err) {
+      console.warn('Could not fetch mechanics from remote DB, loading local:', err);
     }
     const local = storage.get<LocalMechanicAccount[]>(MECHANICS_KEY, []);
     return local.map(({ passwordHash, ...rest }) => ({
@@ -166,24 +182,35 @@ export const authService = {
       createdAt: new Date().toISOString(),
     };
 
-    // 1. Try Backend PostgreSQL API
+    // 1. Optimistic Local Save
+    const existing = storage.get<LocalMechanicAccount[]>(MECHANICS_KEY, []);
+    const updated = [newAccount, ...existing.filter((m) => m.username !== cleanUser)];
+    storage.set(MECHANICS_KEY, updated);
+
+    // 2. Dispatch real-time event
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('chaudhari_mechanics_updated'));
+    }
+
+    // 3. Try Backend PostgreSQL API
     try {
       const res = await apiClient.post<{ success: boolean; data: AdminUser }>('/api/auth/mechanics', {
         name: cleanName,
         usernameOrMobile: cleanUser,
         password: cleanPass,
+        permissions,
       });
       if (res.success && res.data) {
         newAccount.id = res.data.id;
+        const synced = [newAccount, ...existing.filter((m) => m.username !== cleanUser && m.id !== res.data.id)];
+        storage.set(MECHANICS_KEY, synced);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new Event('chaudhari_mechanics_updated'));
+        }
       }
     } catch (err) {
-      console.warn('Backend mechanic creation sync failed, saved locally:', err);
+      console.warn('Backend mechanic creation sync warning:', err);
     }
-
-    // 2. Save locally
-    const existing = storage.get<LocalMechanicAccount[]>(MECHANICS_KEY, []);
-    const updated = [newAccount, ...existing.filter((m) => m.username !== cleanUser)];
-    storage.set(MECHANICS_KEY, updated);
 
     const { passwordHash: _, ...user } = newAccount;
     return user;
@@ -194,7 +221,12 @@ export const authService = {
     const existing = storage.get<LocalMechanicAccount[]>(MECHANICS_KEY, []);
     storage.set(MECHANICS_KEY, existing.filter((m) => m.id !== id));
 
-    // 2. Remote delete
+    // 2. Dispatch real-time event
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('chaudhari_mechanics_updated'));
+    }
+
+    // 3. Remote delete
     try {
       await apiClient.delete(`/api/auth/mechanics/${id}`);
     } catch (err) {
@@ -222,11 +254,16 @@ export const authService = {
       storage.set(storage.keys.CURRENT_USER, { ...current, permissions });
     }
 
-    // 2. Remote API update
+    // 2. Dispatch real-time event
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('chaudhari_mechanics_updated'));
+    }
+
+    // 3. Remote API update
     try {
       await apiClient.put(`/api/auth/mechanics/${id}`, { permissions });
-    } catch {
-      // Graceful fallback
+    } catch (err) {
+      console.warn('Remote mechanic permissions update warning:', err);
     }
 
     if (updatedAccount) {

@@ -29,6 +29,9 @@ export const customerService = {
         const existing = storageService.get<Customer[]>(STORAGE_KEY, []);
         const updated = [res.data, ...existing.filter((c) => c.mobile !== res.data.mobile)];
         storageService.set(STORAGE_KEY, updated);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new Event('chaudhari_customers_updated'));
+        }
         return res.data;
       }
     } catch (err) {
@@ -42,6 +45,9 @@ export const customerService = {
     // 1. Optimistic removal from cache
     const existing = storageService.get<Customer[]>(STORAGE_KEY, []);
     storageService.set(STORAGE_KEY, existing.filter((c) => c.id !== id && c.mobile !== id));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('chaudhari_customers_updated'));
+    }
 
     // 2. Remote delete from Supabase PostgreSQL
     try {

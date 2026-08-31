@@ -49,6 +49,20 @@ export const DashboardPage: React.FC = () => {
 
   useEffect(() => {
     loadData();
+
+    const handleUpdate = () => {
+      loadData();
+    };
+
+    window.addEventListener('chaudhari_repairs_updated', handleUpdate);
+    window.addEventListener('chaudhari_appointments_updated', handleUpdate);
+    window.addEventListener('chaudhari_enquiries_updated', handleUpdate);
+
+    return () => {
+      window.removeEventListener('chaudhari_repairs_updated', handleUpdate);
+      window.removeEventListener('chaudhari_appointments_updated', handleUpdate);
+      window.removeEventListener('chaudhari_enquiries_updated', handleUpdate);
+    };
   }, []);
 
   // ─── Core Garage Stats ───

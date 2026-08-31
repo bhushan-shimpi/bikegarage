@@ -110,6 +110,15 @@ export const AdminRepairHistoryPage: React.FC = () => {
 
   useEffect(() => {
     loadData();
+
+    const handleUpdate = () => {
+      loadData();
+    };
+
+    window.addEventListener('chaudhari_repairs_updated', handleUpdate);
+    return () => {
+      window.removeEventListener('chaudhari_repairs_updated', handleUpdate);
+    };
   }, [statusFilter]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {

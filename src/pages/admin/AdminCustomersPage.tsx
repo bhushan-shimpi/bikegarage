@@ -54,6 +54,15 @@ export const AdminCustomersPage: React.FC = () => {
 
   useEffect(() => {
     loadData();
+
+    const handleUpdate = () => {
+      loadData();
+    };
+
+    window.addEventListener('chaudhari_customers_updated', handleUpdate);
+    return () => {
+      window.removeEventListener('chaudhari_customers_updated', handleUpdate);
+    };
   }, []);
 
   const handleAddSubmit = async (e: React.FormEvent) => {

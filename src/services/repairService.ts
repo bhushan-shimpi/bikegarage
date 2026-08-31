@@ -38,6 +38,9 @@ export const repairService = {
       const res = await apiClient.get<{ success: boolean; data: RepairRecord[] }>(`/api/repairs${qs}`);
       if (res.success && Array.isArray(res.data)) {
         storageService.set(STORAGE_KEY, res.data);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new Event('chaudhari_repairs_updated'));
+        }
         return res.data;
       }
     } catch {
@@ -63,6 +66,9 @@ export const repairService = {
       if (res.success && res.data) {
         const existing = storageService.get<RepairRecord[]>(STORAGE_KEY, []);
         storageService.set(STORAGE_KEY, [res.data, ...existing]);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new Event('chaudhari_repairs_updated'));
+        }
         return res.data;
       }
     } catch (err) {
@@ -79,6 +85,9 @@ export const repairService = {
         const existing = storageService.get<RepairRecord[]>(STORAGE_KEY, []);
         const updated = existing.map((r) => (r.id === id || r.jobNumber === id ? res.data : r));
         storageService.set(STORAGE_KEY, updated);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new Event('chaudhari_repairs_updated'));
+        }
         return res.data;
       }
     } catch (err) {
@@ -91,6 +100,9 @@ export const repairService = {
     // 1. Optimistic removal from cache
     const existing = storageService.get<RepairRecord[]>(STORAGE_KEY, []);
     storageService.set(STORAGE_KEY, existing.filter((r) => r.id !== id && r.jobNumber !== id));
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('chaudhari_repairs_updated'));
+    }
 
     // 2. Remote delete from Supabase PostgreSQL
     try {
