@@ -3,6 +3,7 @@ import { SEO } from '../../components/common/SEO';
 import { HeroSection } from '../../components/home/HeroSection';
 import { ServicesOverview } from '../../components/home/ServicesOverview';
 import { RestorationHighlight } from '../../components/home/RestorationHighlight';
+import { CeramicCoatingSection } from '../../components/home/CeramicCoatingSection';
 import { WhyChooseUs } from '../../components/home/WhyChooseUs';
 import { OwnerAchievementSection } from '../../components/home/OwnerAchievementSection';
 import { GallerySection } from '../../components/home/GallerySection';
@@ -73,8 +74,8 @@ export const HomePage: React.FC = () => {
   return (
     <div className="bg-[#0B0B0B] text-white">
       <SEO
-        title="Bike Service & Repair in Pahur, Jamner"
-        description="Chaudhari Auto provides professional bike servicing, repair and maintenance services in Pahur, Jamner and nearby areas of Jalgaon."
+        title="Bike Service, Ceramic Coating & Restoration in Pahur, Jamner"
+        description="Chaudhari Auto provides professional bike servicing, premium 9H ceramic coating, repair and vintage restoration in Pahur, Jamner and nearby areas of Jalgaon."
         canonicalPath="/"
         jsonLd={[homeSchema, faqSchema]}
       />
@@ -90,25 +91,28 @@ export const HomePage: React.FC = () => {
       {/* 4. Bike Restoration */}
       <RestorationHighlight />
 
-      {/* 5. Why Choose Us */}
+      {/* 5. Premium Ceramic Coating (Bike & Car) */}
+      <CeramicCoatingSection />
+
+      {/* 6. Why Choose Us */}
       <WhyChooseUs />
 
-      {/* 6. Owner / Business Achievement (Awards) */}
+      {/* 7. Owner / Business Achievement (Awards) */}
       <OwnerAchievementSection />
 
-      {/* 7. Workshop & Restoration Gallery */}
+      {/* 8. Workshop & Restoration Gallery */}
       <GallerySection />
 
-      {/* 8. How It Works */}
+      {/* 9. How It Works */}
       <HowItWorks />
 
-      {/* 9. Customer Reviews */}
+      {/* 10. Customer Reviews */}
       <TestimonialsSection />
 
-      {/* 10. Frequently Asked Questions */}
+      {/* 11. Frequently Asked Questions */}
       <WorkshopFAQSection />
 
-      {/* 11. Location & Contact Information */}
+      {/* 12. Location & Contact Information */}
       <HomeContactSnippet />
 
       {/* 13. Final CTA Banner */}
