@@ -883,6 +883,146 @@ export const DashboardPage: React.FC = () => {
 
       </div>
 
+      {/* ─── SECTION 3: 1 COLUMN - 3-MONTH SERVICE REMINDERS CARD ─── */}
+      <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 shadow-xs space-y-4">
+        <div className="flex items-center justify-between gap-2 border-b border-gray-100 pb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-red-50 text-red-700 flex items-center justify-center">
+              <Bell className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-sm sm:text-base font-black text-gray-900 uppercase font-sans tracking-tight">
+                3-Month Service Reminders
+              </h3>
+              <p className="text-[11px] text-gray-500">
+                Automated 90-day periodic maintenance & oil change tracking ({reminders.length} tracked • {overdueReminders.length} due)
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {overdueReminders.length > 0 && (
+              <span className="px-2.5 py-1 rounded-lg bg-red-100 text-red-900 text-xs font-black">
+                {reminderStats.overdue} Overdue
+              </span>
+            )}
+            <Link
+              to="/garage/reminders"
+              className="text-xs text-red-700 hover:text-red-900 font-bold flex items-center gap-1"
+            >
+              <span>View All</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+
+        {reminders.length === 0 ? (
+          <div className="py-8 text-center border border-dashed border-gray-200 rounded-xl space-y-1.5">
+            <CheckCircle2 className="w-8 h-8 text-emerald-400 mx-auto" />
+            <p className="text-xs font-bold text-gray-700">No Overdue Service Reminders</p>
+            <p className="text-[11px] text-gray-400">All customer motorcycles are within their standard 3-month servicing interval.</p>
+            <Link
+              to="/garage/reminders"
+              className="mt-1 px-3 py-1.5 rounded-lg bg-red-50 text-red-700 hover:bg-red-100 text-xs font-bold inline-flex items-center gap-1"
+            >
+              <Bell className="w-3 h-3" />
+              <span>Open Reminders Directory</span>
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {(overdueReminders.length > 0 ? overdueReminders.slice(0, 6) : reminders.slice(0, 6)).map((rem) => (
+              <div
+                key={rem.id}
+                className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between gap-3 shadow-2xs ${
+                  rem.status === 'overdue'
+                    ? 'bg-[#FFFBFB] border-red-200 hover:border-red-400'
+                    : rem.status === 'due_soon'
+                    ? 'bg-[#FFFDF7] border-amber-200 hover:border-amber-400'
+                    : 'bg-gray-50 border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs font-black text-gray-900 truncate">
+                      {rem.customerName}
+                    </span>
+                    <span
+                      className={`text-[9px] font-black px-1.5 py-0.2 rounded uppercase ${
+                        rem.status === 'overdue'
+                          ? 'bg-red-100 text-red-900 border border-red-300'
+                          : rem.status === 'due_soon'
+                          ? 'bg-amber-100 text-amber-900 border border-amber-300'
+                          : 'bg-blue-100 text-blue-900'
+                      }`}
+                    >
+                      {rem.daysDiff >= 0 ? `${rem.daysDiff}d Overdue` : `Due in ${Math.abs(rem.daysDiff)}d`}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[11px] text-gray-600">
+                    <span className="font-bold text-gray-800 truncate">
+                      {rem.bikeBrand} {rem.bikeModel}
+                    </span>
+                    {rem.registrationNumber && (
+                      <span className="font-mono text-[10px] bg-white border border-gray-200 px-1 rounded font-bold uppercase text-gray-700">
+                        {rem.registrationNumber}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="text-[10px] text-gray-500 flex items-center justify-between pt-1 border-t border-gray-100">
+                    <span>Last: <strong>{rem.lastServiceDate}</strong></span>
+                    <span className="font-mono text-gray-500">{formatPhone(rem.customerMobile)}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 pt-1">
+                  <a
+                    href={reminderService.getWhatsAppReminderUrl(rem)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => reminderService.markAsReminded(rem.id)}
+                    className="flex-1 py-1.5 px-2 rounded-lg bg-[#25D366] hover:bg-[#1EBE5D] text-white text-[11px] font-bold flex items-center justify-center gap-1 transition-colors shadow-2xs"
+                    title="Send WhatsApp Reminder"
+                  >
+                    <WhatsAppIcon className="w-3.5 h-3.5" />
+                    <span>WhatsApp</span>
+                  </a>
+                  <a
+                    href={`tel:+91${rem.customerMobile}`}
+                    className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
+                    title="Call Customer"
+                  >
+                    <Phone className="w-3.5 h-3.5" />
+                  </a>
+                  <button
+                    onClick={() => {
+                      setSelectedRecord(rem.rawRecord);
+                      setIsViewModalOpen(true);
+                    }}
+                    className="p-1.5 rounded-lg bg-white border border-gray-200 hover:bg-gray-100 text-gray-700 transition-colors cursor-pointer"
+                    title="View Past Bill"
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="pt-2">
+          <Link
+            to="/garage/reminders"
+            className="w-full py-2.5 rounded-xl bg-red-50/80 hover:bg-red-100/90 border border-red-200 text-red-950 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors"
+          >
+            <span>Manage All {reminders.length} Service Reminders ({overdueReminders.length} Due)</span>
+            <ArrowRight className="w-3.5 h-3.5 text-red-700" />
+          </Link>
+        </div>
+      </div>
+
       {/* ─── MODALS ─── */}
       <CreateBillModal
         isOpen={isCreateBillModalOpen}
