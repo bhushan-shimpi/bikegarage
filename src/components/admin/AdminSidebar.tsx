@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -11,8 +11,11 @@ import {
   Settings,
   LogOut,
   ChevronRight,
+  Bell,
 } from 'lucide-react';
 import { authService } from '../../services/authService';
+import { reminderService } from '../../services/reminderService';
+import { repairService } from '../../services/repairService';
 
 interface AdminSidebarProps {
   isOpen: boolean;
@@ -23,6 +26,24 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
   const navigate = useNavigate();
   const currentUser = authService.getCurrentUser();
   const isMechanic = authService.isMechanic();
+  const [overdueCount, setOverdueCount] = useState<number>(0);
+
+  useEffect(() => {
+    const calc = () => {
+      const all = repairService.getCached();
+      const list = reminderService.calculateReminders(all);
+      const overdue = list.filter((r) => r.status === 'overdue' || r.status === 'due_soon').length;
+      setOverdueCount(overdue);
+    };
+    calc();
+
+    window.addEventListener('chaudhari_repairs_updated', calc);
+    window.addEventListener('chaudhari_reminders_updated', calc);
+    return () => {
+      window.removeEventListener('chaudhari_repairs_updated', calc);
+      window.removeEventListener('chaudhari_reminders_updated', calc);
+    };
+  }, []);
 
   const handleLogout = () => {
     authService.logout();
@@ -33,7 +54,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
 
   interface NavSection {
     title: string;
-    items: { name: string; path: string; icon: any }[];
+    items: { name: string; path: string; icon: any; badge?: number }[];
   }
 
   const navSections: NavSection[] = isMechanic
@@ -42,6 +63,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
           title: 'Workshop Access',
           items: [
             { name: 'Billing', path: '/garage/billing', icon: Receipt },
+            { name: 'Reminders (3M)', path: '/garage/reminders', icon: Bell, badge: overdueCount > 0 ? overdueCount : undefined },
             ...(permissions.includes('customers')
               ? [{ name: 'Customers List', path: '/garage/customers', icon: Users }]
               : []),
@@ -60,6 +82,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
           title: 'Daily Operations',
           items: [
             { name: 'Dashboard', path: '/garage/dashboard', icon: LayoutDashboard },
+            { name: 'Reminders (3-Month)', path: '/garage/reminders', icon: Bell, badge: overdueCount > 0 ? overdueCount : undefined },
             { name: 'Billing & Job Cards', path: '/garage/billing', icon: Receipt },
             { name: 'Customers Directory', path: '/garage/customers', icon: Users },
           ],
@@ -140,11 +163,18 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isOpen, onClose }) =
                           }`
                         }
                       >
-                        <div className="flex items-center gap-2.5">
+                        <div className="flex items-center gap-2.5 min-w-0">
                           <Icon className="w-4 h-4 shrink-0" />
-                          <span>{item.name}</span>
+                          <span className="truncate">{item.name}</span>
                         </div>
-                        <ChevronRight className="w-3.5 h-3.5 opacity-40 shrink-0" />
+                        <div className="flex items-center gap-1.5 shrink-0">
+                          {typeof item.badge === 'number' && item.badge > 0 && (
+                            <span className="px-1.5 py-0.2 rounded-full text-[10px] font-black bg-red-500 text-white animate-pulse">
+                              {item.badge}
+                            </span>
+                          )}
+                          <ChevronRight className="w-3.5 h-3.5 opacity-40 shrink-0" />
+                        </div>
                       </NavLink>
                     );
                   })}

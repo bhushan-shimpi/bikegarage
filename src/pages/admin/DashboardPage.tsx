@@ -19,10 +19,12 @@ import {
   ArrowRight,
   ChevronRight,
   Plus,
+  Bell,
 } from 'lucide-react';
 import { WhatsAppIcon } from '../../components/common/WhatsAppIcon';
 import { repairService } from '../../services/repairService';
 import { enquiryService } from '../../services/enquiryService';
+import { reminderService, ServiceReminder } from '../../services/reminderService';
 import { RepairRecord } from '../../types/customer';
 import { Enquiry, isRestorationEnquiry } from '../../types/enquiry';
 import { formatPhone, formatDate } from '../../utils/formatters';
@@ -39,6 +41,7 @@ import { printInvoice } from '../../utils/printInvoice';
 export const DashboardPage: React.FC = () => {
   const [repairs, setRepairs] = useState<RepairRecord[]>(() => repairService.getCached());
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
+  const [reminders, setReminders] = useState<ServiceReminder[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [paymentFilter, setPaymentFilter] = useState<'all' | 'Paid' | 'Pending'>('all');
   const [dateFilter, setDateFilter] = useState<DateFilterType>('all');
@@ -66,6 +69,7 @@ export const DashboardPage: React.FC = () => {
       ]);
       setRepairs(billsList);
       setEnquiries(enquiriesList);
+      setReminders(reminderService.calculateReminders(billsList));
     } catch {
       // Fallback
     }
@@ -81,11 +85,13 @@ export const DashboardPage: React.FC = () => {
     window.addEventListener('chaudhari_repairs_updated', handleUpdate);
     window.addEventListener('chaudhari_appointments_updated', handleUpdate);
     window.addEventListener('chaudhari_enquiries_updated', handleUpdate);
+    window.addEventListener('chaudhari_reminders_updated', handleUpdate);
 
     return () => {
       window.removeEventListener('chaudhari_repairs_updated', handleUpdate);
       window.removeEventListener('chaudhari_appointments_updated', handleUpdate);
       window.removeEventListener('chaudhari_enquiries_updated', handleUpdate);
+      window.removeEventListener('chaudhari_reminders_updated', handleUpdate);
     };
   }, []);
 
@@ -144,6 +150,10 @@ export const DashboardPage: React.FC = () => {
     { key: 'custom', label: 'Custom Day' },
   ];
 
+  // 3-Month Periodic Service Reminders
+  const overdueReminders = reminders.filter((r) => r.status === 'overdue' || r.status === 'due_soon');
+  const reminderStats = reminderService.getStats(reminders);
+
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12 overflow-x-hidden">
       {/* Clean Top Action Bar */}
@@ -182,6 +192,40 @@ export const DashboardPage: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* ─── 3-MONTH SERVICE REMINDERS ALERT BANNER ─── */}
+      {overdueReminders.length > 0 && (
+        <div className="bg-gradient-to-r from-red-50/90 via-amber-50/80 to-white border border-red-200 rounded-2xl p-4 sm:p-5 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-fade-in">
+          <div className="flex items-start gap-3.5 min-w-0">
+            <div className="w-10 h-10 rounded-xl bg-red-100 border border-red-200 text-red-700 flex items-center justify-center shrink-0 shadow-2xs">
+              <Bell className="w-5 h-5 text-red-700 animate-bounce" />
+            </div>
+            <div className="space-y-0.5 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs sm:text-sm font-black uppercase text-red-950 font-sans tracking-tight">
+                  3-Month Service Due Reminders
+                </span>
+                <span className="text-[10px] font-black bg-red-600 text-white px-2 py-0.5 rounded-full">
+                  {reminderStats.overdue} Overdue • {reminderStats.dueSoon} Due Soon
+                </span>
+              </div>
+              <p className="text-xs text-gray-700 leading-relaxed">
+                <strong className="font-semibold text-gray-900">{overdueReminders.length} customer motorcycle{overdueReminders.length === 1 ? '' : 's'}</strong> completed 3 months since their last periodic service / engine oil change in Pahur.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 self-stretch md:self-auto shrink-0">
+            <Link
+              to="/garage/reminders"
+              className="w-full md:w-auto px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs transition-all active:scale-95 cursor-pointer"
+            >
+              <span>Open Service Reminders ({overdueReminders.length})</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Success Notification */}
       {successMsg && (

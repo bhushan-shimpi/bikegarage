@@ -27,6 +27,7 @@ import { AdminServicesPricingPage } from './pages/admin/AdminServicesPricingPage
 import { AdminRepairHistoryPage } from './pages/admin/AdminRepairHistoryPage';
 import { AdminPartsInventoryPage } from './pages/admin/AdminPartsInventoryPage';
 import { AdminRestorationsPage } from './pages/admin/AdminRestorationsPage';
+import { AdminServiceRemindersPage } from './pages/admin/AdminServiceRemindersPage';
 import { authService } from './services/authService';
 
 const GarageIndexRedirect: React.FC = () => {
@@ -64,6 +65,7 @@ export const App: React.FC = () => {
         <Route path="/garage" element={<AdminLayout />}>
           <Route index element={<GarageIndexRedirect />} />
           <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="reminders" element={<AdminServiceRemindersPage />} />
           <Route path="enquiries" element={<EnquiriesListPage />} />
           <Route path="enquiries/:id" element={<EnquiryDetailsPage />} />
           <Route path="billing" element={<AdminRepairHistoryPage />} />
