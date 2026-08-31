@@ -229,10 +229,15 @@ export const EnquiryDetailsModal: React.FC<EnquiryDetailsModalProps> = ({
             </h3>
 
             <div className="p-3.5 rounded-xl bg-gray-50 border border-gray-200 space-y-2 text-xs">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="font-bold text-gray-900 bg-amber-100 text-amber-950 px-2 py-0.5 rounded border border-amber-200">
                   {enquiry.service.serviceName}
                 </span>
+                {enquiry.service.estimatedPrice && (
+                  <span className="font-mono font-black text-emerald-800 bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded text-xs">
+                    ₹{enquiry.service.estimatedPrice.toLocaleString('en-IN')}/-
+                  </span>
+                )}
                 {enquiry.service.preferredDate && (
                   <span className="text-gray-500 text-[11px] flex items-center gap-1">
                     <Calendar className="w-3 h-3 text-gray-400" />

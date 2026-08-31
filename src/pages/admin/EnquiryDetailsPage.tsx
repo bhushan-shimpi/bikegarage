@@ -330,6 +330,14 @@ export const EnquiryDetailsPage: React.FC = () => {
                     {enquiry.service.serviceName}
                   </span>
                 </div>
+                {enquiry.service.estimatedPrice && (
+                  <div>
+                    <span className="text-gray-500 font-semibold block">Package Estimate:</span>
+                    <span className="text-sm font-black font-mono text-emerald-700">
+                      ₹{enquiry.service.estimatedPrice.toLocaleString('en-IN')}/-
+                    </span>
+                  </div>
+                )}
                 {enquiry.service.preferredDate && (
                   <div className="text-right">
                     <span className="text-gray-500 font-semibold block">Preferred Slot:</span>

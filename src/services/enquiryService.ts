@@ -72,7 +72,7 @@ export const enquiryService = {
   },
 
   create: async (data: {
-    type?: 'general_inquiry' | 'quote_request' | 'breakdown' | 'appointment';
+    type?: 'general_inquiry' | 'quote_request' | 'breakdown' | 'appointment' | 'ceramic_coating';
     customer: {
       name: string;
       mobile: string;
@@ -96,6 +96,7 @@ export const enquiryService = {
       problemDescription: string;
       urgency?: 'normal' | 'urgent' | 'evening';
       quickIssues?: string[];
+      estimatedPrice?: number;
     };
     attachments?: string[];
   }): Promise<Enquiry> => {

@@ -10,10 +10,11 @@ import {
   Bike,
   Phone,
   Eye,
+  Sparkles,
 } from 'lucide-react';
 import { WhatsAppIcon } from '../../components/common/WhatsAppIcon';
 import { enquiryService } from '../../services/enquiryService';
-import { Enquiry, EnquiryStatus, isRestorationEnquiry } from '../../types/enquiry';
+import { Enquiry, EnquiryStatus, isRestorationEnquiry, isCeramicCoatingEnquiry } from '../../types/enquiry';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { formatDate, formatPhone } from '../../utils/formatters';
 import { CreateEnquiryModal } from '../../components/admin/CreateEnquiryModal';
@@ -297,9 +298,23 @@ export const EnquiriesListPage: React.FC = () => {
 
                   {/* Service & Problem Description */}
                   <div className="flex flex-wrap items-center gap-2 pt-0.5 text-xs">
-                    <span className="bg-amber-50 text-amber-900 border border-amber-200 px-2 py-0.5 rounded text-[11px] font-medium">
-                      {enq.service.serviceName}
-                    </span>
+                    {isCeramicCoatingEnquiry(enq) ? (
+                      <span className="bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-950 border border-amber-300 px-2 py-0.5 rounded text-[11px] font-black flex items-center gap-1 shadow-2xs">
+                        <Sparkles className="w-3 h-3 text-amber-700" />
+                        <span>{enq.service.serviceName}</span>
+                      </span>
+                    ) : (
+                      <span className="bg-amber-50 text-amber-900 border border-amber-200 px-2 py-0.5 rounded text-[11px] font-medium">
+                        {enq.service.serviceName}
+                      </span>
+                    )}
+
+                    {enq.service.estimatedPrice && (
+                      <span className="font-mono font-black text-emerald-800 bg-emerald-50 border border-emerald-300 px-1.5 py-0.2 rounded text-[10px]">
+                        ₹{enq.service.estimatedPrice.toLocaleString('en-IN')}/-
+                      </span>
+                    )}
+
                     {enq.service.problemDescription && (
                       <span className="text-gray-400 text-[11px] italic truncate max-w-sm">
                         "{enq.service.problemDescription}"
@@ -322,7 +337,9 @@ export const EnquiriesListPage: React.FC = () => {
 
                   <a
                     href={`https://wa.me/91${enq.customer.mobile}?text=${encodeURIComponent(
-                      `Hello ${enq.customer.name}, this is Chaudhari Auto Centre, Pahur. We received your enquiry regarding your bike service.`
+                      isCeramicCoatingEnquiry(enq)
+                        ? `Hello ${enq.customer.name}, this is Chaudhari Auto Centre, Pahur. Regarding your booking for ${enq.service.serviceName} for your ${enq.bike.brand} ${enq.bike.model} (Ticket: ${enq.ticketNumber})...`
+                        : `Hello ${enq.customer.name}, this is Chaudhari Auto Centre, Pahur. We received your enquiry regarding your bike service.`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"

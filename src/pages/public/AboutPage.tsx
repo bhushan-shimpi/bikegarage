@@ -108,7 +108,7 @@ export const AboutPage: React.FC = () => {
       '@type': 'MotorcycleRepairShop',
       name: 'Chaudhari Auto',
       foundingDate: '1994',
-      telephone: '+91-7020710581',
+      telephone: '+91-7387448878',
       founder: {
         '@type': 'Person',
         name: 'Kailash Chaudhari',
@@ -372,11 +372,11 @@ export const AboutPage: React.FC = () => {
                 <span>Start Bike Restoration</span>
               </Link>
               <a
-                href="tel:+917020710581"
+                href="tel:+917387448878"
                 className="px-6 py-3 rounded-xl bg-transparent hover:bg-white/5 border border-white/20 text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center gap-2"
               >
                 <Phone className="w-4 h-4 text-[#F5B900]" />
-                <span>+91 70207 10581</span>
+                <span>+91 7387448878</span>
               </a>
             </div>
           </div>
